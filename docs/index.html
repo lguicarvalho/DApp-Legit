@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +26,7 @@
 <body>
   <div class="container">
     <div class="jumbotron text-center">
-      <h1>Validação e disponibilização de documentos</h1>
+      <h1>Lecito</h1>
     </div>
 
     <div class="col-md-12" id="hash-list">
@@ -41,9 +40,11 @@
       <div class="row panel panel-default">
         <div class="panel-heading clearfix">
           <div class="panel-title">
+            <button class="btn btn-info btn-lg pull-left" data-toggle="collapse" data-target="#events" aria-expanded="false" aria-controls="events">Events</button>
             <button class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#storeHash">Publicar Hashs</button>
           </div>
         </div>
+        <ul id="events" class="collapse list-group"></ul>
       </div>
 
       <div id="hashsRow" class="row">
@@ -53,18 +54,23 @@
   </div>
 
 
-  <div id="hashTemplate" style="display: none;">
+  <div  style="display: none;">
     <div class="row-lg-12">
       <div class="panel panel-default panel-hash">
         <div class="panel-heading">
           <h3 class="panel-title"></h3>
         </div>
         <div class="panel-body">
+          <div id="hashTemplate">
           <strong>PDF 1</strong>: <span class="PDF1"></span><br/>
           <strong>RDF 1</strong>: <span class="RDF1"></span><br/>
           <strong>PDF 2</strong>: <a  class="PDF2"></a><br/>
           <strong>RDF 2</strong>: <a  class="RDF2"></a><br/>
           <strong>Publicado por</strong>: <span class="hash-publisher"></span><br/>
+          </div>
+           <div id="transactionHash">
+           <strong>Hash da transação</strong>:<span class="welcome pull-left"></span><br/>
+           </div>
         </div>
       </div>
     </div>
