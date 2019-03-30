@@ -45,6 +45,8 @@ App = {
       App.contracts.Inbox = TruffleContract(inboxArtifact);
       //set the provider for our contracts
       App.contracts.Inbox.setProvider(App.web3Provider);
+      // listen to listen
+      App.listenToEvents();
       // retrieve the article from the contract
       return App.reloadHashs();
     });
@@ -71,7 +73,6 @@ App = {
       hashTemplate.find('.PDF2').text(hash[3]);
       hashTemplate.find('.RDF2').text(hash[4]);
 
-  
       var publisher = hash[0];
       if (publisher == App.account) {
         publisher = "Você";
@@ -99,11 +100,25 @@ App = {
         gas: 500000
       });
     }).then(function(result) {
-      App.reloadHashs();
-    }).catch(function(err){
+      $('#transactionHash').text(result.receipt.transactionHash);
+      }).catch(function(err){
       console.error(err);
     });
   },
+
+//listen to events triggeres by the contract
+listenToEvents: function() {
+App.contracts.Inbox.deployed().then(function(instance) {
+  instance.LogStoreHash({}, {}).watch(function(error, event) {
+    if (!error) {
+      $("#events").append('<li class="list-group-item"> Um novo documento foi registrado!</li>');
+    } else {
+      console.error(error);
+    }
+    App.reloadHashs();
+  })
+});
+},
 };
 
 $(function() {
