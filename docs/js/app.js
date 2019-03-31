@@ -57,8 +57,6 @@ App = {
 
     // retrieve the article placeholder and clear it
     $('#hashsRow').empty();
-    //$('#hashsTransaction').empty();
-
 
     App.contracts.Inbox.deployed().then(function(instance) {
       return instance.getMessage();
@@ -81,8 +79,9 @@ App = {
       }
       hashTemplate.find('.hash-publisher').text(publisher);
 
-      //add this hash
+          //add this hash
       $('#hashsRow').append(hashTemplate.html());
+
 
     }).catch(function(err){
       console.error(err.message);
@@ -104,9 +103,7 @@ App = {
       });
     }).then(function(result) {
       $('#transactionHash').text(result.receipt.transactionHash);
-      var transactionHash = $('#transactionHash');
-      transactionHash.find('.hash-transacao').text(result.receipt.transactionHash);
-      $('#hashsTransaction').append(transactionHash.html());
+
       }).catch(function(err){
       console.error(err);
     });
