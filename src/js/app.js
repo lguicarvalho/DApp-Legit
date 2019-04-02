@@ -78,6 +78,8 @@ App = {
         publisher = "Você";
       }
       hashTemplate.find('.hash-publisher').text(publisher);
+      // Tentativa de Manter a Hash na Página
+      hashTemplate.find('#transactionHash').text(localStorage.getItem("hashDaTransacao"));
 
       //add this hash
       $('#hashsRow').append(hashTemplate.html());
@@ -101,6 +103,8 @@ App = {
       });
     }).then(function(result) {
       $('#transactionHash').text(result.receipt.transactionHash);
+      // Tentativa de armazenar a Hash da Transação
+      localStorage.setItem("hashDaTransacao", '#transactionHash');
       }).catch(function(err){
       console.error(err);
     });
