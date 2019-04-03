@@ -105,7 +105,8 @@ App = {
         gas: 500000
       });
     }).then(function(result) {
-      $('#transactionHash').text(result.tx);
+      console.log(result);
+      //$('#transactionHash').text(result.tx);
       //alert("Hash da transação: " + $("#transactionHash").text());
 
       }).catch(function(err){
@@ -119,14 +120,13 @@ App.contracts.Inbox.deployed().then(function(instance) {
   instance.LogStoreHash({}, {}).watch(function(error, event) {
     if (!error) {
       console.log(event);
-      $('#events').text(event.transactionHash);
+      $('#events').html(event.transactionHash);
 
-      localStorage.content = $('#events').text();
-      //$('#events').html(localStorage.content);
+      localStorage.content = $('#events').html();
 
       console.log(localStorage);
 
-      //$("#events").append('<li class="list-group-item"> Um novo documento foi registrado!</li>');
+      $("#success").append('<li class="list-group-item"> Um novo documento foi registrado!</li>');
     } else {
       console.error(error);
     }
@@ -138,7 +138,7 @@ App.contracts.Inbox.deployed().then(function(instance) {
 
 $(function() {
   $(window).load(function() {
-    $('#events').text(localStorage.content);
+    $('#events').html(localStorage.content);
     App.init();
   });
 });
