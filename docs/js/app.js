@@ -116,13 +116,13 @@ App = {
 //listen to events triggeres by the contract
 listenToEvents: function() {
 App.contracts.Inbox.deployed().then(function(instance) {
-  instance.LogStoreHash({fromBlock: '0'}, {}).watch(function(error, event) {
+  instance.LogStoreHash({}, {}).watch(function(error, event) {
     if (!error) {
       console.log(event);
       $('#events').text(event.transactionHash);
 
       localStorage.content = $('#events').text();
-      $('#events').html(localStorage.content);
+      //$('#events').html(localStorage.content);
 
       console.log(localStorage);
 
@@ -138,6 +138,7 @@ App.contracts.Inbox.deployed().then(function(instance) {
 
 $(function() {
   $(window).load(function() {
+    $('#events').text(localStorage.content);
     App.init();
   });
 });
