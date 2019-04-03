@@ -73,6 +73,7 @@ App = {
       hashTemplate.find('.PDF2').text(hash[3]);
       hashTemplate.find('.RDF2').text(hash[4]);
 
+
       var publisher = hash[0];
       if (publisher == App.account) {
         publisher = "Você";
@@ -83,7 +84,9 @@ App = {
       $('#hashsRow').append(hashTemplate.html());
 
 
-    }).catch(function(err){
+    })
+
+    .catch(function(err){
       console.error(err.message);
     });
   },
@@ -102,7 +105,8 @@ App = {
         gas: 500000
       });
     }).then(function(result) {
-      $('#transactionHash').text(result.receipt.transactionHash);
+      $('#transactionHash').text(result.tx);
+      //alert("Hash da transação: " + $("#transactionHash").text());
 
       }).catch(function(err){
       console.error(err);
@@ -112,9 +116,17 @@ App = {
 //listen to events triggeres by the contract
 listenToEvents: function() {
 App.contracts.Inbox.deployed().then(function(instance) {
-  instance.LogStoreHash({}, {}).watch(function(error, event) {
+  instance.LogStoreHash({fromBlock: '0'}, {}).watch(function(error, event) {
     if (!error) {
-      $("#events").append('<li class="list-group-item"> Um novo documento foi registrado!</li>');
+      console.log(event);
+      $('#events').text(event.transactionHash);
+
+      localStorage.content = $('#events').text();
+      $('#events').html(localStorage.content);
+
+      console.log(localStorage);
+
+      //$("#events").append('<li class="list-group-item"> Um novo documento foi registrado!</li>');
     } else {
       console.error(error);
     }
