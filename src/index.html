@@ -7,8 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <title>Lecito</title>
-  <link rel="shortcut icon" href="design/shield.ico">
-  
+  <link rel="shortcut icon" href="design/saeg2.ico">
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -25,9 +24,25 @@
 </head>
 
 <body>
+  <header>
+    <div class="container">
+      <div class="header-topo">
+        <img class="logo" src="design/saeg2.png">
+        <h1>Lecito</h1>
+        <nav class="nav-header">
+          <a href="#">Sobre</a>
+          <a href="#">Implementação</a>
+          <a href="#">Codigo Git</a>
+        </nav>
+
+
+      </div>
+    </div>
+  </header>
   <div class="container">
     <div class="jumbotron text-center">
-      <h1>Lecito</h1>
+      <h4>Lorem ipsum is placeholder text commonly used in the graphic,
+        print, and publishing industries for previewing layouts and visual mockups.</h4>
     </div>
 
     <div class="col-md-12" id="hash-list">
@@ -41,8 +56,10 @@
       <div class="row panel panel-default">
         <div class="panel-heading clearfix">
           <div class="panel-title">
-            <button class="btn btn-info btn-lg pull-left" data-toggle="collapse" data-target="#events" aria-expanded="false" aria-controls="events">Events</button>
-            <button class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#storeHash">Publicar Hashs</button>
+            <button class="btn btn-info btn-lg pull-left" data-toggle="collapse" data-target="#events"
+              aria-expanded="false" aria-controls="events">Events</button>
+            <button class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#storeHash">Publicar
+              Hashs</button>
           </div>
         </div>
         <ul id="events" class="collapse list-group"></ul>
@@ -55,7 +72,7 @@
   </div>
 
 
-  <div  style="display: none;">
+  <div style="display: none;">
     <div class="row-lg-12">
       <div class="panel panel-default panel-hash">
         <div class="panel-heading">
@@ -63,12 +80,12 @@
         </div>
         <div class="panel-body">
           <div id="hashTemplate">
-          <strong>PDF 1</strong>: <span class="PDF1"></span><br/>
-          <strong>RDF 1</strong>: <span class="RDF1"></span><br/>
-          <strong>PDF 2</strong>: <a  class="PDF2"></a><br/>
-          <strong>RDF 2</strong>: <a  class="RDF2"></a><br/>
-          <strong>Publicado por</strong>: <span class="hash-publisher"></span><br/>
-          <strong>Hash da transação</strong>:<span id="transactionHash"></span><br/>
+            <strong>PDF 1</strong>: <span class="PDF1"></span><br />
+            <strong>RDF 1</strong>: <span class="RDF1"></span><br />
+            <strong>PDF 2</strong>: <a class="PDF2"></a><br />
+            <strong>RDF 2</strong>: <a class="RDF2"></a><br />
+            <strong>Publicado por</strong>: <span class="hash-publisher"></span><br />
+            <strong>Hash da transação</strong>:<span id="transactionHash"></span><br />
           </div>
         </div>
       </div>
@@ -111,7 +128,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-success" data-dismiss="modal" onclick="App.storeHash(); return false;">Submit</button>
+          <button type="button" class="btn btn-primary btn-success" data-dismiss="modal"
+            onclick="App.storeHash(); return false;">Submit</button>
           <button type="button" class="btn" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -122,7 +140,9 @@
   <div id="footer" class="container">
     <nav class="navbar navbar-default navbar-fixed-bottom">
       <div class="navbar-inner navbar-content-center text-center">
-        <p class="text-muted" credit><a href="http://chainskills.com">SAEG</a> - &copy; 2019 - <a href="https://twitter.com/sarbogast">Luis Guilherme Carvalho</a> e <a href="https://twitter.com/eloudsa">Mark Douglas Jacyntho</a></p>
+        <p class="text-muted" credit><a href="http://chainskills.com">SAEG</a> - &copy; 2019 - <a
+            href="https://twitter.com/sarbogast">Luis Guilherme Carvalho</a> e <a
+            href="https://twitter.com/eloudsa">Mark Douglas Jacyntho</a></p>
       </div>
     </nav>
   </div>
