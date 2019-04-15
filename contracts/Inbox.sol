@@ -8,6 +8,15 @@ contract Inbox {
     string PDF2;
     string RDF2;
 
+    //events
+    event LogStoreHash(
+      address indexed _publisher,
+      string hash1,
+      string hash2,
+      string hash3,
+      string hash4
+      );
+
     function storeHash
     (string memory hash1,
      string memory hash2,
@@ -19,6 +28,8 @@ contract Inbox {
         RDF1 = hash2;
         PDF2 = hash3;
         RDF2 = hash4;
+
+        emit LogStoreHash(publisher, hash1, hash2, hash3, hash4);
     }
 
     function getMessage() public view returns
