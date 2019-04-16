@@ -70,8 +70,8 @@ App = {
       var hashTemplate = $('#hashTemplate');
       hashTemplate.find('.PDF1').text(hash[1]);
       hashTemplate.find('.RDF1').text(hash[2]);
-      hashTemplate.find('.PDF2').text(hash[3]);
-      hashTemplate.find('.RDF2').text(hash[4]);
+      hashTemplate.find('.PDF2').text(hash[3]).attr('href','https://ipfs.io/ipfs/' + hash[3]);
+      hashTemplate.find('.RDF2').text(hash[4]).attr('href','https://ipfs.io/ipfs/' + hash[4]);
 
 
       var publisher = hash[0];
