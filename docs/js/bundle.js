@@ -26107,6 +26107,57 @@ module.exports = function base (ALPHABET) {
 }
 
 },{"safe-buffer":644}],180:[function(require,module,exports){
+<<<<<<< HEAD
+;(function (globalObject) {
+  'use strict';
+
+/*
+ *      bignumber.js v8.1.1
+ *      A JavaScript library for arbitrary-precision arithmetic.
+ *      https://github.com/MikeMcl/bignumber.js
+ *      Copyright (c) 2019 Michael Mclaughlin <M8ch88l@gmail.com>
+ *      MIT Licensed.
+ *
+ *      BigNumber.prototype methods     |  BigNumber methods
+ *                                      |
+ *      absoluteValue            abs    |  clone
+ *      comparedTo                      |  config               set
+ *      decimalPlaces            dp     |      DECIMAL_PLACES
+ *      dividedBy                div    |      ROUNDING_MODE
+ *      dividedToIntegerBy       idiv   |      EXPONENTIAL_AT
+ *      exponentiatedBy          pow    |      RANGE
+ *      integerValue                    |      CRYPTO
+ *      isEqualTo                eq     |      MODULO_MODE
+ *      isFinite                        |      POW_PRECISION
+ *      isGreaterThan            gt     |      FORMAT
+ *      isGreaterThanOrEqualTo   gte    |      ALPHABET
+ *      isInteger                       |  isBigNumber
+ *      isLessThan               lt     |  maximum              max
+ *      isLessThanOrEqualTo      lte    |  minimum              min
+ *      isNaN                           |  random
+ *      isNegative                      |  sum
+ *      isPositive                      |
+ *      isZero                          |
+ *      minus                           |
+ *      modulo                   mod    |
+ *      multipliedBy             times  |
+ *      negated                         |
+ *      plus                            |
+ *      precision                sd     |
+ *      shiftedBy                       |
+ *      squareRoot               sqrt   |
+ *      toExponential                   |
+ *      toFixed                         |
+ *      toFormat                        |
+ *      toFraction                      |
+ *      toJSON                          |
+ *      toNumber                        |
+ *      toPrecision                     |
+ *      toString                        |
+ *      valueOf                         |
+ *
+ */
+=======
 ;(function (globalObject) {
   'use strict';
 
@@ -29023,6 +29074,7 @@ module.exports = function base (ALPHABET) {
 // Reference https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki
 // Format: 0x30 [total-length] 0x02 [R-length] [R] 0x02 [S-length] [S]
 // NOTE: SIGHASH byte ignored AND restricted, truncate before use
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 var Buffer = require('safe-buffer').Buffer
 
@@ -30779,6 +30831,60 @@ module.exports = function decodeAsm (stdlib, foreign, buffer) {
 
     return 0
   }
+<<<<<<< HEAD
+})(this);
+
+},{}],181:[function(require,module,exports){
+// Reference https://github.com/bitcoin/bips/blob/master/bip-0066.mediawiki
+// Format: 0x30 [total-length] 0x02 [R-length] [R] 0x02 [S-length] [S]
+// NOTE: SIGHASH byte ignored AND restricted, truncate before use
+
+var Buffer = require('safe-buffer').Buffer
+
+function check (buffer) {
+  if (buffer.length < 8) return false
+  if (buffer.length > 72) return false
+  if (buffer[0] !== 0x30) return false
+  if (buffer[1] !== buffer.length - 2) return false
+  if (buffer[2] !== 0x02) return false
+
+  var lenR = buffer[3]
+  if (lenR === 0) return false
+  if (5 + lenR >= buffer.length) return false
+  if (buffer[4 + lenR] !== 0x02) return false
+
+  var lenS = buffer[5 + lenR]
+  if (lenS === 0) return false
+  if ((6 + lenR + lenS) !== buffer.length) return false
+
+  if (buffer[4] & 0x80) return false
+  if (lenR > 1 && (buffer[4] === 0x00) && !(buffer[5] & 0x80)) return false
+
+  if (buffer[lenR + 6] & 0x80) return false
+  if (lenS > 1 && (buffer[lenR + 6] === 0x00) && !(buffer[lenR + 7] & 0x80)) return false
+  return true
+}
+
+function decode (buffer) {
+  if (buffer.length < 8) throw new Error('DER sequence length is too short')
+  if (buffer.length > 72) throw new Error('DER sequence length is too long')
+  if (buffer[0] !== 0x30) throw new Error('Expected DER sequence')
+  if (buffer[1] !== buffer.length - 2) throw new Error('DER sequence length is invalid')
+  if (buffer[2] !== 0x02) throw new Error('Expected DER integer')
+
+  var lenR = buffer[3]
+  if (lenR === 0) throw new Error('R length is zero')
+  if (5 + lenR >= buffer.length) throw new Error('R length is too long')
+  if (buffer[4 + lenR] !== 0x02) throw new Error('Expected DER integer (2)')
+
+  var lenS = buffer[5 + lenR]
+  if (lenS === 0) throw new Error('S length is zero')
+  if ((6 + lenR + lenS) !== buffer.length) throw new Error('S length is invalid')
+
+  if (buffer[4] & 0x80) throw new Error('R value is negative')
+  if (lenR > 1 && (buffer[4] === 0x00) && !(buffer[5] & 0x80)) throw new Error('R value excessively padded')
+=======
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
   function ERROR (octet) {
     octet = octet | 0
@@ -30786,8 +30892,34 @@ module.exports = function decodeAsm (stdlib, foreign, buffer) {
     return 1
   }
 
+<<<<<<< HEAD
+  // 0x30 [total-length] 0x02 [R-length] [R] 0x02 [S-length] [S]
+  signature[0] = 0x30
+  signature[1] = signature.length - 2
+  signature[2] = 0x02
+  signature[3] = r.length
+  r.copy(signature, 4)
+  signature[4 + lenR] = 0x02
+  signature[5 + lenR] = s.length
+  s.copy(signature, 6 + lenR)
+
+  return signature
+}
+
+module.exports = {
+  check: check,
+  decode: decode,
+  encode: encode
+}
+
+},{"safe-buffer":644}],182:[function(require,module,exports){
+// Blake2B in pure Javascript
+// Adapted from the reference implementation in RFC7693
+// Ported to Javascript by DC - https://github.com/dcposch
+=======
   function BREAK (octet) {
     octet = octet | 0
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
     pushBreak()
 
@@ -31349,6 +31481,12 @@ class Decoder {
     }
   }
 
+<<<<<<< HEAD
+},{"./util":185}],183:[function(require,module,exports){
+// BLAKE2s hash function in pure Javascript
+// Adapted from the reference implementation in RFC7693
+// Ported to Javascript by DC - https://github.com/dcposch
+=======
   // Reset all state back to the beginning, also used for initiatlization
   _reset () {
     this._res = []
@@ -31360,6 +31498,7 @@ class Decoder {
       tmpKey: null
     }]
   }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
   // -- Interface to customize deoding behaviour
   createTag (tagNumber, value) {
@@ -31455,17 +31594,29 @@ class Decoder {
     return Infinity
   }
 
+<<<<<<< HEAD
+},{"./util":185}],184:[function(require,module,exports){
+var b2b = require('./blake2b')
+var b2s = require('./blake2s')
+=======
   createInfinityNeg () {
     return -Infinity
   }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
   createNaN () {
     return NaN
   }
 
+<<<<<<< HEAD
+},{"./blake2b":182,"./blake2s":183}],185:[function(require,module,exports){
+(function (Buffer){
+var ERROR_MSG_INPUT = 'Input must be an string, Buffer or Uint8Array'
+=======
   createNaNNeg () {
     return -NaN
   }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
   createUtf8String (raw, len) {
     return raw.join('')
@@ -31493,9 +31644,17 @@ class Decoder {
     this._push(this.createInt32(f, g))
   }
 
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"buffer":51}],186:[function(require,module,exports){
+arguments[4][20][0].apply(exports,arguments)
+},{"buffer":22,"dup":20}],187:[function(require,module,exports){
+'use strict'
+=======
   pushInt64 (f1, f2, g1, g2) {
     this._push(this.createInt64(f1, f2, g1, g2))
   }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
   pushFloat (val) {
     this._push(this.createFloat(val))
@@ -31533,9 +31692,15 @@ class Decoder {
     this._push(this.createUndefined())
   }
 
+<<<<<<< HEAD
+},{"bignumber.js":180}],188:[function(require,module,exports){
+module.exports = function decodeAsm (stdlib, foreign, buffer) {
+  'use asm'
+=======
   pushInfinity () {
     this._push(this.createInfinity())
   }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
   pushInfinityNeg () {
     this._push(this.createInfinityNeg())
@@ -33188,8 +33353,13 @@ module.exports = function base64 (alphabet) {
   }
 }
 
+<<<<<<< HEAD
+},{}],189:[function(require,module,exports){
+(function (global,Buffer){
+=======
 }).call(this,require("buffer").Buffer)
 },{"buffer":51}],203:[function(require,module,exports){
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 'use strict'
 
 const Base = require('./base.js')
@@ -33896,9 +34066,16 @@ var eos = function(stream, opts, callback) {
 	var readable = opts.readable || (opts.readable !== false && stream.readable);
 	var writable = opts.writable || (opts.writable !== false && stream.writable);
 
+<<<<<<< HEAD
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+},{"./constants":187,"./decoder.asm":188,"./simple":193,"./tagged":194,"./utils":195,"bignumber.js":180,"buffer":51,"ieee754":221,"iso-url":488}],190:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+=======
 	var onlegacyfinish = function() {
 		if (!stream.writable) onfinish();
 	};
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 	var onfinish = function() {
 		writable = false;
@@ -34119,6 +34296,15 @@ ip.toString = function(buff, offset, length) {
     result = result.replace(/(^|:)0(:0)*:0(:|$)/, '$1::$3');
     result = result.replace(/:{3,4}/, '::');
   }
+<<<<<<< HEAD
+}
+
+}).call(this,require("buffer").Buffer)
+},{"./decoder":189,"./utils":195,"buffer":51}],191:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+=======
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
   return result;
 };
@@ -34634,7 +34820,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = eachLimit;
 
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"./constants":187,"./utils":195,"bignumber.js":180,"buffer":51,"iso-url":488}],192:[function(require,module,exports){
+'use strict'
+=======
 var _eachOfLimit = require('./internal/eachOfLimit');
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 var _eachOfLimit2 = _interopRequireDefault(_eachOfLimit);
 
@@ -34642,7 +34834,12 @@ var _withoutIndex = require('./internal/withoutIndex');
 
 var _withoutIndex2 = _interopRequireDefault(_withoutIndex);
 
+<<<<<<< HEAD
+},{"./decoder":189,"./diagnose":190,"./encoder":191,"./simple":193,"./tagged":194}],193:[function(require,module,exports){
+'use strict'
+=======
 var _wrapAsync = require('./internal/wrapAsync');
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 var _wrapAsync2 = _interopRequireDefault(_wrapAsync);
 
@@ -34687,7 +34884,12 @@ var _doLimit = require('./internal/doLimit');
 
 var _doLimit2 = _interopRequireDefault(_doLimit);
 
+<<<<<<< HEAD
+},{"./constants":187}],194:[function(require,module,exports){
+'use strict'
+=======
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 /**
  * The same as [`each`]{@link module:Collections.each} but runs only a single async operation at a time.
@@ -34741,7 +34943,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = _eachOfLimit;
 
+<<<<<<< HEAD
+},{}],195:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+=======
 var _noop = require('lodash/noop');
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 var _noop2 = _interopRequireDefault(_noop);
 
@@ -34922,6 +35130,12 @@ module.exports = exports["default"];
 },{}],236:[function(require,module,exports){
 "use strict";
 
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"./constants":187,"bignumber.js":180,"buffer":51}],196:[function(require,module,exports){
+var basex = require('base-x')
+var ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+=======
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -34938,6 +35152,7 @@ module.exports = exports["default"];
 },{}],237:[function(require,module,exports){
 (function (process,setImmediate){
 'use strict';
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -34946,9 +35161,86 @@ exports.hasNextTick = exports.hasSetImmediate = undefined;
 exports.fallback = fallback;
 exports.wrap = wrap;
 
+<<<<<<< HEAD
+},{"base-x":179}],197:[function(require,module,exports){
+module.exports = {
+  "100": "Continue",
+  "101": "Switching Protocols",
+  "102": "Processing",
+  "200": "OK",
+  "201": "Created",
+  "202": "Accepted",
+  "203": "Non-Authoritative Information",
+  "204": "No Content",
+  "205": "Reset Content",
+  "206": "Partial Content",
+  "207": "Multi-Status",
+  "208": "Already Reported",
+  "226": "IM Used",
+  "300": "Multiple Choices",
+  "301": "Moved Permanently",
+  "302": "Found",
+  "303": "See Other",
+  "304": "Not Modified",
+  "305": "Use Proxy",
+  "307": "Temporary Redirect",
+  "308": "Permanent Redirect",
+  "400": "Bad Request",
+  "401": "Unauthorized",
+  "402": "Payment Required",
+  "403": "Forbidden",
+  "404": "Not Found",
+  "405": "Method Not Allowed",
+  "406": "Not Acceptable",
+  "407": "Proxy Authentication Required",
+  "408": "Request Timeout",
+  "409": "Conflict",
+  "410": "Gone",
+  "411": "Length Required",
+  "412": "Precondition Failed",
+  "413": "Payload Too Large",
+  "414": "URI Too Long",
+  "415": "Unsupported Media Type",
+  "416": "Range Not Satisfiable",
+  "417": "Expectation Failed",
+  "418": "I'm a teapot",
+  "421": "Misdirected Request",
+  "422": "Unprocessable Entity",
+  "423": "Locked",
+  "424": "Failed Dependency",
+  "425": "Unordered Collection",
+  "426": "Upgrade Required",
+  "428": "Precondition Required",
+  "429": "Too Many Requests",
+  "431": "Request Header Fields Too Large",
+  "451": "Unavailable For Legal Reasons",
+  "500": "Internal Server Error",
+  "501": "Not Implemented",
+  "502": "Bad Gateway",
+  "503": "Service Unavailable",
+  "504": "Gateway Timeout",
+  "505": "HTTP Version Not Supported",
+  "506": "Variant Also Negotiates",
+  "507": "Insufficient Storage",
+  "508": "Loop Detected",
+  "509": "Bandwidth Limit Exceeded",
+  "510": "Not Extended",
+  "511": "Network Authentication Required"
+}
+
+},{}],198:[function(require,module,exports){
+// base-x encoding
+// Forked from https://github.com/cryptocoinjs/bs58
+// Originally written by Mike Hearn for BitcoinJ
+// Copyright (c) 2011 Google Inc
+// Ported to JavaScript by Stefan Thomas
+// Merged Buffer refactorings from base58-native by Stephen Pair
+// Copyright (c) 2013 BitPay Inc
+=======
 var _slice = require('./slice');
 
 var _slice2 = _interopRequireDefault(_slice);
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35101,6 +35393,2653 @@ exports.default = function (tasks, callback) {
         task.apply(null, args);
     }
 
+    function next(err /*, ...args*/) {
+        if (err || taskIndex === tasks.length) {
+            return callback.apply(null, arguments);
+        }
+        nextTask((0, _slice2.default)(arguments, 1));
+    }
+
+    nextTask([]);
+};
+
+var _isArray = require('lodash/isArray');
+
+var _isArray2 = _interopRequireDefault(_isArray);
+
+var _noop = require('lodash/noop');
+
+<<<<<<< HEAD
+},{"safe-buffer":644}],199:[function(require,module,exports){
+'use strict'
+=======
+var _noop2 = _interopRequireDefault(_noop);
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+var _once = require('./internal/once');
+
+var _once2 = _interopRequireDefault(_once);
+
+var _slice = require('./internal/slice');
+
+var _slice2 = _interopRequireDefault(_slice);
+
+var _onlyOnce = require('./internal/onlyOnce');
+
+<<<<<<< HEAD
+},{}],200:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+=======
+var _onlyOnce2 = _interopRequireDefault(_onlyOnce);
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+var _wrapAsync = require('./internal/wrapAsync');
+
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"buffer":51}],201:[function(require,module,exports){
+=======
+var _wrapAsync2 = _interopRequireDefault(_wrapAsync);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = exports['default'];
+
+/**
+ * Runs the `tasks` array of functions in series, each passing their results to
+ * the next in the array. However, if any of the `tasks` pass an error to their
+ * own callback, the next function is not executed, and the main `callback` is
+ * immediately called with the error.
+ *
+ * @name waterfall
+ * @static
+ * @memberOf module:ControlFlow
+ * @method
+ * @category Control Flow
+ * @param {Array} tasks - An array of [async functions]{@link AsyncFunction}
+ * to run.
+ * Each function should complete with any number of `result` values.
+ * The `result` values will be passed as arguments, in order, to the next task.
+ * @param {Function} [callback] - An optional callback to run once all the
+ * functions have completed. This will be passed the results of the last task's
+ * callback. Invoked with (err, [results]).
+ * @returns undefined
+ * @example
+ *
+ * async.waterfall([
+ *     function(callback) {
+ *         callback(null, 'one', 'two');
+ *     },
+ *     function(arg1, arg2, callback) {
+ *         // arg1 now equals 'one' and arg2 now equals 'two'
+ *         callback(null, 'three');
+ *     },
+ *     function(arg1, callback) {
+ *         // arg1 now equals 'three'
+ *         callback(null, 'done');
+ *     }
+ * ], function (err, result) {
+ *     // result now equals 'done'
+ * });
+ *
+ * // Or, with named functions:
+ * async.waterfall([
+ *     myFirstFunction,
+ *     mySecondFunction,
+ *     myLastFunction,
+ * ], function (err, result) {
+ *     // result now equals 'done'
+ * });
+ * function myFirstFunction(callback) {
+ *     callback(null, 'one', 'two');
+ * }
+ * function mySecondFunction(arg1, arg2, callback) {
+ *     // arg1 now equals 'one' and arg2 now equals 'two'
+ *     callback(null, 'three');
+ * }
+ * function myLastFunction(arg1, callback) {
+ *     // arg1 now equals 'three'
+ *     callback(null, 'done');
+ * }
+ */
+},{"./internal/once":235,"./internal/onlyOnce":236,"./internal/slice":238,"./internal/wrapAsync":240,"lodash/isArray":513,"lodash/noop":522}],243:[function(require,module,exports){
+arguments[4][198][0].apply(exports,arguments)
+},{"dup":198,"safe-buffer":644}],244:[function(require,module,exports){
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+(function (Buffer){
+'use strict'
+var DuplexStream = require('readable-stream').Duplex
+  , util         = require('util')
+
+function BufferList (callback) {
+  if (!(this instanceof BufferList))
+    return new BufferList(callback)
+
+  this._bufs  = []
+  this.length = 0
+
+  if (typeof callback == 'function') {
+    this._callback = callback
+
+    var piper = function piper (err) {
+      if (this._callback) {
+        this._callback(err)
+        this._callback = null
+      }
+    }.bind(this)
+
+    this.on('pipe', function onPipe (src) {
+      src.on('error', piper)
+    })
+    this.on('unpipe', function onUnpipe (src) {
+      src.removeListener('error', piper)
+    })
+  } else {
+    this.append(callback)
+  }
+
+  DuplexStream.call(this)
+}
+
+
+util.inherits(BufferList, DuplexStream)
+
+
+BufferList.prototype._offset = function _offset (offset) {
+  var tot = 0, i = 0, _t
+  if (offset === 0) return [ 0, 0 ]
+  for (; i < this._bufs.length; i++) {
+    _t = tot + this._bufs[i].length
+    if (offset < _t || i == this._bufs.length - 1) {
+      return [ i, offset - tot ]
+    }
+    tot = _t
+  }
+}
+
+BufferList.prototype._reverseOffset = function (blOffset) {
+  var bufferId = blOffset[0]
+  var offset = blOffset[1]
+  for (var i = 0; i < bufferId; i++) {
+    offset += this._bufs[i].length
+  }
+  return offset
+}
+
+BufferList.prototype.append = function append (buf) {
+  var i = 0
+
+  if (Buffer.isBuffer(buf)) {
+    this._appendBuffer(buf)
+  } else if (Array.isArray(buf)) {
+    for (; i < buf.length; i++)
+      this.append(buf[i])
+  } else if (buf instanceof BufferList) {
+    // unwrap argument into individual BufferLists
+    for (; i < buf._bufs.length; i++)
+      this.append(buf._bufs[i])
+  } else if (buf != null) {
+    // coerce number arguments to strings, since Buffer(number) does
+    // uninitialized memory allocation
+    if (typeof buf == 'number')
+      buf = buf.toString()
+
+    this._appendBuffer(Buffer.from(buf))
+  }
+
+  return this
+}
+
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"buffer":51}],202:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+=======
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+BufferList.prototype._appendBuffer = function appendBuffer (buf) {
+  this._bufs.push(buf)
+  this.length += buf.length
+}
+
+
+BufferList.prototype._write = function _write (buf, encoding, callback) {
+  this._appendBuffer(buf)
+
+  if (typeof callback == 'function')
+    callback()
+}
+
+
+BufferList.prototype._read = function _read (size) {
+  if (!this.length)
+    return this.push(null)
+
+  size = Math.min(size, this.length)
+  this.push(this.slice(0, size))
+  this.consume(size)
+}
+
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"buffer":51}],203:[function(require,module,exports){
+'use strict'
+=======
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+BufferList.prototype.end = function end (chunk) {
+  DuplexStream.prototype.end.call(this, chunk)
+
+  if (this._callback) {
+    this._callback(null, this.slice())
+    this._callback = null
+  }
+}
+
+
+BufferList.prototype.get = function get (index) {
+  if (index > this.length || index < 0) {
+    return undefined
+  }
+  var offset = this._offset(index)
+  return this._bufs[offset[0]][offset[1]]
+}
+
+
+BufferList.prototype.slice = function slice (start, end) {
+  if (typeof start == 'number' && start < 0)
+    start += this.length
+  if (typeof end == 'number' && end < 0)
+    end += this.length
+  return this.copy(null, 0, start, end)
+}
+
+<<<<<<< HEAD
+},{"./base.js":199,"./base16":200,"./base32":201,"./base64":202,"base-x":198}],204:[function(require,module,exports){
+(function (Buffer){
+/**
+ * Implementation of the [multibase](https://github.com/multiformats/multibase) specification.
+ * @module Multibase
+ */
+'use strict'
+=======
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+BufferList.prototype.copy = function copy (dst, dstStart, srcStart, srcEnd) {
+  if (typeof srcStart != 'number' || srcStart < 0)
+    srcStart = 0
+  if (typeof srcEnd != 'number' || srcEnd > this.length)
+    srcEnd = this.length
+  if (srcStart >= this.length)
+    return dst || Buffer.alloc(0)
+  if (srcEnd <= 0)
+    return dst || Buffer.alloc(0)
+
+  var copy   = !!dst
+    , off    = this._offset(srcStart)
+    , len    = srcEnd - srcStart
+    , bytes  = len
+    , bufoff = (copy && dstStart) || 0
+    , start  = off[1]
+    , l
+    , i
+
+  // copy/slice everything
+  if (srcStart === 0 && srcEnd == this.length) {
+    if (!copy) { // slice, but full concat if multiple buffers
+      return this._bufs.length === 1
+        ? this._bufs[0]
+        : Buffer.concat(this._bufs, this.length)
+    }
+
+    // copy, need to copy individual buffers
+    for (i = 0; i < this._bufs.length; i++) {
+      this._bufs[i].copy(dst, bufoff)
+      bufoff += this._bufs[i].length
+    }
+
+    return dst
+  }
+
+  // easy, cheap case where it's a subset of one of the buffers
+  if (bytes <= this._bufs[off[0]].length - start) {
+    return copy
+      ? this._bufs[off[0]].copy(dst, dstStart, start, start + bytes)
+      : this._bufs[off[0]].slice(start, start + bytes)
+  }
+
+  if (!copy) // a slice, we need something to copy in to
+    dst = Buffer.allocUnsafe(len)
+
+  for (i = off[0]; i < this._bufs.length; i++) {
+    l = this._bufs[i].length - start
+
+    if (bytes > l) {
+      this._bufs[i].copy(dst, bufoff, start)
+    } else {
+      this._bufs[i].copy(dst, bufoff, start, start + bytes)
+      break
+    }
+
+    bufoff += l
+    bytes -= l
+
+    if (start)
+      start = 0
+  }
+
+  return dst
+}
+
+BufferList.prototype.shallowSlice = function shallowSlice (start, end) {
+  start = start || 0
+  end = typeof end !== 'number' ? this.length : end
+
+  if (start < 0)
+    start += this.length
+  if (end < 0)
+    end += this.length
+
+  if (start === end) {
+    return new BufferList()
+  }
+  var startOffset = this._offset(start)
+    , endOffset = this._offset(end)
+    , buffers = this._bufs.slice(startOffset[0], endOffset[0] + 1)
+
+  if (endOffset[1] == 0)
+    buffers.pop()
+  else
+    buffers[buffers.length-1] = buffers[buffers.length-1].slice(0, endOffset[1])
+
+  if (startOffset[1] != 0)
+    buffers[0] = buffers[0].slice(startOffset[1])
+
+  return new BufferList(buffers)
+}
+
+BufferList.prototype.toString = function toString (encoding, start, end) {
+  return this.slice(start, end).toString(encoding)
+}
+
+BufferList.prototype.consume = function consume (bytes) {
+  while (this._bufs.length) {
+    if (bytes >= this._bufs[0].length) {
+      bytes -= this._bufs[0].length
+      this.length -= this._bufs[0].length
+      this._bufs.shift()
+    } else {
+      this._bufs[0] = this._bufs[0].slice(bytes)
+      this.length -= bytes
+      break
+    }
+  }
+  return this
+}
+
+
+BufferList.prototype.duplicate = function duplicate () {
+  var i = 0
+    , copy = new BufferList()
+
+  for (; i < this._bufs.length; i++)
+    copy.append(this._bufs[i])
+
+  return copy
+}
+
+
+BufferList.prototype._destroy = function _destroy (err, cb) {
+  this._bufs.length = 0
+  this.length = 0
+  cb(err)
+}
+
+
+BufferList.prototype.indexOf = function (search, offset, encoding) {
+  if (encoding === undefined && typeof offset === 'string') {
+    encoding = offset
+    offset = undefined
+  }
+  if (typeof search === 'function' || Array.isArray(search)) {
+    throw new TypeError('The "value" argument must be one of type string, Buffer, BufferList, or Uint8Array.')
+  } else if (typeof search === 'number') {
+      search = Buffer.from([search])
+  } else if (typeof search === 'string') {
+    search = Buffer.from(search, encoding)
+  } else if (search instanceof BufferList) {
+    search = search.slice()
+  } else if (!Buffer.isBuffer(search)) {
+    search = Buffer.from(search)
+  }
+
+  offset = Number(offset || 0)
+  if (isNaN(offset)) {
+    offset = 0
+  }
+
+  if (offset < 0) {
+    offset = this.length + offset
+  }
+
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"./constants":203,"buffer":51}],205:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+=======
+  if (offset < 0) {
+    offset = 0
+  }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+  if (search.length === 0) {
+    return offset > this.length ? this.length : offset
+  }
+
+  var blOffset = this._offset(offset)
+  var blIndex = blOffset[0] // index of which internal buffer we're working on
+  var buffOffset = blOffset[1] // offset of the internal buffer we're working on
+
+  // scan over each buffer
+  for (blIndex; blIndex < this._bufs.length; blIndex++) {
+    var buff = this._bufs[blIndex]
+    while(buffOffset < buff.length) {
+      var availableWindow = buff.length - buffOffset
+      if (availableWindow >= search.length) {
+        var nativeSearchResult = buff.indexOf(search, buffOffset)
+        if (nativeSearchResult !== -1) {
+          return this._reverseOffset([blIndex, nativeSearchResult])
+        }
+        buffOffset = buff.length - search.length + 1 // end of native search window
+      } else {
+        var revOffset = this._reverseOffset([blIndex, buffOffset])
+        if (this._match(revOffset, search)) {
+          return revOffset
+        }
+        buffOffset++
+      }
+    }
+    buffOffset = 0
+  }
+  return -1
+}
+
+BufferList.prototype._match = function(offset, search) {
+  if (this.length - offset < search.length) {
+    return false
+  }
+  for (var searchOffset = 0; searchOffset < search.length ; searchOffset++) {
+    if(this.get(offset + searchOffset) !== search[searchOffset]){
+      return false
+    }
+  }
+  return true
+}
+
+
+;(function () {
+  var methods = {
+      'readDoubleBE' : 8
+    , 'readDoubleLE' : 8
+    , 'readFloatBE'  : 4
+    , 'readFloatLE'  : 4
+    , 'readInt32BE'  : 4
+    , 'readInt32LE'  : 4
+    , 'readUInt32BE' : 4
+    , 'readUInt32LE' : 4
+    , 'readInt16BE'  : 2
+    , 'readInt16LE'  : 2
+    , 'readUInt16BE' : 2
+    , 'readUInt16LE' : 2
+    , 'readInt8'     : 1
+    , 'readUInt8'    : 1
+    , 'readIntBE'    : null
+    , 'readIntLE'    : null
+    , 'readUIntBE'   : null
+    , 'readUIntLE'   : null
+  }
+
+  for (var m in methods) {
+    (function (m) {
+      if (methods[m] === null) {
+        BufferList.prototype[m] = function (offset, byteLength) {
+          return this.slice(offset, offset + byteLength)[m](0, byteLength)
+        }
+      }
+      else {
+        BufferList.prototype[m] = function (offset) {
+          return this.slice(offset, offset + methods[m])[m](0)
+        }
+      }
+    }(m))
+  }
+}())
+
+
+<<<<<<< HEAD
+}).call(this,{"isBuffer":require("../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":105,"multihashes":540}],206:[function(require,module,exports){
+=======
+module.exports = BufferList
+
+}).call(this,require("buffer").Buffer)
+},{"buffer":51,"readable-stream":305,"util":163}],245:[function(require,module,exports){
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+(function (Buffer){
+var Writable = require('readable-stream').Writable
+var inherits = require('inherits')
+
+var U8 = Uint8Array
+
+function ConcatStream(opts, cb) {
+  if (!(this instanceof ConcatStream)) return new ConcatStream(opts, cb)
+
+  if (typeof opts === 'function') {
+    cb = opts
+    opts = {}
+  }
+  if (!opts) opts = {}
+
+  var encoding = opts.encoding
+  var shouldInferEncoding = false
+
+  if (!encoding) {
+    shouldInferEncoding = true
+  } else {
+    encoding =  String(encoding).toLowerCase()
+    if (encoding === 'u8' || encoding === 'uint8') {
+      encoding = 'uint8array'
+    }
+  }
+
+  Writable.call(this, { objectMode: true })
+
+  this.encoding = encoding
+  this.shouldInferEncoding = shouldInferEncoding
+
+  if (cb) this.on('finish', function () { cb(this.getBody()) })
+  this.body = []
+}
+
+module.exports = ConcatStream
+inherits(ConcatStream, Writable)
+
+ConcatStream.prototype._write = function(chunk, enc, next) {
+  this.body.push(chunk)
+  next()
+}
+
+ConcatStream.prototype.inferEncoding = function (buff) {
+  var firstBuffer = buff === undefined ? this.body[0] : buff;
+  if (Buffer.isBuffer(firstBuffer)) return 'buffer'
+  if (typeof Uint8Array !== 'undefined' && firstBuffer instanceof Uint8Array) return 'uint8array'
+  if (Array.isArray(firstBuffer)) return 'array'
+  if (typeof firstBuffer === 'string') return 'string'
+  if (Object.prototype.toString.call(firstBuffer) === "[object Object]") return 'object'
+  return 'buffer'
+}
+
+ConcatStream.prototype.getBody = function () {
+  if (!this.encoding && this.body.length === 0) return []
+  if (this.shouldInferEncoding) this.encoding = this.inferEncoding()
+  if (this.encoding === 'array') return arrayConcat(this.body)
+  if (this.encoding === 'string') return stringConcat(this.body)
+  if (this.encoding === 'buffer') return bufferConcat(this.body)
+  if (this.encoding === 'uint8array') return u8Concat(this.body)
+  return this.body
+}
+
+function isArrayish (arr) {
+  return /Array\]$/.test(Object.prototype.toString.call(arr))
+}
+
+function isBufferish (p) {
+  return typeof p === 'string' || isArrayish(p) || (p && typeof p.subarray === 'function')
+}
+
+function stringConcat (parts) {
+  var strings = []
+  for (var i = 0; i < parts.length; i++) {
+    var p = parts[i]
+    if (typeof p === 'string') {
+      strings.push(p)
+    } else if (Buffer.isBuffer(p)) {
+      strings.push(p)
+    } else if (isBufferish(p)) {
+      strings.push(Buffer.from(p))
+    } else {
+      strings.push(Buffer.from(String(p)))
+    }
+  }
+  if (Buffer.isBuffer(parts[0])) {
+    strings = Buffer.concat(strings)
+    strings = strings.toString('utf8')
+  } else {
+    strings = strings.join('')
+  }
+  return strings
+}
+
+function bufferConcat (parts) {
+  var bufs = []
+  for (var i = 0; i < parts.length; i++) {
+    var p = parts[i]
+    if (Buffer.isBuffer(p)) {
+      bufs.push(p)
+    } else if (isBufferish(p)) {
+      bufs.push(Buffer.from(p))
+    } else {
+      bufs.push(Buffer.from(String(p)))
+    }
+  }
+  return Buffer.concat(bufs)
+}
+
+function arrayConcat (parts) {
+  var res = []
+  for (var i = 0; i < parts.length; i++) {
+    res.push.apply(res, parts[i])
+  }
+  return res
+}
+
+function u8Concat (parts) {
+  var len = 0
+  for (var i = 0; i < parts.length; i++) {
+    if (typeof parts[i] === 'string') {
+      parts[i] = Buffer.from(parts[i])
+    }
+    len += parts[i].length
+  }
+  var u8 = new U8(len)
+  for (var i = 0, offset = 0; i < parts.length; i++) {
+    var part = parts[i]
+    for (var j = 0; j < part.length; j++) {
+      u8[offset++] = part[j]
+    }
+  }
+  return u8
+}
+
+}).call(this,require("buffer").Buffer)
+},{"buffer":51,"inherits":222,"readable-stream":305}],246:[function(require,module,exports){
+(function (process){
+/* eslint-env browser */
+
+/**
+ * This is the web browser implementation of `debug()`.
+ */
+
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+	'#0000CC',
+	'#0000FF',
+	'#0033CC',
+	'#0033FF',
+	'#0066CC',
+	'#0066FF',
+	'#0099CC',
+	'#0099FF',
+	'#00CC00',
+	'#00CC33',
+	'#00CC66',
+	'#00CC99',
+	'#00CCCC',
+	'#00CCFF',
+	'#3300CC',
+	'#3300FF',
+	'#3333CC',
+	'#3333FF',
+	'#3366CC',
+	'#3366FF',
+	'#3399CC',
+	'#3399FF',
+	'#33CC00',
+	'#33CC33',
+	'#33CC66',
+	'#33CC99',
+	'#33CCCC',
+	'#33CCFF',
+	'#6600CC',
+	'#6600FF',
+	'#6633CC',
+	'#6633FF',
+	'#66CC00',
+	'#66CC33',
+	'#9900CC',
+	'#9900FF',
+	'#9933CC',
+	'#9933FF',
+	'#99CC00',
+	'#99CC33',
+	'#CC0000',
+	'#CC0033',
+	'#CC0066',
+	'#CC0099',
+	'#CC00CC',
+	'#CC00FF',
+	'#CC3300',
+	'#CC3333',
+	'#CC3366',
+	'#CC3399',
+	'#CC33CC',
+	'#CC33FF',
+	'#CC6600',
+	'#CC6633',
+	'#CC9900',
+	'#CC9933',
+	'#CCCC00',
+	'#CCCC33',
+	'#FF0000',
+	'#FF0033',
+	'#FF0066',
+	'#FF0099',
+	'#FF00CC',
+	'#FF00FF',
+	'#FF3300',
+	'#FF3333',
+	'#FF3366',
+	'#FF3399',
+	'#FF33CC',
+	'#FF33FF',
+	'#FF6600',
+	'#FF6633',
+	'#FF9900',
+	'#FF9933',
+	'#FFCC00',
+	'#FFCC33'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+// eslint-disable-next-line complexity
+function useColors() {
+	// NB: In an Electron preload script, document will be defined but not fully
+	// initialized. Since we know we're in Chrome, we'll just detect this case
+	// explicitly
+	if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
+		return true;
+	}
+
+	// Internet Explorer and Edge do not support colors.
+	if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+		return false;
+	}
+
+	// Is webkit? http://stackoverflow.com/a/16459606/376773
+	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
+		// Is firebug? http://stackoverflow.com/a/398120/376773
+		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
+		// Is firefox >= v31?
+		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+		// Double check webkit in userAgent just in case we are in a worker
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+}
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs(args) {
+	args[0] = (this.useColors ? '%c' : '') +
+		this.namespace +
+		(this.useColors ? ' %c' : ' ') +
+		args[0] +
+		(this.useColors ? '%c ' : ' ') +
+		'+' + module.exports.humanize(this.diff);
+
+	if (!this.useColors) {
+		return;
+	}
+
+	const c = 'color: ' + this.color;
+	args.splice(1, 0, c, 'color: inherit');
+
+	// The final "%c" is somewhat tricky, because there could be other
+	// arguments passed either before or after the %c, so we need to
+	// figure out the correct index to insert the CSS into
+	let index = 0;
+	let lastC = 0;
+	args[0].replace(/%[a-zA-Z%]/g, match => {
+		if (match === '%%') {
+			return;
+		}
+		index++;
+		if (match === '%c') {
+			// We only are interested in the *last* %c
+			// (the user may have provided their own)
+			lastC = index;
+		}
+	});
+
+	args.splice(lastC, 0, c);
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+function log(...args) {
+	// This hackery is required for IE8/9, where
+	// the `console.log` function doesn't have 'apply'
+	return typeof console === 'object' &&
+		console.log &&
+		console.log(...args);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+function save(namespaces) {
+	try {
+		if (namespaces) {
+			exports.storage.setItem('debug', namespaces);
+		} else {
+			exports.storage.removeItem('debug');
+		}
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+function load() {
+	let r;
+	try {
+		r = exports.storage.getItem('debug');
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+
+	// If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+	if (!r && typeof process !== 'undefined' && 'env' in process) {
+		r = process.env.DEBUG;
+	}
+
+	return r;
+}
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage() {
+	try {
+		// TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
+		// The Browser also has localStorage in the global context.
+		return localStorage;
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+module.exports = require('./common')(exports);
+
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"./cid-util":205,"buffer":51,"class-is":208,"multibase":204,"multicodec":534,"multicodec/src/base-table":532,"multihashes":540}],207:[function(require,module,exports){
+arguments[4][52][0].apply(exports,arguments)
+},{"dup":52,"inherits":222,"safe-buffer":644,"stream":158,"string_decoder":159}],208:[function(require,module,exports){
+'use strict';
+=======
+const {formatters} = module.exports;
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+formatters.j = function (v) {
+	try {
+		return JSON.stringify(v);
+	} catch (error) {
+		return '[UnexpectedJSONParseError]: ' + error.message;
+	}
+};
+
+}).call(this,require('_process'))
+},{"./common":247,"_process":125}],247:[function(require,module,exports){
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ */
+
+function setup(env) {
+	createDebug.debug = createDebug;
+	createDebug.default = createDebug;
+	createDebug.coerce = coerce;
+	createDebug.disable = disable;
+	createDebug.enable = enable;
+	createDebug.enabled = enabled;
+	createDebug.humanize = require('ms');
+
+	Object.keys(env).forEach(key => {
+		createDebug[key] = env[key];
+	});
+
+	/**
+	* Active `debug` instances.
+	*/
+	createDebug.instances = [];
+
+	/**
+	* The currently active debug mode names, and names to skip.
+	*/
+
+	createDebug.names = [];
+	createDebug.skips = [];
+
+	/**
+	* Map of special "%n" handling functions, for the debug "format" argument.
+	*
+	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+	*/
+	createDebug.formatters = {};
+
+	/**
+	* Selects a color for a debug namespace
+	* @param {String} namespace The namespace string for the for the debug instance to be colored
+	* @return {Number|String} An ANSI color code for the given namespace
+	* @api private
+	*/
+	function selectColor(namespace) {
+		let hash = 0;
+
+		for (let i = 0; i < namespace.length; i++) {
+			hash = ((hash << 5) - hash) + namespace.charCodeAt(i);
+			hash |= 0; // Convert to 32bit integer
+		}
+
+		return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+	}
+	createDebug.selectColor = selectColor;
+
+<<<<<<< HEAD
+    return ClassIsWrapper;
+}
+
+module.exports = withIs;
+module.exports.proto = withIsProto;
+
+},{}],209:[function(require,module,exports){
+arguments[4][56][0].apply(exports,arguments)
+},{"cipher-base":207,"dup":56,"inherits":222,"md5.js":530,"ripemd160":643,"sha.js":657}],210:[function(require,module,exports){
+arguments[4][57][0].apply(exports,arguments)
+},{"dup":57,"md5.js":530}],211:[function(require,module,exports){
+arguments[4][58][0].apply(exports,arguments)
+},{"./legacy":212,"cipher-base":207,"create-hash/md5":210,"dup":58,"inherits":222,"ripemd160":643,"safe-buffer":644,"sha.js":657}],212:[function(require,module,exports){
+arguments[4][59][0].apply(exports,arguments)
+},{"cipher-base":207,"dup":59,"inherits":222,"safe-buffer":644}],213:[function(require,module,exports){
+module.exports = false;
+=======
+	/**
+	* Create a debugger with the given `namespace`.
+	*
+	* @param {String} namespace
+	* @return {Function}
+	* @api public
+	*/
+	function createDebug(namespace) {
+		let prevTime;
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+		function debug(...args) {
+			// Disabled?
+			if (!debug.enabled) {
+				return;
+			}
+
+<<<<<<< HEAD
+},{}],214:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+var createHmac = require('create-hmac')
+var hashInfo = require('./lib/hash-info.json')
+=======
+			const self = debug;
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+			// Set `diff` timestamp
+			const curr = Number(new Date());
+			const ms = curr - (prevTime || curr);
+			self.diff = ms;
+			self.prev = prevTime;
+			self.curr = curr;
+			prevTime = curr;
+
+			args[0] = createDebug.coerce(args[0]);
+
+			if (typeof args[0] !== 'string') {
+				// Anything else let's inspect with %O
+				args.unshift('%O');
+			}
+
+			// Apply any `formatters` transformations
+			let index = 0;
+			args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
+				// If we encounter an escaped % then don't increase the array index
+				if (match === '%%') {
+					return match;
+				}
+				index++;
+				const formatter = createDebug.formatters[format];
+				if (typeof formatter === 'function') {
+					const val = args[index];
+					match = formatter.call(self, val);
+
+					// Now we need to remove `args[index]` since it's inlined in the `format`
+					args.splice(index, 1);
+					index--;
+				}
+				return match;
+			});
+
+			// Apply env-specific formatting (colors, etc.)
+			createDebug.formatArgs.call(self, args);
+
+			const logFn = self.log || createDebug.log;
+			logFn.apply(self, args);
+		}
+
+		debug.namespace = namespace;
+		debug.enabled = createDebug.enabled(namespace);
+		debug.useColors = createDebug.useColors();
+		debug.color = selectColor(namespace);
+		debug.destroy = destroy;
+		debug.extend = extend;
+		// Debug.formatArgs = formatArgs;
+		// debug.rawLog = rawLog;
+
+		// env-specific initialization logic for debug instances
+		if (typeof createDebug.init === 'function') {
+			createDebug.init(debug);
+		}
+
+		createDebug.instances.push(debug);
+
+		return debug;
+	}
+
+	function destroy() {
+		const index = createDebug.instances.indexOf(this);
+		if (index !== -1) {
+			createDebug.instances.splice(index, 1);
+			return true;
+		}
+		return false;
+	}
+
+	function extend(namespace, delimiter) {
+		const newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+		newDebug.log = this.log;
+		return newDebug;
+	}
+
+	/**
+	* Enables a debug mode by namespaces. This can include modes
+	* separated by a colon and wildcards.
+	*
+	* @param {String} namespaces
+	* @api public
+	*/
+	function enable(namespaces) {
+		createDebug.save(namespaces);
+
+		createDebug.names = [];
+		createDebug.skips = [];
+
+		let i;
+		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+		const len = split.length;
+
+		for (i = 0; i < len; i++) {
+			if (!split[i]) {
+				// ignore empty strings
+				continue;
+			}
+
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"./lib/hash-info.json":215,"buffer":51,"create-hmac":211}],215:[function(require,module,exports){
+module.exports={
+  "sha1": {
+    "securityStrength": 128,
+    "outlen": 160,
+    "seedlen": 440
+  },
+  "sha224": {
+    "securityStrength": 192,
+    "outlen": 224,
+    "seedlen": 440
+  },
+  "sha256": {
+    "securityStrength": 256,
+    "outlen": 256,
+    "seedlen": 440
+  },
+  "sha384": {
+    "securityStrength": 256,
+    "outlen": 384,
+    "seedlen": 888
+  },
+  "sha512": {
+    "securityStrength": 256,
+    "outlen": 512,
+    "seedlen": 888
+  }
+}
+
+},{}],216:[function(require,module,exports){
+var once = require('once');
+=======
+			namespaces = split[i].replace(/\*/g, '.*?');
+
+			if (namespaces[0] === '-') {
+				createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+			} else {
+				createDebug.names.push(new RegExp('^' + namespaces + '$'));
+			}
+		}
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+		for (i = 0; i < createDebug.instances.length; i++) {
+			const instance = createDebug.instances[i];
+			instance.enabled = createDebug.enabled(instance.namespace);
+		}
+	}
+
+	/**
+	* Disable debug output.
+	*
+	* @return {String} namespaces
+	* @api public
+	*/
+	function disable() {
+		const namespaces = [
+			...createDebug.names.map(toNamespace),
+			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
+		].join(',');
+		createDebug.enable('');
+		return namespaces;
+	}
+
+	/**
+	* Returns true if the given mode name is enabled, false otherwise.
+	*
+	* @param {String} name
+	* @return {Boolean}
+	* @api public
+	*/
+	function enabled(name) {
+		if (name[name.length - 1] === '*') {
+			return true;
+		}
+
+		let i;
+		let len;
+
+		for (i = 0, len = createDebug.skips.length; i < len; i++) {
+			if (createDebug.skips[i].test(name)) {
+				return false;
+			}
+		}
+
+		for (i = 0, len = createDebug.names.length; i < len; i++) {
+			if (createDebug.names[i].test(name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	* Convert regexp to namespace
+	*
+	* @param {RegExp} regxep
+	* @return {String} namespace
+	* @api private
+	*/
+	function toNamespace(regexp) {
+		return regexp.toString()
+			.substring(2, regexp.toString().length - 2)
+			.replace(/\.\*\?$/, '*');
+	}
+
+	/**
+	* Coerce `val`.
+	*
+	* @param {Mixed} val
+	* @return {Mixed}
+	* @api private
+	*/
+	function coerce(val) {
+		if (val instanceof Error) {
+			return val.stack || val.message;
+		}
+		return val;
+	}
+
+	createDebug.enable(createDebug.load());
+
+	return createDebug;
+}
+
+module.exports = setup;
+
+},{"ms":272}],248:[function(require,module,exports){
+'use strict'
+
+const DAGLink = require('./index.js')
+
+function create (name, size, cid, callback) {
+  const link = new DAGLink(name, size, cid)
+  callback(null, link)
+}
+
+module.exports = create
+
+},{"./index.js":249}],249:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+const CID = require('cids')
+const assert = require('assert')
+const withIs = require('class-is')
+
+<<<<<<< HEAD
+},{"once":573}],217:[function(require,module,exports){
+'use strict';
+=======
+// Link represents an IPFS Merkle DAG Link between Nodes.
+class DAGLink {
+  constructor (name, size, cid) {
+    assert(cid, 'A link requires a cid to point to')
+    // assert(size, 'A link requires a size')
+    //  note - links should include size, but this assert is disabled
+    //  for now to maintain consistency with go-ipfs pinset
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+    this._name = name || ''
+    this._nameBuf = null
+    this._size = size
+    this._cid = new CID(cid)
+  }
+
+  toString () {
+    return `DAGLink <${this._cid.toBaseEncodedString()} - name: "${this.name}", size: ${this.size}>`
+  }
+
+  toJSON () {
+    if (!this._json) {
+      this._json = Object.freeze({
+        name: this.name,
+        size: this.size,
+        cid: this._cid.toBaseEncodedString()
+      })
+    }
+
+    return Object.assign({}, this._json)
+  }
+
+<<<<<<< HEAD
+},{}],218:[function(require,module,exports){
+"use strict";
+=======
+  get name () {
+    return this._name
+  }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+  // Memoize the Buffer representation of name
+  // We need this to sort the links, otherwise
+  // we will reallocate new buffers every time
+  get nameAsBuffer () {
+    if (this._nameBuf !== null) {
+      return this._nameBuf
+    }
+<<<<<<< HEAD
+  });
+  return results;
+};
+},{}],219:[function(require,module,exports){
+module.exports = require('constants')
+
+},{"constants":53}],220:[function(require,module,exports){
+arguments[4][89][0].apply(exports,arguments)
+},{"dup":89,"inherits":222,"safe-buffer":644,"stream":158}],221:[function(require,module,exports){
+arguments[4][103][0].apply(exports,arguments)
+},{"dup":103}],222:[function(require,module,exports){
+arguments[4][16][0].apply(exports,arguments)
+},{"dup":16}],223:[function(require,module,exports){
+'use strict';
+=======
+
+    this._nameBuf = Buffer.from(this._name)
+    return this._nameBuf
+  }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+  set name (name) {
+    throw new Error("Can't set property: 'name' is immutable")
+  }
+
+  get size () {
+    return this._size
+  }
+
+  set size (size) {
+    throw new Error("Can't set property: 'size' is immutable")
+  }
+
+  get cid () {
+    return this._cid
+  }
+
+<<<<<<< HEAD
+},{}],224:[function(require,module,exports){
+'use strict';
+=======
+  set cid (cid) {
+    throw new Error("Can't set property: 'cid' is immutable")
+  }
+}
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+exports = module.exports = withIs(DAGLink, { className: 'DAGLink', symbolName: '@ipld/js-ipld-dag-pb/daglink' })
+exports.create = require('./create')
+exports.util = require('./util')
+
+}).call(this,require("buffer").Buffer)
+},{"./create":248,"./util":250,"assert":15,"buffer":51,"cids":206,"class-is":208}],250:[function(require,module,exports){
+'use strict'
+
+const DAGLink = require('./index')
+
+function createDagLinkFromB58EncodedHash (link) {
+  return new DAGLink(
+    link.name ? link.name : link.Name,
+    link.size ? link.size : link.Size,
+    link.hash || link.Hash || link.multihash || link.cid
+  )
+}
+
+exports = module.exports
+exports.createDagLinkFromB58EncodedHash = createDagLinkFromB58EncodedHash
+
+},{"./index":249}],251:[function(require,module,exports){
+'use strict'
+
+const dagNodeUtil = require('./util')
+const cloneLinks = dagNodeUtil.cloneLinks
+const cloneData = dagNodeUtil.cloneData
+const toDAGLink = dagNodeUtil.toDAGLink
+const DAGLink = require('../dag-link')
+const DAGNode = require('./index')
+const create = require('./create')
+
+function asDAGLink (link, callback) {
+  if (DAGLink.isDAGLink(link)) {
+    // It's a DAGLink instance
+    // no need to do anything
+
+    return callback(null, link)
+  }
+
+  if (DAGNode.isDAGNode(link)) {
+    // It's a DAGNode instance
+    // convert to link
+    return toDAGLink(link, {}, callback)
+  }
+
+  // It's a Object with name, multihash/hash/cid and size
+  try {
+    callback(null, new DAGLink(link.name, link.size, link.multihash || link.hash || link.cid))
+  } catch (err) {
+    return callback(err)
+  }
+}
+
+function addLink (node, link, callback) {
+  const links = cloneLinks(node)
+  const data = cloneData(node)
+
+  asDAGLink(link, (error, link) => {
+    if (error) {
+      return callback(error)
+    }
+
+    links.push(link)
+    create(data, links, callback)
+  })
+}
+
+module.exports = addLink
+
+},{"../dag-link":249,"./create":253,"./index":254,"./util":256}],252:[function(require,module,exports){
+'use strict'
+
+const dagNodeUtil = require('./util')
+const cloneLinks = dagNodeUtil.cloneLinks
+const cloneData = dagNodeUtil.cloneData
+const create = require('./create')
+
+function clone (dagNode, callback) {
+  const data = cloneData(dagNode)
+  const links = cloneLinks(dagNode)
+  create(data, links, callback)
+}
+
+module.exports = clone
+
+},{"./create":253,"./util":256}],253:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+const sort = require('stable')
+const {
+  serialize
+} = require('../util.js')
+const dagNodeUtil = require('./util.js')
+const linkSort = dagNodeUtil.linkSort
+const DAGNode = require('./index.js')
+const DAGLink = require('../dag-link')
+
+function create (data, links, callback) {
+  if (typeof data === 'function') {
+    callback = data
+    data = undefined
+  } else if (typeof data === 'string') {
+    data = Buffer.from(data)
+  }
+  if (typeof links === 'function') {
+    callback = links
+    links = []
+  }
+
+  if (!Buffer.isBuffer(data)) {
+    return callback(new Error('Passed \'data\' is not a buffer or a string!'))
+  }
+
+  links = links.map((link) => {
+    return DAGLink.isDAGLink(link) ? link : DAGLink.util.createDagLinkFromB58EncodedHash(link)
+  })
+  links = sort(links, linkSort)
+
+  serialize({
+    data, links
+  }, (err, buffer) => {
+    if (err) {
+      return callback(err)
+    }
+
+    return callback(null, new DAGNode(data, links, buffer.length))
+  })
+}
+
+module.exports = create
+
+}).call(this,require("buffer").Buffer)
+},{"../dag-link":249,"../util.js":260,"./index.js":254,"./util.js":256,"buffer":51,"stable":665}],254:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+const assert = require('assert')
+const withIs = require('class-is')
+
+class DAGNode {
+  constructor (data, links, serializedSize) {
+    if (serializedSize !== 0) {
+      assert(serializedSize, 'A DAGNode requires it\'s serialized size')
+    }
+
+    this._data = data || Buffer.alloc(0)
+    this._links = links || []
+    this._serializedSize = serializedSize
+  }
+
+  toJSON () {
+    if (!this._json) {
+      this._json = Object.freeze({
+        data: this.data,
+        links: this.links.map((l) => l.toJSON()),
+        size: this.size
+      })
+    }
+
+    return Object.assign({}, this._json)
+  }
+
+  toString () {
+    return `DAGNode <data: "${this.data.toString('base64')}", links: ${this.links.length}, size: ${this.size}>`
+  }
+
+  get data () {
+    return this._data
+  }
+
+  set data (data) {
+    throw new Error("Can't set property: 'data' is immutable")
+  }
+
+  get links () {
+    return this._links
+  }
+
+  set links (links) {
+    throw new Error("Can't set property: 'links' is immutable")
+  }
+
+  get size () {
+    if (this._size === undefined) {
+      this._size = this.links.reduce((sum, l) => sum + l.size, this._serializedSize)
+    }
+
+    return this._size
+  }
+
+  set size (size) {
+    throw new Error("Can't set property: 'size' is immutable")
+  }
+}
+
+exports = module.exports = withIs(DAGNode, { className: 'DAGNode', symbolName: '@ipld/js-ipld-dag-pb/dagnode' })
+exports.create = require('./create')
+exports.clone = require('./clone')
+exports.addLink = require('./addLink')
+exports.rmLink = require('./rmLink')
+
+}).call(this,require("buffer").Buffer)
+},{"./addLink":251,"./clone":252,"./create":253,"./rmLink":255,"assert":15,"buffer":51,"class-is":208}],255:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+const dagNodeUtil = require('./util')
+const cloneLinks = dagNodeUtil.cloneLinks
+const cloneData = dagNodeUtil.cloneData
+const create = require('./create')
+const CID = require('cids')
+
+function rmLink (dagNode, nameOrCid, callback) {
+  const data = cloneData(dagNode)
+  let links = cloneLinks(dagNode)
+
+  if (typeof nameOrCid === 'string') {
+    links = links.filter((link) => link.name !== nameOrCid)
+  } else if (Buffer.isBuffer(nameOrCid) || CID.isCID(nameOrCid)) {
+    links = links.filter((link) => !link.cid.equals(nameOrCid))
+  } else {
+    return callback(new Error('second arg needs to be a name or CID'), null)
+  }
+
+  create(data, links, callback)
+}
+
+module.exports = rmLink
+
+}).call(this,{"isBuffer":require("../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":105,"./create":253,"./util":256,"cids":206}],256:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+const DAGLink = require('./../dag-link')
+const {
+  cid
+} = require('../util')
+
+exports = module.exports
+
+function cloneData (dagNode) {
+  let data
+
+  if (dagNode.data && dagNode.data.length > 0) {
+    data = Buffer.alloc(dagNode.data.length)
+    dagNode.data.copy(data)
+  } else {
+    data = Buffer.alloc(0)
+  }
+
+  return data
+}
+
+function cloneLinks (dagNode) {
+  return dagNode.links.slice()
+}
+
+function linkSort (a, b) {
+  return Buffer.compare(a.nameAsBuffer, b.nameAsBuffer)
+}
+
+/*
+ * toDAGLink converts a DAGNode to a DAGLink
+ */
+function toDAGLink (node, options, callback) {
+  if (typeof options === 'function') {
+    callback = options
+    options = {}
+  }
+
+  cid(node, options, (error, cid) => {
+    if (error) {
+      return callback(error)
+    }
+
+    callback(null, new DAGLink(options.name || '', node.size, cid))
+  })
+}
+
+exports.cloneData = cloneData
+exports.cloneLinks = cloneLinks
+exports.linkSort = linkSort
+exports.toDAGLink = toDAGLink
+
+}).call(this,require("buffer").Buffer)
+},{"../util":260,"./../dag-link":249,"buffer":51}],257:[function(require,module,exports){
+'use strict'
+
+module.exports = `// An IPFS MerkleDAG Link
+message PBLink {
+
+  // multihash of the target object
+  optional bytes Hash = 1;
+
+  // utf string name. should be unique per object
+  optional string Name = 2;
+
+  // cumulative size of target object
+  optional uint64 Tsize = 3;
+}
+
+// An IPFS MerkleDAG Node
+message PBNode {
+
+  // refs to other objects
+  repeated PBLink Links = 2;
+
+  // opaque user data
+  optional bytes Data = 1;
+}`
+
+},{}],258:[function(require,module,exports){
+'use strict'
+
+exports.DAGNode = require('./dag-node')
+exports.DAGLink = require('./dag-link')
+
+/*
+ * Functions to fulfil IPLD Format interface
+ * https://github.com/ipld/interface-ipld-format
+ */
+exports.resolver = require('./resolver')
+exports.util = require('./util')
+
+<<<<<<< HEAD
+ip.toLong = function(ip) {
+  var ipl = 0;
+  ip.split('.').forEach(function(octet) {
+    ipl <<= 8;
+    ipl += parseInt(octet);
+  });
+  return(ipl >>> 0);
+};
+
+ip.fromLong = function(ipl) {
+  return ((ipl >>> 24) + '.' +
+      (ipl >> 16 & 255) + '.' +
+      (ipl >> 8 & 255) + '.' +
+      (ipl & 255) );
+};
+
+},{"buffer":51,"os":112}],225:[function(require,module,exports){
+(function (Buffer){
+=======
+},{"./dag-link":249,"./dag-node":254,"./resolver":259,"./util":260}],259:[function(require,module,exports){
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+'use strict'
+
+const waterfall = require('async/waterfall')
+const CID = require('cids')
+
+const util = require('./util')
+
+exports = module.exports
+exports.multicodec = 'dag-pb'
+exports.defaultHashAlg = 'sha2-256'
+
+/*
+ * resolve: receives a path and a binary blob and returns the value on path,
+ * throw if not possible. `binaryBlob` is the ProtocolBuffer encoded data.
+ */
+exports.resolve = (binaryBlob, path, callback) => {
+  waterfall([
+    (cb) => util.deserialize(binaryBlob, cb),
+    (node, cb) => {
+      // Return the deserialized block if no path is given
+      if (!path) {
+        return callback(null, {
+          value: node,
+          remainderPath: ''
+        })
+      }
+
+      const split = path.split('/')
+
+      if (split[0] === 'Links') {
+        let remainderPath = ''
+
+        // all links
+        if (!split[1]) {
+          return cb(null, {
+            value: node.links.map((l) => l.toJSON()),
+            remainderPath: ''
+          })
+        }
+
+<<<<<<< HEAD
+}).call(this,{"isBuffer":require("../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":105,"cids":206,"class-is":208}],226:[function(require,module,exports){
+'use strict';
+=======
+        // select one link
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+        const values = {}
+
+        // populate both index number and name to enable both cases
+        // for the resolver
+        node.links.forEach((l, i) => {
+          const link = l.toJSON()
+          values[i] = values[link.name] = {
+            cid: link.cid,
+            name: link.name,
+            size: link.size
+          }
+        })
+
+        let value = values[split[1]]
+
+        // if remainderPath exists, value needs to be CID
+        if (split[2] === 'Hash') {
+          value = { '/': value.cid }
+        } else if (split[2] === 'Tsize') {
+          value = value.size
+        } else if (split[2] === 'Name') {
+          value = value.name
+        }
+
+        remainderPath = split.slice(3).join('/')
+
+        cb(null, { value: value, remainderPath: remainderPath })
+      } else if (split[0] === 'Data') {
+        cb(null, { value: node.data, remainderPath: '' })
+      } else {
+        // If split[0] is not 'Data' or 'Links' then we might be trying to refer
+        // to a named link from the Links array. This is because go-ipfs and
+        // js-ipfs have historically supported the ability to do
+        // `ipfs dag get CID/a` where a is a named link in a dag-pb.
+        const values = {}
+
+        node.links.forEach((l, i) => {
+          const link = l.toJSON()
+          values[link.name] = {
+            cid: link.cid,
+            name: link.name,
+            size: link.size
+          }
+        })
+
+        const value = values[split[0]]
+
+        if (value) {
+          return cb(null, {
+            value: { '/': value.cid },
+            remainderPath: split.slice(1).join('/')
+          })
+        }
+
+        cb(new Error('path not available'))
+      }
+    }
+  ], callback)
+}
+
+<<<<<<< HEAD
+function rethrow(error) {
+    throw error;
+}
+module.exports = exports['default'];
+},{"./internal/initialParams":233,"./internal/setImmediate":237,"lodash/isObject":518}],227:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = eachLimit;
+=======
+/*
+ * tree: returns a flattened array with paths: values of the project. options
+ * is an object that can carry several options (i.e. nestness)
+ */
+exports.tree = (binaryBlob, options, callback) => {
+  if (typeof options === 'function') {
+    callback = options
+    options = {}
+  }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+  options = options || {}
+
+  util.deserialize(binaryBlob, (err, node) => {
+    if (err) {
+      return callback(err)
+    }
+
+    const paths = []
+
+    paths.push('Links')
+
+    node.links.forEach((link, i) => {
+      paths.push(`Links/${i}/Name`)
+      paths.push(`Links/${i}/Tsize`)
+      paths.push(`Links/${i}/Hash`)
+    })
+
+    paths.push('Data')
+
+    callback(null, paths)
+  })
+}
+
+/*
+ * isLink: returns the Link if a given path in a binary blob is a Link,
+ * false otherwise
+ */
+<<<<<<< HEAD
+function eachLimit(coll, limit, iteratee, callback) {
+  (0, _eachOfLimit2.default)(limit)(coll, (0, _withoutIndex2.default)((0, _wrapAsync2.default)(iteratee)), callback);
+}
+module.exports = exports['default'];
+},{"./internal/eachOfLimit":231,"./internal/withoutIndex":239,"./internal/wrapAsync":240}],228:[function(require,module,exports){
+'use strict';
+=======
+exports.isLink = (binaryBlob, path, callback) => {
+  exports.resolve(binaryBlob, path, (err, result) => {
+    if (err) {
+      return callback(err)
+    }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+    if (result.remainderPath.length > 0) {
+      return callback(new Error('path out of scope'))
+    }
+
+    if (typeof result.value === 'object' && result.value['/']) {
+      let valid
+      try {
+        valid = CID.isCID(new CID(result.value['/']))
+      } catch (err) {
+        valid = false
+      }
+      if (valid) {
+        return callback(null, result.value)
+      }
+    }
+
+    callback(null, false)
+  })
+}
+
+},{"./util":260,"async/waterfall":242,"cids":206}],260:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+const CID = require('cids')
+const protons = require('protons')
+const proto = protons(require('./dag.proto.js'))
+const resolver = require('./resolver')
+const DAGLink = require('./dag-link')
+const DAGNode = require('./dag-node')
+const multihashing = require('multihashing-async')
+const waterfall = require('async/waterfall')
+const setImmediate = require('async/setImmediate')
+
+exports = module.exports
+
+/**
+ * @callback CidCallback
+ * @param {?Error} error - Error if getting the CID failed
+ * @param {?CID} cid - CID if call was successful
+ */
+/**
+ * Get the CID of the DAG-Node.
+ *
+ * @param {Object} dagNode - Internal representation
+ * @param {Object} [options] - Options to create the CID
+ * @param {number} [options.version] - CID version number. Defaults to zero if hashAlg == 'sha2-256'; otherwise, 1.
+ * @param {string} [options.hashAlg] - Defaults to hashAlg for the resolver
+ * @param {CidCallback} callback - Callback that handles the return value
+ * @returns {void}
+ */
+<<<<<<< HEAD
+exports.default = (0, _doLimit2.default)(_eachLimit2.default, 1);
+module.exports = exports['default'];
+},{"./eachLimit":227,"./internal/doLimit":230}],229:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// A temporary value used to identify if the loop should be broken.
+// See #1064, #1293
+exports.default = {};
+module.exports = exports["default"];
+},{}],230:[function(require,module,exports){
+"use strict";
+=======
+function cid (dagNode, options, callback) {
+  if (typeof options === 'function') {
+    callback = options
+    options = {}
+  }
+  options = options || {}
+  const hashAlg = options.hashAlg || resolver.defaultHashAlg
+  let version = options.version
+  if (typeof version === 'undefined') {
+    version = hashAlg === 'sha2-256' ? 0 : 1
+  }
+  waterfall([
+    (cb) => {
+      if (Buffer.isBuffer(dagNode)) {
+        return cb(null, dagNode)
+      }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+      serialize(dagNode, cb)
+    },
+    (serialized, cb) => multihashing(serialized, hashAlg, cb),
+    (mh, cb) => cb(null, new CID(version, resolver.multicodec, mh))
+  ], callback)
+}
+<<<<<<< HEAD
+module.exports = exports["default"];
+},{}],231:[function(require,module,exports){
+'use strict';
+=======
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+function serialize (node, callback) {
+  let serialized
+  let {
+    data,
+    links = []
+  } = node
+
+  // If the node is not an instance of a DAGNode, the link.hash might be a Base58 encoded string; decode it
+  if (!DAGNode.isDAGNode(node) && links) {
+    links = links.map((link) => {
+      return DAGLink.isDAGLink(link) ? link : DAGLink.util.createDagLinkFromB58EncodedHash(link)
+    })
+  }
+
+  try {
+    serialized = proto.PBNode.encode(toProtoBuf({
+      data, links
+    }))
+  } catch (err) {
+    return callback(err)
+  }
+
+  callback(null, serialized)
+}
+
+function deserialize (buffer, callback) {
+  const pbn = proto.PBNode.decode(buffer)
+
+  const links = pbn.Links.map((link) => {
+    return new DAGLink(link.Name, link.Tsize, link.Hash)
+  })
+
+  const data = pbn.Data == null ? Buffer.alloc(0) : pbn.Data
+
+  setImmediate(() => callback(null, new DAGNode(data, links, buffer.length)))
+}
+
+function toProtoBuf (node) {
+  const pbn = {}
+
+  if (node.data && node.data.length > 0) {
+    pbn.Data = node.data
+  } else {
+    // NOTE: this has to be null in order to match go-ipfs serialization `null !== new Buffer(0)`
+    pbn.Data = null
+  }
+
+  if (node.links && node.links.length > 0) {
+    pbn.Links = node.links
+      .map((link) => ({
+        Hash: link.cid.buffer,
+        Name: link.name,
+        Tsize: link.size
+      }))
+  } else {
+    pbn.Links = null
+  }
+
+  return pbn
+}
+
+exports.serialize = serialize
+exports.deserialize = deserialize
+exports.cid = cid
+
+}).call(this,require("buffer").Buffer)
+},{"./dag-link":249,"./dag-node":254,"./dag.proto.js":257,"./resolver":259,"async/setImmediate":241,"async/waterfall":242,"buffer":51,"cids":206,"multihashing-async":544,"protons":616}],261:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+<<<<<<< HEAD
+        function replenish() {
+            looping = true;
+            while (running < limit && !done) {
+                var elem = nextElem();
+                if (elem === null) {
+                    done = true;
+                    if (running <= 0) {
+                        callback(null);
+                    }
+                    return;
+                }
+                running += 1;
+                iteratee(elem.value, elem.key, (0, _onlyOnce2.default)(iterateeCallback));
+            }
+            looping = false;
+        }
+
+        replenish();
+    };
+}
+module.exports = exports['default'];
+},{"./breakLoop":229,"./iterator":234,"./once":235,"./onlyOnce":236,"lodash/noop":522}],232:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+exports.default = function (coll) {
+    return iteratorSymbol && coll[iteratorSymbol] && coll[iteratorSymbol]();
+};
+
+var iteratorSymbol = typeof Symbol === 'function' && Symbol.iterator;
+
+module.exports = exports['default'];
+},{}],233:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+exports.default = function (fn) {
+    return function () /*...args, callback*/{
+        var args = (0, _slice2.default)(arguments);
+        var callback = args.pop();
+        fn.call(this, args, callback);
+    };
+};
+
+var _slice = require('./slice');
+
+var _slice2 = _interopRequireDefault(_slice);
+=======
+const mh = require('multihashes')
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+var CIDUtil = {
+  /**
+   * Test if the given input is a valid CID object.
+   * Returns an error message if it is not.
+   * Returns undefined if it is a valid CID.
+   *
+   * @param {any} other
+   * @returns {string}
+   */
+  checkCIDComponents: function (other) {
+    if (other == null) {
+      return 'null values are not valid CIDs'
+    }
+
+<<<<<<< HEAD
+module.exports = exports['default'];
+},{"./slice":238}],234:[function(require,module,exports){
+'use strict';
+=======
+    if (!(other.version === 0 || other.version === 1)) {
+      return 'Invalid version, must be a number equal to 1 or 0'
+    }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+    if (typeof other.codec !== 'string') {
+      return 'codec must be string'
+    }
+
+    if (other.version === 0) {
+      if (other.codec !== 'dag-pb') {
+        return `codec must be 'dag-pb' for CIDv0`
+      }
+      if (other.multibaseName !== 'base58btc') {
+        return `multibaseName must be 'base58btc' for CIDv0`
+      }
+    }
+
+    if (!Buffer.isBuffer(other.multihash)) {
+      return 'multihash must be a Buffer'
+    }
+
+    try {
+      mh.validate(other.multihash)
+    } catch (err) {
+      let errorMsg = err.message
+      if (!errorMsg) { // Just in case mh.validate() throws an error with empty error message
+        errorMsg = 'Multihash validation failed'
+      }
+      return errorMsg
+    }
+  }
+}
+
+module.exports = CIDUtil
+
+}).call(this,{"isBuffer":require("../../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":105,"multihashes":540}],262:[function(require,module,exports){
+(function (Buffer){
+'use strict'
+
+const mh = require('multihashes')
+const multibase = require('multibase')
+const multicodec = require('multicodec')
+const codecs = require('multicodec/src/base-table')
+const CIDUtil = require('./cid-util')
+const withIs = require('class-is')
+
+/**
+ * @typedef {Object} SerializedCID
+ * @param {string} codec
+ * @param {number} version
+ * @param {Buffer} multihash
+ */
+
+/**
+ * Test if the given input is a CID.
+ * @function isCID
+ * @memberof CID
+ * @static
+ * @param {any} other
+ * @returns {bool}
+ */
+
+/**
+ * Class representing a CID `<mbase><version><mcodec><mhash>`
+ * , as defined in [ipld/cid](https://github.com/multiformats/cid).
+ * @class CID
+ */
+class CID {
+  /**
+   * Create a new CID.
+   *
+   * The algorithm for argument input is roughly:
+   * ```
+   * if (cid)
+   *   -> create a copy
+   * else if (str)
+   *   if (1st char is on multibase table) -> CID String
+   *   else -> bs58 encoded multihash
+   * else if (Buffer)
+   *   if (1st byte is 0 or 1) -> CID
+   *   else -> multihash
+   * else if (Number)
+   *   -> construct CID by parts
+   * ```
+   *
+   * @param {string|Buffer|CID} version
+   * @param {string} [codec]
+   * @param {Buffer} [multihash]
+   * @param {string} [multibaseName]
+   *
+   * @example
+   * new CID(<version>, <codec>, <multihash>, <multibaseName>)
+   * new CID(<cidStr>)
+   * new CID(<cid.buffer>)
+   * new CID(<multihash>)
+   * new CID(<bs58 encoded multihash>)
+   * new CID(<cid>)
+   */
+  constructor (version, codec, multihash, multibaseName) {
+    if (_CID.isCID(version)) {
+      // version is an exising CID instance
+      const cid = version
+      this.version = cid.version
+      this.codec = cid.codec
+      this.multihash = Buffer.from(cid.multihash)
+      // Default guard for when a CID < 0.7 is passed with no multibaseName
+      this.multibaseName = cid.multibaseName || (cid.version === 0 ? 'base58btc' : 'base32')
+      return
+    }
+
+    if (typeof version === 'string') {
+      // e.g. 'base32' or false
+      const baseName = multibase.isEncoded(version)
+      if (baseName) {
+        // version is a CID String encoded with multibase, so v1
+        const cid = multibase.decode(version)
+        this.version = parseInt(cid.slice(0, 1).toString('hex'), 16)
+        this.codec = multicodec.getCodec(cid.slice(1))
+        this.multihash = multicodec.rmPrefix(cid.slice(1))
+        this.multibaseName = baseName
+      } else {
+        // version is a base58btc string multihash, so v0
+        this.version = 0
+        this.codec = 'dag-pb'
+        this.multihash = mh.fromB58String(version)
+        this.multibaseName = 'base58btc'
+      }
+      CID.validateCID(this)
+      Object.defineProperty(this, 'string', { value: version })
+      return
+    }
+
+    if (Buffer.isBuffer(version)) {
+      const firstByte = version.slice(0, 1)
+      const v = parseInt(firstByte.toString('hex'), 16)
+      if (v === 1) {
+        // version is a CID buffer
+        const cid = version
+        this.version = v
+        this.codec = multicodec.getCodec(cid.slice(1))
+        this.multihash = multicodec.rmPrefix(cid.slice(1))
+        this.multibaseName = 'base32'
+      } else {
+        // version is a raw multihash buffer, so v0
+        this.version = 0
+        this.codec = 'dag-pb'
+        this.multihash = version
+        this.multibaseName = 'base58btc'
+      }
+      CID.validateCID(this)
+      return
+    }
+
+<<<<<<< HEAD
+    var iterator = (0, _getIterator2.default)(coll);
+    return iterator ? createES2015Iterator(iterator) : createObjectIterator(coll);
+}
+module.exports = exports['default'];
+},{"./getIterator":232,"lodash/isArrayLike":514,"lodash/keys":521}],235:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = once;
+function once(fn) {
+    return function () {
+        if (fn === null) return;
+        var callFn = fn;
+        fn = null;
+        callFn.apply(this, arguments);
+    };
+}
+module.exports = exports["default"];
+},{}],236:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = onlyOnce;
+function onlyOnce(fn) {
+    return function () {
+        if (fn === null) throw new Error("Callback was already called.");
+        var callFn = fn;
+        fn = null;
+        callFn.apply(this, arguments);
+    };
+}
+module.exports = exports["default"];
+},{}],237:[function(require,module,exports){
+(function (process,setImmediate){
+'use strict';
+=======
+    // otherwise, assemble the CID from the parameters
+
+    /**
+     * @type {number}
+     */
+    this.version = version
+
+    /**
+     * @type {string}
+     */
+    this.codec = codec
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+    /**
+     * @type {Buffer}
+     */
+    this.multihash = multihash
+
+    /**
+     * @type {string}
+     */
+    this.multibaseName = multibaseName || (version === 0 ? 'base58btc' : 'base32')
+
+    CID.validateCID(this)
+  }
+
+  /**
+   * The CID as a `Buffer`
+   *
+   * @return {Buffer}
+   * @readonly
+   *
+   * @memberOf CID
+   */
+  get buffer () {
+    let buffer = this._buffer
+
+    if (!buffer) {
+      if (this.version === 0) {
+        buffer = this.multihash
+      } else if (this.version === 1) {
+        buffer = Buffer.concat([
+          Buffer.from('01', 'hex'),
+          multicodec.getCodeVarint(this.codec),
+          this.multihash
+        ])
+      } else {
+        throw new Error('unsupported version')
+      }
+
+      // Cache this buffer so it doesn't have to be recreated
+      Object.defineProperty(this, '_buffer', { value: buffer })
+    }
+
+    return buffer
+  }
+
+  /**
+   * Get the prefix of the CID.
+   *
+   * @returns {Buffer}
+   * @readonly
+   */
+  get prefix () {
+    return Buffer.concat([
+      Buffer.from(`0${this.version}`, 'hex'),
+      multicodec.getCodeVarint(this.codec),
+      mh.prefix(this.multihash)
+    ])
+  }
+
+  /**
+   * Convert to a CID of version `0`.
+   *
+   * @returns {CID}
+   */
+  toV0 () {
+    if (this.codec !== 'dag-pb') {
+      throw new Error('Cannot convert a non dag-pb CID to CIDv0')
+    }
+
+<<<<<<< HEAD
+exports.default = wrap(_defer);
+}).call(this,require('_process'),require("timers").setImmediate)
+},{"./slice":238,"_process":125,"timers":160}],238:[function(require,module,exports){
+"use strict";
+=======
+    const { name, length } = mh.decode(this.multihash)
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+    if (name !== 'sha2-256') {
+      throw new Error('Cannot convert non sha2-256 multihash CID to CIDv0')
+    }
+<<<<<<< HEAD
+    return newArr;
+}
+module.exports = exports["default"];
+},{}],239:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = _withoutIndex;
+function _withoutIndex(iteratee) {
+    return function (value, index, callback) {
+        return iteratee(value, callback);
+    };
+}
+module.exports = exports["default"];
+},{}],240:[function(require,module,exports){
+'use strict';
+=======
+
+    if (length !== 32) {
+      throw new Error('Cannot convert non 32 byte multihash CID to CIDv0')
+    }
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+    return new _CID(0, this.codec, this.multihash)
+  }
+
+  /**
+   * Convert to a CID of version `1`.
+   *
+   * @returns {CID}
+   */
+  toV1 () {
+    return new _CID(1, this.codec, this.multihash)
+  }
+
+  /**
+   * Encode the CID into a string.
+   *
+   * @param {string} [base=this.multibaseName] - Base encoding to use.
+   * @returns {string}
+   */
+  toBaseEncodedString (base = this.multibaseName) {
+    if (this.string && base === this.multibaseName) {
+      return this.string
+    }
+    let str = null
+    if (this.version === 0) {
+      if (base !== 'base58btc') {
+        throw new Error('not supported with CIDv0, to support different bases, please migrate the instance do CIDv1, you can do that through cid.toV1()')
+      }
+      str = mh.toB58String(this.multihash)
+    } else if (this.version === 1) {
+      str = multibase.encode(base, this.buffer).toString()
+    } else {
+      throw new Error('unsupported version')
+    }
+    if (base === this.multibaseName) {
+      // cache the string value
+      Object.defineProperty(this, 'string', { value: str })
+    }
+    return str
+  }
+
+  toString (base) {
+    return this.toBaseEncodedString(base)
+  }
+
+  /**
+   * Serialize to a plain object.
+   *
+   * @returns {SerializedCID}
+   */
+  toJSON () {
+    return {
+      codec: this.codec,
+      version: this.version,
+      hash: this.multihash
+    }
+  }
+
+  /**
+   * Compare equality with another CID.
+   *
+   * @param {CID} other
+   * @returns {bool}
+   */
+  equals (other) {
+    return this.codec === other.codec &&
+      this.version === other.version &&
+      this.multihash.equals(other.multihash)
+  }
+
+  /**
+   * Test if the given input is a valid CID object.
+   * Throws if it is not.
+   *
+   * @param {any} other
+   * @returns {void}
+   */
+  static validateCID (other) {
+    let errorMsg = CIDUtil.checkCIDComponents(other)
+    if (errorMsg) {
+      throw new Error(errorMsg)
+    }
+  }
+}
+
+<<<<<<< HEAD
+exports.default = wrapAsync;
+exports.isAsync = isAsync;
+},{"../asyncify":226}],241:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _setImmediate = require('./internal/setImmediate');
+
+var _setImmediate2 = _interopRequireDefault(_setImmediate);
+=======
+const _CID = withIs(CID, {
+  className: 'CID',
+  symbolName: '@ipld/js-cid/CID'
+})
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+_CID.codecs = codecs
+
+<<<<<<< HEAD
+/**
+ * Calls `callback` on a later loop around the event loop. In Node.js this just
+ * calls `setImmediate`.  In the browser it will use `setImmediate` if
+ * available, otherwise `setTimeout(callback, 0)`, which means other higher
+ * priority events may precede the execution of `callback`.
+ *
+ * This is used internally for browser-compatibility purposes.
+ *
+ * @name setImmediate
+ * @static
+ * @memberOf module:Utils
+ * @method
+ * @see [async.nextTick]{@link module:Utils.nextTick}
+ * @category Util
+ * @param {Function} callback - The function to call on a later loop around
+ * the event loop. Invoked with (args...).
+ * @param {...*} args... - any number of additional arguments to pass to the
+ * callback on the next tick.
+ * @example
+ *
+ * var call_order = [];
+ * async.nextTick(function() {
+ *     call_order.push('two');
+ *     // call_order now equals ['one','two']
+ * });
+ * call_order.push('one');
+ *
+ * async.setImmediate(function (a, b, c) {
+ *     // a, b, and c equal 1, 2, and 3
+ * }, 1, 2, 3);
+ */
+exports.default = _setImmediate2.default;
+module.exports = exports['default'];
+},{"./internal/setImmediate":237}],242:[function(require,module,exports){
+'use strict';
+=======
+module.exports = _CID
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+
+}).call(this,require("buffer").Buffer)
+},{"./cid-util":261,"buffer":51,"class-is":208,"multibase":282,"multicodec":265,"multicodec/src/base-table":263,"multihashes":540}],263:[function(require,module,exports){
+(function (Buffer){
+// THIS FILE IS GENERATED, DO NO EDIT MANUALLY
+// For more information see the README.md
+/* eslint-disable dot-notation */
+'use strict'
+
+// serialization
+exports['protobuf'] = Buffer.from('50', 'hex')
+exports['cbor'] = Buffer.from('51', 'hex')
+exports['rlp'] = Buffer.from('60', 'hex')
+exports['bencode'] = Buffer.from('63', 'hex')
+
+// multiformat
+exports['multicodec'] = Buffer.from('30', 'hex')
+exports['multihash'] = Buffer.from('31', 'hex')
+exports['multiaddr'] = Buffer.from('32', 'hex')
+exports['multibase'] = Buffer.from('33', 'hex')
+
+<<<<<<< HEAD
     function next(err /*, ...args*/) {
         if (err || taskIndex === tasks.length) {
             return callback.apply(null, arguments);
@@ -36412,211 +39351,1490 @@ function addLink (node, link, callback) {
     create(data, links, callback)
   })
 }
+=======
+// multihash
+exports['identity'] = Buffer.from('00', 'hex')
+exports['sha1'] = Buffer.from('11', 'hex')
+exports['sha2-256'] = Buffer.from('12', 'hex')
+exports['sha2-512'] = Buffer.from('13', 'hex')
+exports['sha3-512'] = Buffer.from('14', 'hex')
+exports['sha3-384'] = Buffer.from('15', 'hex')
+exports['sha3-256'] = Buffer.from('16', 'hex')
+exports['sha3-224'] = Buffer.from('17', 'hex')
+exports['shake-128'] = Buffer.from('18', 'hex')
+exports['shake-256'] = Buffer.from('19', 'hex')
+exports['keccak-224'] = Buffer.from('1a', 'hex')
+exports['keccak-256'] = Buffer.from('1b', 'hex')
+exports['keccak-384'] = Buffer.from('1c', 'hex')
+exports['keccak-512'] = Buffer.from('1d', 'hex')
+exports['murmur3-128'] = Buffer.from('22', 'hex')
+exports['murmur3-32'] = Buffer.from('23', 'hex')
+exports['dbl-sha2-256'] = Buffer.from('56', 'hex')
+exports['md4'] = Buffer.from('d4', 'hex')
+exports['md5'] = Buffer.from('d5', 'hex')
+exports['bmt'] = Buffer.from('d6', 'hex')
+exports['x11'] = Buffer.from('1100', 'hex')
+exports['blake2b-8'] = Buffer.from('b201', 'hex')
+exports['blake2b-16'] = Buffer.from('b202', 'hex')
+exports['blake2b-24'] = Buffer.from('b203', 'hex')
+exports['blake2b-32'] = Buffer.from('b204', 'hex')
+exports['blake2b-40'] = Buffer.from('b205', 'hex')
+exports['blake2b-48'] = Buffer.from('b206', 'hex')
+exports['blake2b-56'] = Buffer.from('b207', 'hex')
+exports['blake2b-64'] = Buffer.from('b208', 'hex')
+exports['blake2b-72'] = Buffer.from('b209', 'hex')
+exports['blake2b-80'] = Buffer.from('b20a', 'hex')
+exports['blake2b-88'] = Buffer.from('b20b', 'hex')
+exports['blake2b-96'] = Buffer.from('b20c', 'hex')
+exports['blake2b-104'] = Buffer.from('b20d', 'hex')
+exports['blake2b-112'] = Buffer.from('b20e', 'hex')
+exports['blake2b-120'] = Buffer.from('b20f', 'hex')
+exports['blake2b-128'] = Buffer.from('b210', 'hex')
+exports['blake2b-136'] = Buffer.from('b211', 'hex')
+exports['blake2b-144'] = Buffer.from('b212', 'hex')
+exports['blake2b-152'] = Buffer.from('b213', 'hex')
+exports['blake2b-160'] = Buffer.from('b214', 'hex')
+exports['blake2b-168'] = Buffer.from('b215', 'hex')
+exports['blake2b-176'] = Buffer.from('b216', 'hex')
+exports['blake2b-184'] = Buffer.from('b217', 'hex')
+exports['blake2b-192'] = Buffer.from('b218', 'hex')
+exports['blake2b-200'] = Buffer.from('b219', 'hex')
+exports['blake2b-208'] = Buffer.from('b21a', 'hex')
+exports['blake2b-216'] = Buffer.from('b21b', 'hex')
+exports['blake2b-224'] = Buffer.from('b21c', 'hex')
+exports['blake2b-232'] = Buffer.from('b21d', 'hex')
+exports['blake2b-240'] = Buffer.from('b21e', 'hex')
+exports['blake2b-248'] = Buffer.from('b21f', 'hex')
+exports['blake2b-256'] = Buffer.from('b220', 'hex')
+exports['blake2b-264'] = Buffer.from('b221', 'hex')
+exports['blake2b-272'] = Buffer.from('b222', 'hex')
+exports['blake2b-280'] = Buffer.from('b223', 'hex')
+exports['blake2b-288'] = Buffer.from('b224', 'hex')
+exports['blake2b-296'] = Buffer.from('b225', 'hex')
+exports['blake2b-304'] = Buffer.from('b226', 'hex')
+exports['blake2b-312'] = Buffer.from('b227', 'hex')
+exports['blake2b-320'] = Buffer.from('b228', 'hex')
+exports['blake2b-328'] = Buffer.from('b229', 'hex')
+exports['blake2b-336'] = Buffer.from('b22a', 'hex')
+exports['blake2b-344'] = Buffer.from('b22b', 'hex')
+exports['blake2b-352'] = Buffer.from('b22c', 'hex')
+exports['blake2b-360'] = Buffer.from('b22d', 'hex')
+exports['blake2b-368'] = Buffer.from('b22e', 'hex')
+exports['blake2b-376'] = Buffer.from('b22f', 'hex')
+exports['blake2b-384'] = Buffer.from('b230', 'hex')
+exports['blake2b-392'] = Buffer.from('b231', 'hex')
+exports['blake2b-400'] = Buffer.from('b232', 'hex')
+exports['blake2b-408'] = Buffer.from('b233', 'hex')
+exports['blake2b-416'] = Buffer.from('b234', 'hex')
+exports['blake2b-424'] = Buffer.from('b235', 'hex')
+exports['blake2b-432'] = Buffer.from('b236', 'hex')
+exports['blake2b-440'] = Buffer.from('b237', 'hex')
+exports['blake2b-448'] = Buffer.from('b238', 'hex')
+exports['blake2b-456'] = Buffer.from('b239', 'hex')
+exports['blake2b-464'] = Buffer.from('b23a', 'hex')
+exports['blake2b-472'] = Buffer.from('b23b', 'hex')
+exports['blake2b-480'] = Buffer.from('b23c', 'hex')
+exports['blake2b-488'] = Buffer.from('b23d', 'hex')
+exports['blake2b-496'] = Buffer.from('b23e', 'hex')
+exports['blake2b-504'] = Buffer.from('b23f', 'hex')
+exports['blake2b-512'] = Buffer.from('b240', 'hex')
+exports['blake2s-8'] = Buffer.from('b241', 'hex')
+exports['blake2s-16'] = Buffer.from('b242', 'hex')
+exports['blake2s-24'] = Buffer.from('b243', 'hex')
+exports['blake2s-32'] = Buffer.from('b244', 'hex')
+exports['blake2s-40'] = Buffer.from('b245', 'hex')
+exports['blake2s-48'] = Buffer.from('b246', 'hex')
+exports['blake2s-56'] = Buffer.from('b247', 'hex')
+exports['blake2s-64'] = Buffer.from('b248', 'hex')
+exports['blake2s-72'] = Buffer.from('b249', 'hex')
+exports['blake2s-80'] = Buffer.from('b24a', 'hex')
+exports['blake2s-88'] = Buffer.from('b24b', 'hex')
+exports['blake2s-96'] = Buffer.from('b24c', 'hex')
+exports['blake2s-104'] = Buffer.from('b24d', 'hex')
+exports['blake2s-112'] = Buffer.from('b24e', 'hex')
+exports['blake2s-120'] = Buffer.from('b24f', 'hex')
+exports['blake2s-128'] = Buffer.from('b250', 'hex')
+exports['blake2s-136'] = Buffer.from('b251', 'hex')
+exports['blake2s-144'] = Buffer.from('b252', 'hex')
+exports['blake2s-152'] = Buffer.from('b253', 'hex')
+exports['blake2s-160'] = Buffer.from('b254', 'hex')
+exports['blake2s-168'] = Buffer.from('b255', 'hex')
+exports['blake2s-176'] = Buffer.from('b256', 'hex')
+exports['blake2s-184'] = Buffer.from('b257', 'hex')
+exports['blake2s-192'] = Buffer.from('b258', 'hex')
+exports['blake2s-200'] = Buffer.from('b259', 'hex')
+exports['blake2s-208'] = Buffer.from('b25a', 'hex')
+exports['blake2s-216'] = Buffer.from('b25b', 'hex')
+exports['blake2s-224'] = Buffer.from('b25c', 'hex')
+exports['blake2s-232'] = Buffer.from('b25d', 'hex')
+exports['blake2s-240'] = Buffer.from('b25e', 'hex')
+exports['blake2s-248'] = Buffer.from('b25f', 'hex')
+exports['blake2s-256'] = Buffer.from('b260', 'hex')
+exports['skein256-8'] = Buffer.from('b301', 'hex')
+exports['skein256-16'] = Buffer.from('b302', 'hex')
+exports['skein256-24'] = Buffer.from('b303', 'hex')
+exports['skein256-32'] = Buffer.from('b304', 'hex')
+exports['skein256-40'] = Buffer.from('b305', 'hex')
+exports['skein256-48'] = Buffer.from('b306', 'hex')
+exports['skein256-56'] = Buffer.from('b307', 'hex')
+exports['skein256-64'] = Buffer.from('b308', 'hex')
+exports['skein256-72'] = Buffer.from('b309', 'hex')
+exports['skein256-80'] = Buffer.from('b30a', 'hex')
+exports['skein256-88'] = Buffer.from('b30b', 'hex')
+exports['skein256-96'] = Buffer.from('b30c', 'hex')
+exports['skein256-104'] = Buffer.from('b30d', 'hex')
+exports['skein256-112'] = Buffer.from('b30e', 'hex')
+exports['skein256-120'] = Buffer.from('b30f', 'hex')
+exports['skein256-128'] = Buffer.from('b310', 'hex')
+exports['skein256-136'] = Buffer.from('b311', 'hex')
+exports['skein256-144'] = Buffer.from('b312', 'hex')
+exports['skein256-152'] = Buffer.from('b313', 'hex')
+exports['skein256-160'] = Buffer.from('b314', 'hex')
+exports['skein256-168'] = Buffer.from('b315', 'hex')
+exports['skein256-176'] = Buffer.from('b316', 'hex')
+exports['skein256-184'] = Buffer.from('b317', 'hex')
+exports['skein256-192'] = Buffer.from('b318', 'hex')
+exports['skein256-200'] = Buffer.from('b319', 'hex')
+exports['skein256-208'] = Buffer.from('b31a', 'hex')
+exports['skein256-216'] = Buffer.from('b31b', 'hex')
+exports['skein256-224'] = Buffer.from('b31c', 'hex')
+exports['skein256-232'] = Buffer.from('b31d', 'hex')
+exports['skein256-240'] = Buffer.from('b31e', 'hex')
+exports['skein256-248'] = Buffer.from('b31f', 'hex')
+exports['skein256-256'] = Buffer.from('b320', 'hex')
+exports['skein512-8'] = Buffer.from('b321', 'hex')
+exports['skein512-16'] = Buffer.from('b322', 'hex')
+exports['skein512-24'] = Buffer.from('b323', 'hex')
+exports['skein512-32'] = Buffer.from('b324', 'hex')
+exports['skein512-40'] = Buffer.from('b325', 'hex')
+exports['skein512-48'] = Buffer.from('b326', 'hex')
+exports['skein512-56'] = Buffer.from('b327', 'hex')
+exports['skein512-64'] = Buffer.from('b328', 'hex')
+exports['skein512-72'] = Buffer.from('b329', 'hex')
+exports['skein512-80'] = Buffer.from('b32a', 'hex')
+exports['skein512-88'] = Buffer.from('b32b', 'hex')
+exports['skein512-96'] = Buffer.from('b32c', 'hex')
+exports['skein512-104'] = Buffer.from('b32d', 'hex')
+exports['skein512-112'] = Buffer.from('b32e', 'hex')
+exports['skein512-120'] = Buffer.from('b32f', 'hex')
+exports['skein512-128'] = Buffer.from('b330', 'hex')
+exports['skein512-136'] = Buffer.from('b331', 'hex')
+exports['skein512-144'] = Buffer.from('b332', 'hex')
+exports['skein512-152'] = Buffer.from('b333', 'hex')
+exports['skein512-160'] = Buffer.from('b334', 'hex')
+exports['skein512-168'] = Buffer.from('b335', 'hex')
+exports['skein512-176'] = Buffer.from('b336', 'hex')
+exports['skein512-184'] = Buffer.from('b337', 'hex')
+exports['skein512-192'] = Buffer.from('b338', 'hex')
+exports['skein512-200'] = Buffer.from('b339', 'hex')
+exports['skein512-208'] = Buffer.from('b33a', 'hex')
+exports['skein512-216'] = Buffer.from('b33b', 'hex')
+exports['skein512-224'] = Buffer.from('b33c', 'hex')
+exports['skein512-232'] = Buffer.from('b33d', 'hex')
+exports['skein512-240'] = Buffer.from('b33e', 'hex')
+exports['skein512-248'] = Buffer.from('b33f', 'hex')
+exports['skein512-256'] = Buffer.from('b340', 'hex')
+exports['skein512-264'] = Buffer.from('b341', 'hex')
+exports['skein512-272'] = Buffer.from('b342', 'hex')
+exports['skein512-280'] = Buffer.from('b343', 'hex')
+exports['skein512-288'] = Buffer.from('b344', 'hex')
+exports['skein512-296'] = Buffer.from('b345', 'hex')
+exports['skein512-304'] = Buffer.from('b346', 'hex')
+exports['skein512-312'] = Buffer.from('b347', 'hex')
+exports['skein512-320'] = Buffer.from('b348', 'hex')
+exports['skein512-328'] = Buffer.from('b349', 'hex')
+exports['skein512-336'] = Buffer.from('b34a', 'hex')
+exports['skein512-344'] = Buffer.from('b34b', 'hex')
+exports['skein512-352'] = Buffer.from('b34c', 'hex')
+exports['skein512-360'] = Buffer.from('b34d', 'hex')
+exports['skein512-368'] = Buffer.from('b34e', 'hex')
+exports['skein512-376'] = Buffer.from('b34f', 'hex')
+exports['skein512-384'] = Buffer.from('b350', 'hex')
+exports['skein512-392'] = Buffer.from('b351', 'hex')
+exports['skein512-400'] = Buffer.from('b352', 'hex')
+exports['skein512-408'] = Buffer.from('b353', 'hex')
+exports['skein512-416'] = Buffer.from('b354', 'hex')
+exports['skein512-424'] = Buffer.from('b355', 'hex')
+exports['skein512-432'] = Buffer.from('b356', 'hex')
+exports['skein512-440'] = Buffer.from('b357', 'hex')
+exports['skein512-448'] = Buffer.from('b358', 'hex')
+exports['skein512-456'] = Buffer.from('b359', 'hex')
+exports['skein512-464'] = Buffer.from('b35a', 'hex')
+exports['skein512-472'] = Buffer.from('b35b', 'hex')
+exports['skein512-480'] = Buffer.from('b35c', 'hex')
+exports['skein512-488'] = Buffer.from('b35d', 'hex')
+exports['skein512-496'] = Buffer.from('b35e', 'hex')
+exports['skein512-504'] = Buffer.from('b35f', 'hex')
+exports['skein512-512'] = Buffer.from('b360', 'hex')
+exports['skein1024-8'] = Buffer.from('b361', 'hex')
+exports['skein1024-16'] = Buffer.from('b362', 'hex')
+exports['skein1024-24'] = Buffer.from('b363', 'hex')
+exports['skein1024-32'] = Buffer.from('b364', 'hex')
+exports['skein1024-40'] = Buffer.from('b365', 'hex')
+exports['skein1024-48'] = Buffer.from('b366', 'hex')
+exports['skein1024-56'] = Buffer.from('b367', 'hex')
+exports['skein1024-64'] = Buffer.from('b368', 'hex')
+exports['skein1024-72'] = Buffer.from('b369', 'hex')
+exports['skein1024-80'] = Buffer.from('b36a', 'hex')
+exports['skein1024-88'] = Buffer.from('b36b', 'hex')
+exports['skein1024-96'] = Buffer.from('b36c', 'hex')
+exports['skein1024-104'] = Buffer.from('b36d', 'hex')
+exports['skein1024-112'] = Buffer.from('b36e', 'hex')
+exports['skein1024-120'] = Buffer.from('b36f', 'hex')
+exports['skein1024-128'] = Buffer.from('b370', 'hex')
+exports['skein1024-136'] = Buffer.from('b371', 'hex')
+exports['skein1024-144'] = Buffer.from('b372', 'hex')
+exports['skein1024-152'] = Buffer.from('b373', 'hex')
+exports['skein1024-160'] = Buffer.from('b374', 'hex')
+exports['skein1024-168'] = Buffer.from('b375', 'hex')
+exports['skein1024-176'] = Buffer.from('b376', 'hex')
+exports['skein1024-184'] = Buffer.from('b377', 'hex')
+exports['skein1024-192'] = Buffer.from('b378', 'hex')
+exports['skein1024-200'] = Buffer.from('b379', 'hex')
+exports['skein1024-208'] = Buffer.from('b37a', 'hex')
+exports['skein1024-216'] = Buffer.from('b37b', 'hex')
+exports['skein1024-224'] = Buffer.from('b37c', 'hex')
+exports['skein1024-232'] = Buffer.from('b37d', 'hex')
+exports['skein1024-240'] = Buffer.from('b37e', 'hex')
+exports['skein1024-248'] = Buffer.from('b37f', 'hex')
+exports['skein1024-256'] = Buffer.from('b380', 'hex')
+exports['skein1024-264'] = Buffer.from('b381', 'hex')
+exports['skein1024-272'] = Buffer.from('b382', 'hex')
+exports['skein1024-280'] = Buffer.from('b383', 'hex')
+exports['skein1024-288'] = Buffer.from('b384', 'hex')
+exports['skein1024-296'] = Buffer.from('b385', 'hex')
+exports['skein1024-304'] = Buffer.from('b386', 'hex')
+exports['skein1024-312'] = Buffer.from('b387', 'hex')
+exports['skein1024-320'] = Buffer.from('b388', 'hex')
+exports['skein1024-328'] = Buffer.from('b389', 'hex')
+exports['skein1024-336'] = Buffer.from('b38a', 'hex')
+exports['skein1024-344'] = Buffer.from('b38b', 'hex')
+exports['skein1024-352'] = Buffer.from('b38c', 'hex')
+exports['skein1024-360'] = Buffer.from('b38d', 'hex')
+exports['skein1024-368'] = Buffer.from('b38e', 'hex')
+exports['skein1024-376'] = Buffer.from('b38f', 'hex')
+exports['skein1024-384'] = Buffer.from('b390', 'hex')
+exports['skein1024-392'] = Buffer.from('b391', 'hex')
+exports['skein1024-400'] = Buffer.from('b392', 'hex')
+exports['skein1024-408'] = Buffer.from('b393', 'hex')
+exports['skein1024-416'] = Buffer.from('b394', 'hex')
+exports['skein1024-424'] = Buffer.from('b395', 'hex')
+exports['skein1024-432'] = Buffer.from('b396', 'hex')
+exports['skein1024-440'] = Buffer.from('b397', 'hex')
+exports['skein1024-448'] = Buffer.from('b398', 'hex')
+exports['skein1024-456'] = Buffer.from('b399', 'hex')
+exports['skein1024-464'] = Buffer.from('b39a', 'hex')
+exports['skein1024-472'] = Buffer.from('b39b', 'hex')
+exports['skein1024-480'] = Buffer.from('b39c', 'hex')
+exports['skein1024-488'] = Buffer.from('b39d', 'hex')
+exports['skein1024-496'] = Buffer.from('b39e', 'hex')
+exports['skein1024-504'] = Buffer.from('b39f', 'hex')
+exports['skein1024-512'] = Buffer.from('b3a0', 'hex')
+exports['skein1024-520'] = Buffer.from('b3a1', 'hex')
+exports['skein1024-528'] = Buffer.from('b3a2', 'hex')
+exports['skein1024-536'] = Buffer.from('b3a3', 'hex')
+exports['skein1024-544'] = Buffer.from('b3a4', 'hex')
+exports['skein1024-552'] = Buffer.from('b3a5', 'hex')
+exports['skein1024-560'] = Buffer.from('b3a6', 'hex')
+exports['skein1024-568'] = Buffer.from('b3a7', 'hex')
+exports['skein1024-576'] = Buffer.from('b3a8', 'hex')
+exports['skein1024-584'] = Buffer.from('b3a9', 'hex')
+exports['skein1024-592'] = Buffer.from('b3aa', 'hex')
+exports['skein1024-600'] = Buffer.from('b3ab', 'hex')
+exports['skein1024-608'] = Buffer.from('b3ac', 'hex')
+exports['skein1024-616'] = Buffer.from('b3ad', 'hex')
+exports['skein1024-624'] = Buffer.from('b3ae', 'hex')
+exports['skein1024-632'] = Buffer.from('b3af', 'hex')
+exports['skein1024-640'] = Buffer.from('b3b0', 'hex')
+exports['skein1024-648'] = Buffer.from('b3b1', 'hex')
+exports['skein1024-656'] = Buffer.from('b3b2', 'hex')
+exports['skein1024-664'] = Buffer.from('b3b3', 'hex')
+exports['skein1024-672'] = Buffer.from('b3b4', 'hex')
+exports['skein1024-680'] = Buffer.from('b3b5', 'hex')
+exports['skein1024-688'] = Buffer.from('b3b6', 'hex')
+exports['skein1024-696'] = Buffer.from('b3b7', 'hex')
+exports['skein1024-704'] = Buffer.from('b3b8', 'hex')
+exports['skein1024-712'] = Buffer.from('b3b9', 'hex')
+exports['skein1024-720'] = Buffer.from('b3ba', 'hex')
+exports['skein1024-728'] = Buffer.from('b3bb', 'hex')
+exports['skein1024-736'] = Buffer.from('b3bc', 'hex')
+exports['skein1024-744'] = Buffer.from('b3bd', 'hex')
+exports['skein1024-752'] = Buffer.from('b3be', 'hex')
+exports['skein1024-760'] = Buffer.from('b3bf', 'hex')
+exports['skein1024-768'] = Buffer.from('b3c0', 'hex')
+exports['skein1024-776'] = Buffer.from('b3c1', 'hex')
+exports['skein1024-784'] = Buffer.from('b3c2', 'hex')
+exports['skein1024-792'] = Buffer.from('b3c3', 'hex')
+exports['skein1024-800'] = Buffer.from('b3c4', 'hex')
+exports['skein1024-808'] = Buffer.from('b3c5', 'hex')
+exports['skein1024-816'] = Buffer.from('b3c6', 'hex')
+exports['skein1024-824'] = Buffer.from('b3c7', 'hex')
+exports['skein1024-832'] = Buffer.from('b3c8', 'hex')
+exports['skein1024-840'] = Buffer.from('b3c9', 'hex')
+exports['skein1024-848'] = Buffer.from('b3ca', 'hex')
+exports['skein1024-856'] = Buffer.from('b3cb', 'hex')
+exports['skein1024-864'] = Buffer.from('b3cc', 'hex')
+exports['skein1024-872'] = Buffer.from('b3cd', 'hex')
+exports['skein1024-880'] = Buffer.from('b3ce', 'hex')
+exports['skein1024-888'] = Buffer.from('b3cf', 'hex')
+exports['skein1024-896'] = Buffer.from('b3d0', 'hex')
+exports['skein1024-904'] = Buffer.from('b3d1', 'hex')
+exports['skein1024-912'] = Buffer.from('b3d2', 'hex')
+exports['skein1024-920'] = Buffer.from('b3d3', 'hex')
+exports['skein1024-928'] = Buffer.from('b3d4', 'hex')
+exports['skein1024-936'] = Buffer.from('b3d5', 'hex')
+exports['skein1024-944'] = Buffer.from('b3d6', 'hex')
+exports['skein1024-952'] = Buffer.from('b3d7', 'hex')
+exports['skein1024-960'] = Buffer.from('b3d8', 'hex')
+exports['skein1024-968'] = Buffer.from('b3d9', 'hex')
+exports['skein1024-976'] = Buffer.from('b3da', 'hex')
+exports['skein1024-984'] = Buffer.from('b3db', 'hex')
+exports['skein1024-992'] = Buffer.from('b3dc', 'hex')
+exports['skein1024-1000'] = Buffer.from('b3dd', 'hex')
+exports['skein1024-1008'] = Buffer.from('b3de', 'hex')
+exports['skein1024-1016'] = Buffer.from('b3df', 'hex')
+exports['skein1024-1024'] = Buffer.from('b3e0', 'hex')
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
-module.exports = addLink
+// multiaddr
+exports['ip4'] = Buffer.from('04', 'hex')
+exports['tcp'] = Buffer.from('06', 'hex')
+exports['dccp'] = Buffer.from('21', 'hex')
+exports['ip6'] = Buffer.from('29', 'hex')
+exports['ip6zone'] = Buffer.from('2a', 'hex')
+exports['dns'] = Buffer.from('35', 'hex')
+exports['dns4'] = Buffer.from('36', 'hex')
+exports['dns6'] = Buffer.from('37', 'hex')
+exports['dnsaddr'] = Buffer.from('38', 'hex')
+exports['sctp'] = Buffer.from('84', 'hex')
+exports['udp'] = Buffer.from('0111', 'hex')
+exports['p2p-webrtc-star'] = Buffer.from('0113', 'hex')
+exports['p2p-webrtc-direct'] = Buffer.from('0114', 'hex')
+exports['p2p-stardust'] = Buffer.from('0115', 'hex')
+exports['p2p-circuit'] = Buffer.from('0122', 'hex')
+exports['udt'] = Buffer.from('012d', 'hex')
+exports['utp'] = Buffer.from('012e', 'hex')
+exports['unix'] = Buffer.from('0190', 'hex')
+exports['p2p'] = Buffer.from('01a5', 'hex')
+exports['ipfs'] = Buffer.from('01a5', 'hex')
+exports['https'] = Buffer.from('01bb', 'hex')
+exports['onion'] = Buffer.from('01bc', 'hex')
+exports['onion3'] = Buffer.from('01bd', 'hex')
+exports['garlic64'] = Buffer.from('01be', 'hex')
+exports['quic'] = Buffer.from('01cc', 'hex')
+exports['ws'] = Buffer.from('01dd', 'hex')
+exports['wss'] = Buffer.from('01de', 'hex')
+exports['p2p-websocket-star'] = Buffer.from('01df', 'hex')
+exports['http'] = Buffer.from('01e0', 'hex')
 
+<<<<<<< HEAD
 },{"../dag-link":249,"./create":253,"./index":254,"./util":256}],252:[function(require,module,exports){
 'use strict'
+=======
+// ipld
+exports['raw'] = Buffer.from('55', 'hex')
+exports['dag-pb'] = Buffer.from('70', 'hex')
+exports['dag-cbor'] = Buffer.from('71', 'hex')
+exports['git-raw'] = Buffer.from('78', 'hex')
+exports['torrent-info'] = Buffer.from('7b', 'hex')
+exports['torrent-file'] = Buffer.from('7c', 'hex')
+exports['leofcoin-block'] = Buffer.from('81', 'hex')
+exports['leofcoin-tx'] = Buffer.from('82', 'hex')
+exports['leofcoin-pr'] = Buffer.from('83', 'hex')
+exports['eth-block'] = Buffer.from('90', 'hex')
+exports['eth-block-list'] = Buffer.from('91', 'hex')
+exports['eth-tx-trie'] = Buffer.from('92', 'hex')
+exports['eth-tx'] = Buffer.from('93', 'hex')
+exports['eth-tx-receipt-trie'] = Buffer.from('94', 'hex')
+exports['eth-tx-receipt'] = Buffer.from('95', 'hex')
+exports['eth-state-trie'] = Buffer.from('96', 'hex')
+exports['eth-account-snapshot'] = Buffer.from('97', 'hex')
+exports['eth-storage-trie'] = Buffer.from('98', 'hex')
+exports['bitcoin-block'] = Buffer.from('b0', 'hex')
+exports['bitcoin-tx'] = Buffer.from('b1', 'hex')
+exports['zcash-block'] = Buffer.from('c0', 'hex')
+exports['zcash-tx'] = Buffer.from('c1', 'hex')
+exports['stellar-block'] = Buffer.from('d0', 'hex')
+exports['stellar-tx'] = Buffer.from('d1', 'hex')
+exports['decred-block'] = Buffer.from('e0', 'hex')
+exports['decred-tx'] = Buffer.from('e1', 'hex')
+exports['dash-block'] = Buffer.from('f0', 'hex')
+exports['dash-tx'] = Buffer.from('f1', 'hex')
+exports['swarm-manifest'] = Buffer.from('fa', 'hex')
+exports['swarm-feed'] = Buffer.from('fb', 'hex')
+exports['dag-json'] = Buffer.from('0129', 'hex')
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
-const dagNodeUtil = require('./util')
-const cloneLinks = dagNodeUtil.cloneLinks
-const cloneData = dagNodeUtil.cloneData
-const create = require('./create')
+// namespace
+exports['path'] = Buffer.from('2f', 'hex')
+exports['ipld-ns'] = Buffer.from('e2', 'hex')
+exports['ipfs-ns'] = Buffer.from('e3', 'hex')
+exports['swarm-ns'] = Buffer.from('e4', 'hex')
 
-function clone (dagNode, callback) {
-  const data = cloneData(dagNode)
-  const links = cloneLinks(dagNode)
-  create(data, links, callback)
-}
+// key
+exports['ed25519-pub'] = Buffer.from('ed', 'hex')
 
-module.exports = clone
+// holochain
+exports['holochain-adr-v0'] = Buffer.from('807124', 'hex')
+exports['holochain-adr-v1'] = Buffer.from('817124', 'hex')
+exports['holochain-key-v0'] = Buffer.from('947124', 'hex')
+exports['holochain-key-v1'] = Buffer.from('957124', 'hex')
+exports['holochain-sig-v0'] = Buffer.from('a27124', 'hex')
+exports['holochain-sig-v1'] = Buffer.from('a37124', 'hex')
 
+<<<<<<< HEAD
 },{"./create":253,"./util":256}],253:[function(require,module,exports){
 (function (Buffer){
+=======
+}).call(this,require("buffer").Buffer)
+},{"buffer":51}],264:[function(require,module,exports){
+// THIS FILE IS GENERATED, DO NO EDIT MANUALLY
+// For more information see the README.md
+/* eslint-disable dot-notation */
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 'use strict'
+module.exports = Object.freeze({
 
-const sort = require('stable')
-const {
-  serialize
-} = require('../util.js')
-const dagNodeUtil = require('./util.js')
-const linkSort = dagNodeUtil.linkSort
-const DAGNode = require('./index.js')
-const DAGLink = require('../dag-link')
+  // serialization
+  PROTOBUF: 0x50,
+  CBOR: 0x51,
+  RLP: 0x60,
+  BENCODE: 0x63,
 
-function create (data, links, callback) {
-  if (typeof data === 'function') {
-    callback = data
-    data = undefined
-  } else if (typeof data === 'string') {
-    data = Buffer.from(data)
-  }
-  if (typeof links === 'function') {
-    callback = links
-    links = []
-  }
+  // multiformat
+  MULTICODEC: 0x30,
+  MULTIHASH: 0x31,
+  MULTIADDR: 0x32,
+  MULTIBASE: 0x33,
 
-  if (!Buffer.isBuffer(data)) {
-    return callback(new Error('Passed \'data\' is not a buffer or a string!'))
-  }
+  // multihash
+  IDENTITY: 0x00,
+  SHA1: 0x11,
+  SHA2_256: 0x12,
+  SHA2_512: 0x13,
+  SHA3_512: 0x14,
+  SHA3_384: 0x15,
+  SHA3_256: 0x16,
+  SHA3_224: 0x17,
+  SHAKE_128: 0x18,
+  SHAKE_256: 0x19,
+  KECCAK_224: 0x1a,
+  KECCAK_256: 0x1b,
+  KECCAK_384: 0x1c,
+  KECCAK_512: 0x1d,
+  MURMUR3_128: 0x22,
+  MURMUR3_32: 0x23,
+  DBL_SHA2_256: 0x56,
+  MD4: 0xd4,
+  MD5: 0xd5,
+  BMT: 0xd6,
+  X11: 0x1100,
+  BLAKE2B_8: 0xb201,
+  BLAKE2B_16: 0xb202,
+  BLAKE2B_24: 0xb203,
+  BLAKE2B_32: 0xb204,
+  BLAKE2B_40: 0xb205,
+  BLAKE2B_48: 0xb206,
+  BLAKE2B_56: 0xb207,
+  BLAKE2B_64: 0xb208,
+  BLAKE2B_72: 0xb209,
+  BLAKE2B_80: 0xb20a,
+  BLAKE2B_88: 0xb20b,
+  BLAKE2B_96: 0xb20c,
+  BLAKE2B_104: 0xb20d,
+  BLAKE2B_112: 0xb20e,
+  BLAKE2B_120: 0xb20f,
+  BLAKE2B_128: 0xb210,
+  BLAKE2B_136: 0xb211,
+  BLAKE2B_144: 0xb212,
+  BLAKE2B_152: 0xb213,
+  BLAKE2B_160: 0xb214,
+  BLAKE2B_168: 0xb215,
+  BLAKE2B_176: 0xb216,
+  BLAKE2B_184: 0xb217,
+  BLAKE2B_192: 0xb218,
+  BLAKE2B_200: 0xb219,
+  BLAKE2B_208: 0xb21a,
+  BLAKE2B_216: 0xb21b,
+  BLAKE2B_224: 0xb21c,
+  BLAKE2B_232: 0xb21d,
+  BLAKE2B_240: 0xb21e,
+  BLAKE2B_248: 0xb21f,
+  BLAKE2B_256: 0xb220,
+  BLAKE2B_264: 0xb221,
+  BLAKE2B_272: 0xb222,
+  BLAKE2B_280: 0xb223,
+  BLAKE2B_288: 0xb224,
+  BLAKE2B_296: 0xb225,
+  BLAKE2B_304: 0xb226,
+  BLAKE2B_312: 0xb227,
+  BLAKE2B_320: 0xb228,
+  BLAKE2B_328: 0xb229,
+  BLAKE2B_336: 0xb22a,
+  BLAKE2B_344: 0xb22b,
+  BLAKE2B_352: 0xb22c,
+  BLAKE2B_360: 0xb22d,
+  BLAKE2B_368: 0xb22e,
+  BLAKE2B_376: 0xb22f,
+  BLAKE2B_384: 0xb230,
+  BLAKE2B_392: 0xb231,
+  BLAKE2B_400: 0xb232,
+  BLAKE2B_408: 0xb233,
+  BLAKE2B_416: 0xb234,
+  BLAKE2B_424: 0xb235,
+  BLAKE2B_432: 0xb236,
+  BLAKE2B_440: 0xb237,
+  BLAKE2B_448: 0xb238,
+  BLAKE2B_456: 0xb239,
+  BLAKE2B_464: 0xb23a,
+  BLAKE2B_472: 0xb23b,
+  BLAKE2B_480: 0xb23c,
+  BLAKE2B_488: 0xb23d,
+  BLAKE2B_496: 0xb23e,
+  BLAKE2B_504: 0xb23f,
+  BLAKE2B_512: 0xb240,
+  BLAKE2S_8: 0xb241,
+  BLAKE2S_16: 0xb242,
+  BLAKE2S_24: 0xb243,
+  BLAKE2S_32: 0xb244,
+  BLAKE2S_40: 0xb245,
+  BLAKE2S_48: 0xb246,
+  BLAKE2S_56: 0xb247,
+  BLAKE2S_64: 0xb248,
+  BLAKE2S_72: 0xb249,
+  BLAKE2S_80: 0xb24a,
+  BLAKE2S_88: 0xb24b,
+  BLAKE2S_96: 0xb24c,
+  BLAKE2S_104: 0xb24d,
+  BLAKE2S_112: 0xb24e,
+  BLAKE2S_120: 0xb24f,
+  BLAKE2S_128: 0xb250,
+  BLAKE2S_136: 0xb251,
+  BLAKE2S_144: 0xb252,
+  BLAKE2S_152: 0xb253,
+  BLAKE2S_160: 0xb254,
+  BLAKE2S_168: 0xb255,
+  BLAKE2S_176: 0xb256,
+  BLAKE2S_184: 0xb257,
+  BLAKE2S_192: 0xb258,
+  BLAKE2S_200: 0xb259,
+  BLAKE2S_208: 0xb25a,
+  BLAKE2S_216: 0xb25b,
+  BLAKE2S_224: 0xb25c,
+  BLAKE2S_232: 0xb25d,
+  BLAKE2S_240: 0xb25e,
+  BLAKE2S_248: 0xb25f,
+  BLAKE2S_256: 0xb260,
+  SKEIN256_8: 0xb301,
+  SKEIN256_16: 0xb302,
+  SKEIN256_24: 0xb303,
+  SKEIN256_32: 0xb304,
+  SKEIN256_40: 0xb305,
+  SKEIN256_48: 0xb306,
+  SKEIN256_56: 0xb307,
+  SKEIN256_64: 0xb308,
+  SKEIN256_72: 0xb309,
+  SKEIN256_80: 0xb30a,
+  SKEIN256_88: 0xb30b,
+  SKEIN256_96: 0xb30c,
+  SKEIN256_104: 0xb30d,
+  SKEIN256_112: 0xb30e,
+  SKEIN256_120: 0xb30f,
+  SKEIN256_128: 0xb310,
+  SKEIN256_136: 0xb311,
+  SKEIN256_144: 0xb312,
+  SKEIN256_152: 0xb313,
+  SKEIN256_160: 0xb314,
+  SKEIN256_168: 0xb315,
+  SKEIN256_176: 0xb316,
+  SKEIN256_184: 0xb317,
+  SKEIN256_192: 0xb318,
+  SKEIN256_200: 0xb319,
+  SKEIN256_208: 0xb31a,
+  SKEIN256_216: 0xb31b,
+  SKEIN256_224: 0xb31c,
+  SKEIN256_232: 0xb31d,
+  SKEIN256_240: 0xb31e,
+  SKEIN256_248: 0xb31f,
+  SKEIN256_256: 0xb320,
+  SKEIN512_8: 0xb321,
+  SKEIN512_16: 0xb322,
+  SKEIN512_24: 0xb323,
+  SKEIN512_32: 0xb324,
+  SKEIN512_40: 0xb325,
+  SKEIN512_48: 0xb326,
+  SKEIN512_56: 0xb327,
+  SKEIN512_64: 0xb328,
+  SKEIN512_72: 0xb329,
+  SKEIN512_80: 0xb32a,
+  SKEIN512_88: 0xb32b,
+  SKEIN512_96: 0xb32c,
+  SKEIN512_104: 0xb32d,
+  SKEIN512_112: 0xb32e,
+  SKEIN512_120: 0xb32f,
+  SKEIN512_128: 0xb330,
+  SKEIN512_136: 0xb331,
+  SKEIN512_144: 0xb332,
+  SKEIN512_152: 0xb333,
+  SKEIN512_160: 0xb334,
+  SKEIN512_168: 0xb335,
+  SKEIN512_176: 0xb336,
+  SKEIN512_184: 0xb337,
+  SKEIN512_192: 0xb338,
+  SKEIN512_200: 0xb339,
+  SKEIN512_208: 0xb33a,
+  SKEIN512_216: 0xb33b,
+  SKEIN512_224: 0xb33c,
+  SKEIN512_232: 0xb33d,
+  SKEIN512_240: 0xb33e,
+  SKEIN512_248: 0xb33f,
+  SKEIN512_256: 0xb340,
+  SKEIN512_264: 0xb341,
+  SKEIN512_272: 0xb342,
+  SKEIN512_280: 0xb343,
+  SKEIN512_288: 0xb344,
+  SKEIN512_296: 0xb345,
+  SKEIN512_304: 0xb346,
+  SKEIN512_312: 0xb347,
+  SKEIN512_320: 0xb348,
+  SKEIN512_328: 0xb349,
+  SKEIN512_336: 0xb34a,
+  SKEIN512_344: 0xb34b,
+  SKEIN512_352: 0xb34c,
+  SKEIN512_360: 0xb34d,
+  SKEIN512_368: 0xb34e,
+  SKEIN512_376: 0xb34f,
+  SKEIN512_384: 0xb350,
+  SKEIN512_392: 0xb351,
+  SKEIN512_400: 0xb352,
+  SKEIN512_408: 0xb353,
+  SKEIN512_416: 0xb354,
+  SKEIN512_424: 0xb355,
+  SKEIN512_432: 0xb356,
+  SKEIN512_440: 0xb357,
+  SKEIN512_448: 0xb358,
+  SKEIN512_456: 0xb359,
+  SKEIN512_464: 0xb35a,
+  SKEIN512_472: 0xb35b,
+  SKEIN512_480: 0xb35c,
+  SKEIN512_488: 0xb35d,
+  SKEIN512_496: 0xb35e,
+  SKEIN512_504: 0xb35f,
+  SKEIN512_512: 0xb360,
+  SKEIN1024_8: 0xb361,
+  SKEIN1024_16: 0xb362,
+  SKEIN1024_24: 0xb363,
+  SKEIN1024_32: 0xb364,
+  SKEIN1024_40: 0xb365,
+  SKEIN1024_48: 0xb366,
+  SKEIN1024_56: 0xb367,
+  SKEIN1024_64: 0xb368,
+  SKEIN1024_72: 0xb369,
+  SKEIN1024_80: 0xb36a,
+  SKEIN1024_88: 0xb36b,
+  SKEIN1024_96: 0xb36c,
+  SKEIN1024_104: 0xb36d,
+  SKEIN1024_112: 0xb36e,
+  SKEIN1024_120: 0xb36f,
+  SKEIN1024_128: 0xb370,
+  SKEIN1024_136: 0xb371,
+  SKEIN1024_144: 0xb372,
+  SKEIN1024_152: 0xb373,
+  SKEIN1024_160: 0xb374,
+  SKEIN1024_168: 0xb375,
+  SKEIN1024_176: 0xb376,
+  SKEIN1024_184: 0xb377,
+  SKEIN1024_192: 0xb378,
+  SKEIN1024_200: 0xb379,
+  SKEIN1024_208: 0xb37a,
+  SKEIN1024_216: 0xb37b,
+  SKEIN1024_224: 0xb37c,
+  SKEIN1024_232: 0xb37d,
+  SKEIN1024_240: 0xb37e,
+  SKEIN1024_248: 0xb37f,
+  SKEIN1024_256: 0xb380,
+  SKEIN1024_264: 0xb381,
+  SKEIN1024_272: 0xb382,
+  SKEIN1024_280: 0xb383,
+  SKEIN1024_288: 0xb384,
+  SKEIN1024_296: 0xb385,
+  SKEIN1024_304: 0xb386,
+  SKEIN1024_312: 0xb387,
+  SKEIN1024_320: 0xb388,
+  SKEIN1024_328: 0xb389,
+  SKEIN1024_336: 0xb38a,
+  SKEIN1024_344: 0xb38b,
+  SKEIN1024_352: 0xb38c,
+  SKEIN1024_360: 0xb38d,
+  SKEIN1024_368: 0xb38e,
+  SKEIN1024_376: 0xb38f,
+  SKEIN1024_384: 0xb390,
+  SKEIN1024_392: 0xb391,
+  SKEIN1024_400: 0xb392,
+  SKEIN1024_408: 0xb393,
+  SKEIN1024_416: 0xb394,
+  SKEIN1024_424: 0xb395,
+  SKEIN1024_432: 0xb396,
+  SKEIN1024_440: 0xb397,
+  SKEIN1024_448: 0xb398,
+  SKEIN1024_456: 0xb399,
+  SKEIN1024_464: 0xb39a,
+  SKEIN1024_472: 0xb39b,
+  SKEIN1024_480: 0xb39c,
+  SKEIN1024_488: 0xb39d,
+  SKEIN1024_496: 0xb39e,
+  SKEIN1024_504: 0xb39f,
+  SKEIN1024_512: 0xb3a0,
+  SKEIN1024_520: 0xb3a1,
+  SKEIN1024_528: 0xb3a2,
+  SKEIN1024_536: 0xb3a3,
+  SKEIN1024_544: 0xb3a4,
+  SKEIN1024_552: 0xb3a5,
+  SKEIN1024_560: 0xb3a6,
+  SKEIN1024_568: 0xb3a7,
+  SKEIN1024_576: 0xb3a8,
+  SKEIN1024_584: 0xb3a9,
+  SKEIN1024_592: 0xb3aa,
+  SKEIN1024_600: 0xb3ab,
+  SKEIN1024_608: 0xb3ac,
+  SKEIN1024_616: 0xb3ad,
+  SKEIN1024_624: 0xb3ae,
+  SKEIN1024_632: 0xb3af,
+  SKEIN1024_640: 0xb3b0,
+  SKEIN1024_648: 0xb3b1,
+  SKEIN1024_656: 0xb3b2,
+  SKEIN1024_664: 0xb3b3,
+  SKEIN1024_672: 0xb3b4,
+  SKEIN1024_680: 0xb3b5,
+  SKEIN1024_688: 0xb3b6,
+  SKEIN1024_696: 0xb3b7,
+  SKEIN1024_704: 0xb3b8,
+  SKEIN1024_712: 0xb3b9,
+  SKEIN1024_720: 0xb3ba,
+  SKEIN1024_728: 0xb3bb,
+  SKEIN1024_736: 0xb3bc,
+  SKEIN1024_744: 0xb3bd,
+  SKEIN1024_752: 0xb3be,
+  SKEIN1024_760: 0xb3bf,
+  SKEIN1024_768: 0xb3c0,
+  SKEIN1024_776: 0xb3c1,
+  SKEIN1024_784: 0xb3c2,
+  SKEIN1024_792: 0xb3c3,
+  SKEIN1024_800: 0xb3c4,
+  SKEIN1024_808: 0xb3c5,
+  SKEIN1024_816: 0xb3c6,
+  SKEIN1024_824: 0xb3c7,
+  SKEIN1024_832: 0xb3c8,
+  SKEIN1024_840: 0xb3c9,
+  SKEIN1024_848: 0xb3ca,
+  SKEIN1024_856: 0xb3cb,
+  SKEIN1024_864: 0xb3cc,
+  SKEIN1024_872: 0xb3cd,
+  SKEIN1024_880: 0xb3ce,
+  SKEIN1024_888: 0xb3cf,
+  SKEIN1024_896: 0xb3d0,
+  SKEIN1024_904: 0xb3d1,
+  SKEIN1024_912: 0xb3d2,
+  SKEIN1024_920: 0xb3d3,
+  SKEIN1024_928: 0xb3d4,
+  SKEIN1024_936: 0xb3d5,
+  SKEIN1024_944: 0xb3d6,
+  SKEIN1024_952: 0xb3d7,
+  SKEIN1024_960: 0xb3d8,
+  SKEIN1024_968: 0xb3d9,
+  SKEIN1024_976: 0xb3da,
+  SKEIN1024_984: 0xb3db,
+  SKEIN1024_992: 0xb3dc,
+  SKEIN1024_1000: 0xb3dd,
+  SKEIN1024_1008: 0xb3de,
+  SKEIN1024_1016: 0xb3df,
+  SKEIN1024_1024: 0xb3e0,
 
-  links = links.map((link) => {
-    return DAGLink.isDAGLink(link) ? link : DAGLink.util.createDagLinkFromB58EncodedHash(link)
-  })
-  links = sort(links, linkSort)
+  // multiaddr
+  IP4: 0x04,
+  TCP: 0x06,
+  DCCP: 0x21,
+  IP6: 0x29,
+  IP6ZONE: 0x2a,
+  DNS: 0x35,
+  DNS4: 0x36,
+  DNS6: 0x37,
+  DNSADDR: 0x38,
+  SCTP: 0x84,
+  UDP: 0x0111,
+  P2P_WEBRTC_STAR: 0x0113,
+  P2P_WEBRTC_DIRECT: 0x0114,
+  P2P_STARDUST: 0x0115,
+  P2P_CIRCUIT: 0x0122,
+  UDT: 0x012d,
+  UTP: 0x012e,
+  UNIX: 0x0190,
+  P2P: 0x01a5,
+  IPFS: 0x01a5,
+  HTTPS: 0x01bb,
+  ONION: 0x01bc,
+  ONION3: 0x01bd,
+  GARLIC64: 0x01be,
+  QUIC: 0x01cc,
+  WS: 0x01dd,
+  WSS: 0x01de,
+  P2P_WEBSOCKET_STAR: 0x01df,
+  HTTP: 0x01e0,
 
-  serialize({
-    data, links
-  }, (err, buffer) => {
-    if (err) {
-      return callback(err)
-    }
+  // ipld
+  RAW: 0x55,
+  DAG_PB: 0x70,
+  DAG_CBOR: 0x71,
+  GIT_RAW: 0x78,
+  TORRENT_INFO: 0x7b,
+  TORRENT_FILE: 0x7c,
+  LEOFCOIN_BLOCK: 0x81,
+  LEOFCOIN_TX: 0x82,
+  LEOFCOIN_PR: 0x83,
+  ETH_BLOCK: 0x90,
+  ETH_BLOCK_LIST: 0x91,
+  ETH_TX_TRIE: 0x92,
+  ETH_TX: 0x93,
+  ETH_TX_RECEIPT_TRIE: 0x94,
+  ETH_TX_RECEIPT: 0x95,
+  ETH_STATE_TRIE: 0x96,
+  ETH_ACCOUNT_SNAPSHOT: 0x97,
+  ETH_STORAGE_TRIE: 0x98,
+  BITCOIN_BLOCK: 0xb0,
+  BITCOIN_TX: 0xb1,
+  ZCASH_BLOCK: 0xc0,
+  ZCASH_TX: 0xc1,
+  STELLAR_BLOCK: 0xd0,
+  STELLAR_TX: 0xd1,
+  DECRED_BLOCK: 0xe0,
+  DECRED_TX: 0xe1,
+  DASH_BLOCK: 0xf0,
+  DASH_TX: 0xf1,
+  SWARM_MANIFEST: 0xfa,
+  SWARM_FEED: 0xfb,
+  DAG_JSON: 0x0129,
 
-    return callback(null, new DAGNode(data, links, buffer.length))
-  })
-}
+  // namespace
+  PATH: 0x2f,
+  IPLD_NS: 0xe2,
+  IPFS_NS: 0xe3,
+  SWARM_NS: 0xe4,
 
-module.exports = create
+  // key
+  ED25519_PUB: 0xed,
 
+  // holochain
+  HOLOCHAIN_ADR_V0: 0x807124,
+  HOLOCHAIN_ADR_V1: 0x817124,
+  HOLOCHAIN_KEY_V0: 0x947124,
+  HOLOCHAIN_KEY_V1: 0x957124,
+  HOLOCHAIN_SIG_V0: 0xa27124,
+  HOLOCHAIN_SIG_V1: 0xa37124
+})
+
+<<<<<<< HEAD
 }).call(this,require("buffer").Buffer)
 },{"../dag-link":249,"../util.js":260,"./index.js":254,"./util.js":256,"buffer":51,"stable":665}],254:[function(require,module,exports){
+=======
+},{}],265:[function(require,module,exports){
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 (function (Buffer){
+/**
+ * Implementation of the multicodec specification.
+ *
+ * @module multicodec
+ * @example
+ * const multicodec = require('multicodec')
+ *
+ * const prefixedProtobuf = multicodec.addPrefix('protobuf', protobufBuffer)
+ * // prefixedProtobuf 0x50...
+ *
+ */
 'use strict'
 
-const assert = require('assert')
-const withIs = require('class-is')
-
-class DAGNode {
-  constructor (data, links, serializedSize) {
-    if (serializedSize !== 0) {
-      assert(serializedSize, 'A DAGNode requires it\'s serialized size')
-    }
-
-    this._data = data || Buffer.alloc(0)
-    this._links = links || []
-    this._serializedSize = serializedSize
-  }
-
-  toJSON () {
-    if (!this._json) {
-      this._json = Object.freeze({
-        data: this.data,
-        links: this.links.map((l) => l.toJSON()),
-        size: this.size
-      })
-    }
-
-    return Object.assign({}, this._json)
-  }
-
-  toString () {
-    return `DAGNode <data: "${this.data.toString('base64')}", links: ${this.links.length}, size: ${this.size}>`
-  }
-
-  get data () {
-    return this._data
-  }
-
-  set data (data) {
-    throw new Error("Can't set property: 'data' is immutable")
-  }
-
-  get links () {
-    return this._links
-  }
-
-  set links (links) {
-    throw new Error("Can't set property: 'links' is immutable")
-  }
-
-  get size () {
-    if (this._size === undefined) {
-      this._size = this.links.reduce((sum, l) => sum + l.size, this._serializedSize)
-    }
-
-    return this._size
-  }
-
-  set size (size) {
-    throw new Error("Can't set property: 'size' is immutable")
-  }
-}
-
-exports = module.exports = withIs(DAGNode, { className: 'DAGNode', symbolName: '@ipld/js-ipld-dag-pb/dagnode' })
-exports.create = require('./create')
-exports.clone = require('./clone')
-exports.addLink = require('./addLink')
-exports.rmLink = require('./rmLink')
-
-}).call(this,require("buffer").Buffer)
-},{"./addLink":251,"./clone":252,"./create":253,"./rmLink":255,"assert":15,"buffer":51,"class-is":208}],255:[function(require,module,exports){
-(function (Buffer){
-'use strict'
-
-const dagNodeUtil = require('./util')
-const cloneLinks = dagNodeUtil.cloneLinks
-const cloneData = dagNodeUtil.cloneData
-const create = require('./create')
-const CID = require('cids')
-
-function rmLink (dagNode, nameOrCid, callback) {
-  const data = cloneData(dagNode)
-  let links = cloneLinks(dagNode)
-
-  if (typeof nameOrCid === 'string') {
-    links = links.filter((link) => link.name !== nameOrCid)
-  } else if (Buffer.isBuffer(nameOrCid) || CID.isCID(nameOrCid)) {
-    links = links.filter((link) => !link.cid.equals(nameOrCid))
-  } else {
-    return callback(new Error('second arg needs to be a name or CID'), null)
-  }
-
-  create(data, links, callback)
-}
-
-module.exports = rmLink
-
-}).call(this,{"isBuffer":require("../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":105,"./create":253,"./util":256,"cids":206}],256:[function(require,module,exports){
-(function (Buffer){
-'use strict'
-
-const DAGLink = require('./../dag-link')
-const {
-  cid
-} = require('../util')
+const varint = require('varint')
+const codecNameToCodeVarint = require('./varint-table')
+const codeToCodecName = require('./name-table')
+const util = require('./util')
 
 exports = module.exports
 
-function cloneData (dagNode) {
-  let data
-
-  if (dagNode.data && dagNode.data.length > 0) {
-    data = Buffer.alloc(dagNode.data.length)
-    dagNode.data.copy(data)
-  } else {
-    data = Buffer.alloc(0)
-  }
-
-  return data
-}
-
-function cloneLinks (dagNode) {
-  return dagNode.links.slice()
-}
-
-function linkSort (a, b) {
-  return Buffer.compare(a.nameAsBuffer, b.nameAsBuffer)
-}
-
-/*
- * toDAGLink converts a DAGNode to a DAGLink
+/**
+ * Prefix a buffer with a multicodec-packed.
+ *
+ * @param {string|number} multicodecStrOrCode
+ * @param {Buffer} data
+ * @returns {Buffer}
  */
-function toDAGLink (node, options, callback) {
-  if (typeof options === 'function') {
-    callback = options
-    options = {}
+exports.addPrefix = (multicodecStrOrCode, data) => {
+  let prefix
+
+  if (Buffer.isBuffer(multicodecStrOrCode)) {
+    prefix = util.varintBufferEncode(multicodecStrOrCode)
+  } else {
+    if (codecNameToCodeVarint[multicodecStrOrCode]) {
+      prefix = codecNameToCodeVarint[multicodecStrOrCode]
+    } else {
+      throw new Error('multicodec not recognized')
+    }
   }
+  return Buffer.concat([prefix, data])
+}
+
+/**
+ * Decapsulate the multicodec-packed prefix from the data.
+ *
+ * @param {Buffer} data
+ * @returns {Buffer}
+ */
+exports.rmPrefix = (data) => {
+  varint.decode(data)
+  return data.slice(varint.decode.bytes)
+}
+
+/**
+ * Get the codec of the prefixed data.
+ * @param {Buffer} prefixedData
+ * @returns {string}
+ */
+exports.getCodec = (prefixedData) => {
+  const code = util.varintBufferDecode(prefixedData)
+  const codecName = codeToCodecName[code.toString('hex')]
+  if (codecName === undefined) {
+    throw new Error('Code `0x' + code.toString('hex') + '` not found')
+  }
+  return codecName
+}
+
+/**
+ * Get the code of the prefixed data.
+ * @param {Buffer} prefixedData
+ * @returns {number}
+ */
+exports.getCode = (prefixedData) => {
+  return varint.decode(prefixedData)
+}
+
+/**
+ * Get the code as varint of a codec name.
+ * @param {string} codecName
+ * @returns {Buffer}
+ */
+exports.getCodeVarint = (codecName) => {
+  const code = codecNameToCodeVarint[codecName]
+  if (code === undefined) {
+    throw new Error('Codec `' + codecName + '` not found')
+  }
+  return code
+}
+
+/**
+ * Get the varint of a code.
+ * @param {Number} code
+ * @returns {Array.<number>}
+ */
+exports.getVarint = (code) => {
+  return varint.encode(code)
+}
+
+// Make the constants top-level constants
+const constants = require('./constants')
+Object.assign(exports, constants)
+
+// Human friendly names for printing, e.g. in error messages
+exports.print = require('./print')
+
+}).call(this,require("buffer").Buffer)
+},{"./constants":264,"./name-table":266,"./print":267,"./util":268,"./varint-table":269,"buffer":51,"varint":674}],266:[function(require,module,exports){
+'use strict'
+const baseTable = require('./base-table')
+
+// this creates a map for code as hexString -> codecName
+
+<<<<<<< HEAD
+}).call(this,require("buffer").Buffer)
+},{"./addLink":251,"./clone":252,"./create":253,"./rmLink":255,"assert":15,"buffer":51,"class-is":208}],255:[function(require,module,exports){
+(function (Buffer){
+=======
+const nameTable = {}
+module.exports = nameTable
+
+for (let encodingName in baseTable) {
+  let code = baseTable[encodingName]
+  nameTable[code.toString('hex')] = encodingName
+}
+
+},{"./base-table":263}],267:[function(require,module,exports){
+// THIS FILE IS GENERATED, DO NO EDIT MANUALLY
+// For more information see the README.md
+/* eslint-disable dot-notation */
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+'use strict'
+module.exports = Object.freeze({
+
+  // serialization
+  0x50: 'protobuf',
+  0x51: 'cbor',
+  0x60: 'rlp',
+  0x63: 'bencode',
+
+  // multiformat
+  0x30: 'multicodec',
+  0x31: 'multihash',
+  0x32: 'multiaddr',
+  0x33: 'multibase',
+
+  // multihash
+  0x00: 'identity',
+  0x11: 'sha1',
+  0x12: 'sha2-256',
+  0x13: 'sha2-512',
+  0x14: 'sha3-512',
+  0x15: 'sha3-384',
+  0x16: 'sha3-256',
+  0x17: 'sha3-224',
+  0x18: 'shake-128',
+  0x19: 'shake-256',
+  0x1a: 'keccak-224',
+  0x1b: 'keccak-256',
+  0x1c: 'keccak-384',
+  0x1d: 'keccak-512',
+  0x22: 'murmur3-128',
+  0x23: 'murmur3-32',
+  0x56: 'dbl-sha2-256',
+  0xd4: 'md4',
+  0xd5: 'md5',
+  0xd6: 'bmt',
+  0x1100: 'x11',
+  0xb201: 'blake2b-8',
+  0xb202: 'blake2b-16',
+  0xb203: 'blake2b-24',
+  0xb204: 'blake2b-32',
+  0xb205: 'blake2b-40',
+  0xb206: 'blake2b-48',
+  0xb207: 'blake2b-56',
+  0xb208: 'blake2b-64',
+  0xb209: 'blake2b-72',
+  0xb20a: 'blake2b-80',
+  0xb20b: 'blake2b-88',
+  0xb20c: 'blake2b-96',
+  0xb20d: 'blake2b-104',
+  0xb20e: 'blake2b-112',
+  0xb20f: 'blake2b-120',
+  0xb210: 'blake2b-128',
+  0xb211: 'blake2b-136',
+  0xb212: 'blake2b-144',
+  0xb213: 'blake2b-152',
+  0xb214: 'blake2b-160',
+  0xb215: 'blake2b-168',
+  0xb216: 'blake2b-176',
+  0xb217: 'blake2b-184',
+  0xb218: 'blake2b-192',
+  0xb219: 'blake2b-200',
+  0xb21a: 'blake2b-208',
+  0xb21b: 'blake2b-216',
+  0xb21c: 'blake2b-224',
+  0xb21d: 'blake2b-232',
+  0xb21e: 'blake2b-240',
+  0xb21f: 'blake2b-248',
+  0xb220: 'blake2b-256',
+  0xb221: 'blake2b-264',
+  0xb222: 'blake2b-272',
+  0xb223: 'blake2b-280',
+  0xb224: 'blake2b-288',
+  0xb225: 'blake2b-296',
+  0xb226: 'blake2b-304',
+  0xb227: 'blake2b-312',
+  0xb228: 'blake2b-320',
+  0xb229: 'blake2b-328',
+  0xb22a: 'blake2b-336',
+  0xb22b: 'blake2b-344',
+  0xb22c: 'blake2b-352',
+  0xb22d: 'blake2b-360',
+  0xb22e: 'blake2b-368',
+  0xb22f: 'blake2b-376',
+  0xb230: 'blake2b-384',
+  0xb231: 'blake2b-392',
+  0xb232: 'blake2b-400',
+  0xb233: 'blake2b-408',
+  0xb234: 'blake2b-416',
+  0xb235: 'blake2b-424',
+  0xb236: 'blake2b-432',
+  0xb237: 'blake2b-440',
+  0xb238: 'blake2b-448',
+  0xb239: 'blake2b-456',
+  0xb23a: 'blake2b-464',
+  0xb23b: 'blake2b-472',
+  0xb23c: 'blake2b-480',
+  0xb23d: 'blake2b-488',
+  0xb23e: 'blake2b-496',
+  0xb23f: 'blake2b-504',
+  0xb240: 'blake2b-512',
+  0xb241: 'blake2s-8',
+  0xb242: 'blake2s-16',
+  0xb243: 'blake2s-24',
+  0xb244: 'blake2s-32',
+  0xb245: 'blake2s-40',
+  0xb246: 'blake2s-48',
+  0xb247: 'blake2s-56',
+  0xb248: 'blake2s-64',
+  0xb249: 'blake2s-72',
+  0xb24a: 'blake2s-80',
+  0xb24b: 'blake2s-88',
+  0xb24c: 'blake2s-96',
+  0xb24d: 'blake2s-104',
+  0xb24e: 'blake2s-112',
+  0xb24f: 'blake2s-120',
+  0xb250: 'blake2s-128',
+  0xb251: 'blake2s-136',
+  0xb252: 'blake2s-144',
+  0xb253: 'blake2s-152',
+  0xb254: 'blake2s-160',
+  0xb255: 'blake2s-168',
+  0xb256: 'blake2s-176',
+  0xb257: 'blake2s-184',
+  0xb258: 'blake2s-192',
+  0xb259: 'blake2s-200',
+  0xb25a: 'blake2s-208',
+  0xb25b: 'blake2s-216',
+  0xb25c: 'blake2s-224',
+  0xb25d: 'blake2s-232',
+  0xb25e: 'blake2s-240',
+  0xb25f: 'blake2s-248',
+  0xb260: 'blake2s-256',
+  0xb301: 'skein256-8',
+  0xb302: 'skein256-16',
+  0xb303: 'skein256-24',
+  0xb304: 'skein256-32',
+  0xb305: 'skein256-40',
+  0xb306: 'skein256-48',
+  0xb307: 'skein256-56',
+  0xb308: 'skein256-64',
+  0xb309: 'skein256-72',
+  0xb30a: 'skein256-80',
+  0xb30b: 'skein256-88',
+  0xb30c: 'skein256-96',
+  0xb30d: 'skein256-104',
+  0xb30e: 'skein256-112',
+  0xb30f: 'skein256-120',
+  0xb310: 'skein256-128',
+  0xb311: 'skein256-136',
+  0xb312: 'skein256-144',
+  0xb313: 'skein256-152',
+  0xb314: 'skein256-160',
+  0xb315: 'skein256-168',
+  0xb316: 'skein256-176',
+  0xb317: 'skein256-184',
+  0xb318: 'skein256-192',
+  0xb319: 'skein256-200',
+  0xb31a: 'skein256-208',
+  0xb31b: 'skein256-216',
+  0xb31c: 'skein256-224',
+  0xb31d: 'skein256-232',
+  0xb31e: 'skein256-240',
+  0xb31f: 'skein256-248',
+  0xb320: 'skein256-256',
+  0xb321: 'skein512-8',
+  0xb322: 'skein512-16',
+  0xb323: 'skein512-24',
+  0xb324: 'skein512-32',
+  0xb325: 'skein512-40',
+  0xb326: 'skein512-48',
+  0xb327: 'skein512-56',
+  0xb328: 'skein512-64',
+  0xb329: 'skein512-72',
+  0xb32a: 'skein512-80',
+  0xb32b: 'skein512-88',
+  0xb32c: 'skein512-96',
+  0xb32d: 'skein512-104',
+  0xb32e: 'skein512-112',
+  0xb32f: 'skein512-120',
+  0xb330: 'skein512-128',
+  0xb331: 'skein512-136',
+  0xb332: 'skein512-144',
+  0xb333: 'skein512-152',
+  0xb334: 'skein512-160',
+  0xb335: 'skein512-168',
+  0xb336: 'skein512-176',
+  0xb337: 'skein512-184',
+  0xb338: 'skein512-192',
+  0xb339: 'skein512-200',
+  0xb33a: 'skein512-208',
+  0xb33b: 'skein512-216',
+  0xb33c: 'skein512-224',
+  0xb33d: 'skein512-232',
+  0xb33e: 'skein512-240',
+  0xb33f: 'skein512-248',
+  0xb340: 'skein512-256',
+  0xb341: 'skein512-264',
+  0xb342: 'skein512-272',
+  0xb343: 'skein512-280',
+  0xb344: 'skein512-288',
+  0xb345: 'skein512-296',
+  0xb346: 'skein512-304',
+  0xb347: 'skein512-312',
+  0xb348: 'skein512-320',
+  0xb349: 'skein512-328',
+  0xb34a: 'skein512-336',
+  0xb34b: 'skein512-344',
+  0xb34c: 'skein512-352',
+  0xb34d: 'skein512-360',
+  0xb34e: 'skein512-368',
+  0xb34f: 'skein512-376',
+  0xb350: 'skein512-384',
+  0xb351: 'skein512-392',
+  0xb352: 'skein512-400',
+  0xb353: 'skein512-408',
+  0xb354: 'skein512-416',
+  0xb355: 'skein512-424',
+  0xb356: 'skein512-432',
+  0xb357: 'skein512-440',
+  0xb358: 'skein512-448',
+  0xb359: 'skein512-456',
+  0xb35a: 'skein512-464',
+  0xb35b: 'skein512-472',
+  0xb35c: 'skein512-480',
+  0xb35d: 'skein512-488',
+  0xb35e: 'skein512-496',
+  0xb35f: 'skein512-504',
+  0xb360: 'skein512-512',
+  0xb361: 'skein1024-8',
+  0xb362: 'skein1024-16',
+  0xb363: 'skein1024-24',
+  0xb364: 'skein1024-32',
+  0xb365: 'skein1024-40',
+  0xb366: 'skein1024-48',
+  0xb367: 'skein1024-56',
+  0xb368: 'skein1024-64',
+  0xb369: 'skein1024-72',
+  0xb36a: 'skein1024-80',
+  0xb36b: 'skein1024-88',
+  0xb36c: 'skein1024-96',
+  0xb36d: 'skein1024-104',
+  0xb36e: 'skein1024-112',
+  0xb36f: 'skein1024-120',
+  0xb370: 'skein1024-128',
+  0xb371: 'skein1024-136',
+  0xb372: 'skein1024-144',
+  0xb373: 'skein1024-152',
+  0xb374: 'skein1024-160',
+  0xb375: 'skein1024-168',
+  0xb376: 'skein1024-176',
+  0xb377: 'skein1024-184',
+  0xb378: 'skein1024-192',
+  0xb379: 'skein1024-200',
+  0xb37a: 'skein1024-208',
+  0xb37b: 'skein1024-216',
+  0xb37c: 'skein1024-224',
+  0xb37d: 'skein1024-232',
+  0xb37e: 'skein1024-240',
+  0xb37f: 'skein1024-248',
+  0xb380: 'skein1024-256',
+  0xb381: 'skein1024-264',
+  0xb382: 'skein1024-272',
+  0xb383: 'skein1024-280',
+  0xb384: 'skein1024-288',
+  0xb385: 'skein1024-296',
+  0xb386: 'skein1024-304',
+  0xb387: 'skein1024-312',
+  0xb388: 'skein1024-320',
+  0xb389: 'skein1024-328',
+  0xb38a: 'skein1024-336',
+  0xb38b: 'skein1024-344',
+  0xb38c: 'skein1024-352',
+  0xb38d: 'skein1024-360',
+  0xb38e: 'skein1024-368',
+  0xb38f: 'skein1024-376',
+  0xb390: 'skein1024-384',
+  0xb391: 'skein1024-392',
+  0xb392: 'skein1024-400',
+  0xb393: 'skein1024-408',
+  0xb394: 'skein1024-416',
+  0xb395: 'skein1024-424',
+  0xb396: 'skein1024-432',
+  0xb397: 'skein1024-440',
+  0xb398: 'skein1024-448',
+  0xb399: 'skein1024-456',
+  0xb39a: 'skein1024-464',
+  0xb39b: 'skein1024-472',
+  0xb39c: 'skein1024-480',
+  0xb39d: 'skein1024-488',
+  0xb39e: 'skein1024-496',
+  0xb39f: 'skein1024-504',
+  0xb3a0: 'skein1024-512',
+  0xb3a1: 'skein1024-520',
+  0xb3a2: 'skein1024-528',
+  0xb3a3: 'skein1024-536',
+  0xb3a4: 'skein1024-544',
+  0xb3a5: 'skein1024-552',
+  0xb3a6: 'skein1024-560',
+  0xb3a7: 'skein1024-568',
+  0xb3a8: 'skein1024-576',
+  0xb3a9: 'skein1024-584',
+  0xb3aa: 'skein1024-592',
+  0xb3ab: 'skein1024-600',
+  0xb3ac: 'skein1024-608',
+  0xb3ad: 'skein1024-616',
+  0xb3ae: 'skein1024-624',
+  0xb3af: 'skein1024-632',
+  0xb3b0: 'skein1024-640',
+  0xb3b1: 'skein1024-648',
+  0xb3b2: 'skein1024-656',
+  0xb3b3: 'skein1024-664',
+  0xb3b4: 'skein1024-672',
+  0xb3b5: 'skein1024-680',
+  0xb3b6: 'skein1024-688',
+  0xb3b7: 'skein1024-696',
+  0xb3b8: 'skein1024-704',
+  0xb3b9: 'skein1024-712',
+  0xb3ba: 'skein1024-720',
+  0xb3bb: 'skein1024-728',
+  0xb3bc: 'skein1024-736',
+  0xb3bd: 'skein1024-744',
+  0xb3be: 'skein1024-752',
+  0xb3bf: 'skein1024-760',
+  0xb3c0: 'skein1024-768',
+  0xb3c1: 'skein1024-776',
+  0xb3c2: 'skein1024-784',
+  0xb3c3: 'skein1024-792',
+  0xb3c4: 'skein1024-800',
+  0xb3c5: 'skein1024-808',
+  0xb3c6: 'skein1024-816',
+  0xb3c7: 'skein1024-824',
+  0xb3c8: 'skein1024-832',
+  0xb3c9: 'skein1024-840',
+  0xb3ca: 'skein1024-848',
+  0xb3cb: 'skein1024-856',
+  0xb3cc: 'skein1024-864',
+  0xb3cd: 'skein1024-872',
+  0xb3ce: 'skein1024-880',
+  0xb3cf: 'skein1024-888',
+  0xb3d0: 'skein1024-896',
+  0xb3d1: 'skein1024-904',
+  0xb3d2: 'skein1024-912',
+  0xb3d3: 'skein1024-920',
+  0xb3d4: 'skein1024-928',
+  0xb3d5: 'skein1024-936',
+  0xb3d6: 'skein1024-944',
+  0xb3d7: 'skein1024-952',
+  0xb3d8: 'skein1024-960',
+  0xb3d9: 'skein1024-968',
+  0xb3da: 'skein1024-976',
+  0xb3db: 'skein1024-984',
+  0xb3dc: 'skein1024-992',
+  0xb3dd: 'skein1024-1000',
+  0xb3de: 'skein1024-1008',
+  0xb3df: 'skein1024-1016',
+  0xb3e0: 'skein1024-1024',
+
+  // multiaddr
+  0x04: 'ip4',
+  0x06: 'tcp',
+  0x21: 'dccp',
+  0x29: 'ip6',
+  0x2a: 'ip6zone',
+  0x35: 'dns',
+  0x36: 'dns4',
+  0x37: 'dns6',
+  0x38: 'dnsaddr',
+  0x84: 'sctp',
+  0x0111: 'udp',
+  0x0113: 'p2p-webrtc-star',
+  0x0114: 'p2p-webrtc-direct',
+  0x0115: 'p2p-stardust',
+  0x0122: 'p2p-circuit',
+  0x012d: 'udt',
+  0x012e: 'utp',
+  0x0190: 'unix',
+  0x01a5: 'p2p',
+  0x01bb: 'https',
+  0x01bc: 'onion',
+  0x01bd: 'onion3',
+  0x01be: 'garlic64',
+  0x01cc: 'quic',
+  0x01dd: 'ws',
+  0x01de: 'wss',
+  0x01df: 'p2p-websocket-star',
+  0x01e0: 'http',
+
+  // ipld
+  0x55: 'raw',
+  0x70: 'dag-pb',
+  0x71: 'dag-cbor',
+  0x78: 'git-raw',
+  0x7b: 'torrent-info',
+  0x7c: 'torrent-file',
+  0x81: 'leofcoin-block',
+  0x82: 'leofcoin-tx',
+  0x83: 'leofcoin-pr',
+  0x90: 'eth-block',
+  0x91: 'eth-block-list',
+  0x92: 'eth-tx-trie',
+  0x93: 'eth-tx',
+  0x94: 'eth-tx-receipt-trie',
+  0x95: 'eth-tx-receipt',
+  0x96: 'eth-state-trie',
+  0x97: 'eth-account-snapshot',
+  0x98: 'eth-storage-trie',
+  0xb0: 'bitcoin-block',
+  0xb1: 'bitcoin-tx',
+  0xc0: 'zcash-block',
+  0xc1: 'zcash-tx',
+  0xd0: 'stellar-block',
+  0xd1: 'stellar-tx',
+  0xe0: 'decred-block',
+  0xe1: 'decred-tx',
+  0xf0: 'dash-block',
+  0xf1: 'dash-tx',
+  0xfa: 'swarm-manifest',
+  0xfb: 'swarm-feed',
+  0x0129: 'dag-json',
+
+  // namespace
+  0x2f: 'path',
+  0xe2: 'ipld-ns',
+  0xe3: 'ipfs-ns',
+  0xe4: 'swarm-ns',
+
+  // key
+  0xed: 'ed25519-pub',
+
+  // holochain
+  0x807124: 'holochain-adr-v0',
+  0x817124: 'holochain-adr-v1',
+  0x947124: 'holochain-key-v0',
+  0x957124: 'holochain-key-v1',
+  0xa27124: 'holochain-sig-v0',
+  0xa37124: 'holochain-sig-v1'
+})
+
+<<<<<<< HEAD
+}).call(this,{"isBuffer":require("../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../../../AppData/Roaming/npm/node_modules/browserify/node_modules/is-buffer/index.js":105,"./create":253,"./util":256,"cids":206}],256:[function(require,module,exports){
+=======
+},{}],268:[function(require,module,exports){
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
+(function (Buffer){
+'use strict'
+const varint = require('varint')
+
+module.exports = {
+  numberToBuffer,
+  bufferToNumber,
+  varintBufferEncode,
+  varintBufferDecode
+}
+
+function bufferToNumber (buf) {
+  return parseInt(buf.toString('hex'), 16)
+}
+
+function numberToBuffer (num) {
+  let hexString = num.toString(16)
+  if (hexString.length % 2 === 1) {
+    hexString = '0' + hexString
+  }
+<<<<<<< HEAD
 
   cid(node, options, (error, cid) => {
     if (error) {
@@ -38808,6 +43026,25 @@ function varintBufferDecode (input) {
 const baseTable = require('./base-table')
 const varintBufferEncode = require('./util').varintBufferEncode
 
+=======
+  return Buffer.from(hexString, 'hex')
+}
+
+function varintBufferEncode (input) {
+  return Buffer.from(varint.encode(bufferToNumber(input)))
+}
+
+function varintBufferDecode (input) {
+  return numberToBuffer(varint.decode(input))
+}
+
+}).call(this,require("buffer").Buffer)
+},{"buffer":51,"varint":674}],269:[function(require,module,exports){
+'use strict'
+const baseTable = require('./base-table')
+const varintBufferEncode = require('./util').varintBufferEncode
+
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 // this creates a map for codecName -> codeVarintBuffer
 
 const varintTable = {}
@@ -40399,6 +44636,7 @@ arguments[4][203][0].apply(exports,arguments)
 },{"./base.js":277,"./base16":278,"./base32":279,"./base64":280,"base-x":243,"dup":203}],282:[function(require,module,exports){
 arguments[4][204][0].apply(exports,arguments)
 },{"./constants":281,"buffer":51,"dup":204}],283:[function(require,module,exports){
+<<<<<<< HEAD
 var through = require('through2')
 var split = require('split2')
 var EOL = require('os').EOL
@@ -40430,6 +44668,39 @@ function serialize (opts) {
     cb(null, stringify(obj) + EOL)
   })
 }
+=======
+var through = require('through2')
+var split = require('split2')
+var EOL = require('os').EOL
+var stringify = require('json-stringify-safe')
+
+module.exports = parse
+module.exports.serialize = module.exports.stringify = serialize
+module.exports.parse = parse
+
+function parse (opts) {
+  opts = opts || {}
+  opts.strict = opts.strict !== false
+
+  function parseRow (row) {
+    try {
+      if (row) return JSON.parse(row)
+    } catch (e) {
+      if (opts.strict) {
+        this.emit('error', new Error('Could not parse row ' + row.slice(0, 50) + '...'))
+      }
+    }
+  }
+
+  return split(parseRow, opts)
+}
+
+function serialize (opts) {
+  return through.obj(opts, function(obj, enc, cb) {
+    cb(null, stringify(obj) + EOL)
+  })
+}
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 
 },{"json-stringify-safe":492,"os":112,"split2":306,"through2":311}],284:[function(require,module,exports){
 'use strict'
@@ -52131,10 +56402,17 @@ isIp.v4 = x => ipRegex.v4({exact: true}).test(x);
 isIp.v6 = x => ipRegex.v6({exact: true}).test(x);
 
 },{"ip-regex":223}],465:[function(require,module,exports){
+<<<<<<< HEAD
 module.exports = isPromise;
 
 function isPromise(obj) {
   return obj && typeof obj.then === 'function';
+=======
+module.exports = isPromise;
+
+function isPromise(obj) {
+  return obj && typeof obj.then === 'function';
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 }
 },{}],466:[function(require,module,exports){
 
@@ -75307,6 +79585,7 @@ Promise.use = function (extension) {
 };
 }).call(this,require('_process'))
 },{"_process":125,"is-promise":465}],605:[function(require,module,exports){
+<<<<<<< HEAD
 /** PROMISIFY CALLBACK-STYLE FUNCTIONS TO ES6 PROMISES
 *
 * EXAMPLE:
@@ -75374,6 +79653,75 @@ if (typeof exports === "undefined") {
     this["promisify"] = module.exports;
 }
 
+=======
+/** PROMISIFY CALLBACK-STYLE FUNCTIONS TO ES6 PROMISES
+*
+* EXAMPLE:
+* const fn = promisify( (callback) => callback(null, "Hello world!") );
+* fn((err, str) => console.log(str));
+* fn().then((str) => console.log(str));
+* //Both functions, will log 'Hello world!'
+*
+* Note: The function you pass, may have any arguments you want, but the latest
+* have to be the callback, which you will call with: next(err, value)
+*
+* @param method: Function/Array/Map = The function(s) to promisify
+* @param options: Map =
+*  "context" (default is function): The context which to apply the called function
+*  "replace" (default is falsy): When passed an array/map, if to replace the original object
+*
+* @return: A promise if passed a function, otherwise the object with the promises
+*
+* @license: MIT
+* @version: 1.0.3
+* @author: Manuel Di Iorio
+**/
+
+var createCallback = function (method, context) {
+    return function () {
+        var args = Array.prototype.slice.call(arguments);
+        var lastIndex = args.length - 1;
+        var lastArg = args && args.length > 0 ? args[lastIndex] : null;
+        var cb = typeof lastArg === 'function' ? lastArg : null;
+
+        if (cb) {
+            return method.apply(context, args);
+        }
+
+        return new Promise(function (resolve, reject) {
+            args.push(function (err, val) {
+                if (err) return reject(err);
+                resolve(val);
+            });
+
+            method.apply(context, args);
+        });
+    };
+};
+
+if (typeof module === "undefined") module = {}; // Browserify this module
+
+module.exports = function (methods, options) {
+    options = options || {};
+    var type = Object.prototype.toString.call(methods);
+
+    if (type === "[object Object]" || type === "[object Array]") {
+        var obj = options.replace ? methods : {};
+
+        for (var key in methods) {
+            if (methods.hasOwnProperty(key)) obj[key] = createCallback(methods[key]);
+        }return obj;
+    }
+
+    return createCallback(methods, options.context || methods);
+};
+
+// Browserify this module
+if (typeof exports === "undefined") {
+    this["promisify"] = module.exports;
+}
+
+>>>>>>> bdc19535d69ec739586b59051e19a512b923f347
 },{}],606:[function(require,module,exports){
 var parse = require('./parse')
 var stringify = require('./stringify')
