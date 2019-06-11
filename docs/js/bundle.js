@@ -83537,7 +83537,9 @@ async function onImageChange(event) {
   const files = await uploadFile(file)
   const multihash = files[0].hash
   console.log(multihash)
-  $('#ipfshash').html(multihash).attr('href','https://ipfs.io/ipfs/' + multihash);
+  $('#ipfshash').text(multihash).attr('href','https://ipfs.io/ipfs/' + multihash);
+  $('#ipfsmirror').text("Mirror 1").attr('href','https://ipfs.infura.io/ipfs/' + multihash);
+  $('#mirroripfs').text("Mirror 2").attr('href','https://cloudflare-ipfs.com/ipfs/' + multihash);
 
 }
 

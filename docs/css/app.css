@@ -1,9 +1,50 @@
 body {
-  padding-top: 40px;
-}
+  padding-top: 15px;
+
+
+  }
 
 .welcome {
   font-size: 18px;
-  display: inline;
   padding: 5px;
+}
+
+.btn-group .button5 {
+  background-color: #555555;
+  color: white;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+} /* Black */
+.btn-group .button5:hover {
+  background-color: #008CBA;
+  color: white;
+}
+
+.button6 {
+  background-color: #555555;
+  color: white;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+} /* Black */
+.button6:hover {
+  background-color: #008CBA;
+  color: white;
+}
+
+input[type="file"] {
+    display: none;
+  }
+
+.custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+        cursor: pointer;
+    }
+
+.custom-file-upload:hover {
+background-color: #008CBA;
+color: white;
 }

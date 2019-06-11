@@ -12,6 +12,8 @@
 
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,33 +28,32 @@
 </head>
 
 <body>
+  <header>
+    <div class="container">
+    <div class="col-md-12">
+      <div class="row">
+
+            <div class="col-lg-12">
+            <span class="welcome pull-left">Conta:</span> <p id="account" class="welcome pull-left"></p>
+            </div>
+
+            <div class="col-lg-12">
+            <span class="welcome pull-left">Saldo atual:</span><p id="accountBalance" class="welcome pull-left"></p>
+          </div>
+      <div <div class="btn-group">
+    <a type="button" class="btn button5" href="https://www.ethereum.org/" target="_blank"><i class="fa fa-ethereum"></i><span> Ethereum</span></a>
+    <a type="button" class="btn button5" href="https://ipfs.io/" target="_blank"><i class="fa fa-cube"></i><span> IPFS</span></a>
+    <a type="button" class="btn button5" href="https://metamask.io/" target="_blank"><i class="fa fa-money"></i><span> MetaMask</span></a>
+    <a type="button" class="btn button5" href="https://github.com/lguicarvalho/Inbox" target="_blank"><i class="fa fa-github"></i><span> Github</span></a>
+     </div>
+     </div>
+    </div>
+  </div>
+</header>
 
   <div class="container">
     <div id="success" style="background:transparent !important" class="jumbotron text-center">
       <h1>Lecito</h1>
-    </div>
-
-    <div class="col-md-12">
-      <div class="row">
-        <div class="col-lg-12">
-          <p id="account" class="welcome pull-right"></p>
-          <p id="accountBalance" class="welcome pull-left"></p>
-        </div>
-      </div>
-
-      <div class="row panel panel-default">
-        <div class="panel-heading clearfix">
-          <div>
-            <button class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#storeHash">Publicar Hashs</button>
-          </div>
-        </div>
-      </div>
-
-
-      <!--   <div id="hashsRow" class="row"> -->
-        <!-- HASHS LOAD HERE -->
-      <!--  </div> -->
-
     </div>
   </div>
 
@@ -65,8 +66,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="file">File upload</label>
-                        <input type="file" id="file" accept='*' placeholder="Select file"></input>
+                        <label class="custom-file-upload" for="file">
+                        <input type="file" id="file" accept='*' placeholder="Select file" class="btn button5 btn-lg"     border="1px solid #ccc"><i class="fa fa-cloud-upload"></i></input>
+                        Enviar arquivo</label>
                     </div>
                     <div class="form-group">
                     <input type="hidden" id="chunkSize" class="form-control" value="1048576"/>
@@ -79,11 +81,19 @@
 
                     <div class="form-group">
                       <label for="ipfshash"> IPFS Hash</label>
-                      <p class="form-control">
-                    <a id="ipfshash" target="_blank">
-                    </a>
+                      <div>
+                  <p class="form-control" style="height:55px">
+                    <a id="ipfshash" target="_blank"></a><br/>
+                    <a id="ipfsmirror" target="_blank"></a>&nbsp;&nbsp;
+                    <a id="mirroripfs" target="_blank"></a>
                   </p>
+                     </div>
                   </div>
+                  <div>
+
+                    <button class="btn button6 btn-lg pull-left" data-toggle="modal" data-target="#storeHash"><i class="fa fa-ethereum"></i> Publicar Hashs</button>
+                  </div>
+                  <p>&nbsp;</p><p>&nbsp;</p>
 
 
                 </div>
@@ -99,14 +109,27 @@
     <div class="row">
       <div class="panel panel-default panel-hash">
         <div class="panel-heading">
-          <strong>Hash da transação</strong>: <span id="events"></span><br/>
+          <strong>Hash da transação</strong>: <a id="events" target="_blank"></a><br/>
         </div>
         <div class="panel-body">
           <div id="hashTemplate">
-          <strong>PDF 1</strong>: <span class="PDF1"></span><br/>
-          <strong>RDF 1</strong>: <span class="RDF1"></span><br/>
-          <strong>PDF 2</strong>: <a  class="PDF2" target="_blank"></a><br/>
-          <strong>RDF 2</strong>: <a  class="RDF2" target="_blank"></a><br/>
+
+          <label>PDF</label>
+          <div>
+          <strong>SHA256</strong>: <span class="PDF1"></span><br/>
+          <strong>IPFS</strong>: <a  class="PDF2" target="_blank"></a><br/>
+           <a  class="mirrorPDF2" target="_blank"></a>&nbsp;&nbsp;
+           <a  class="PDF2mirror" target="_blank"></a><br/>
+          </div>
+          <p>&nbsp;</p>
+          <label>RDF</label>
+          <div>
+          <strong>SHA256</strong>: <span class="RDF1"></span><br/>
+          <strong>IPFS</strong>: <a  class="RDF2" target="_blank"></a><br/>
+          <a  class="mirrorRDF2" target="_blank"></a>&nbsp;&nbsp;
+          <a  class="RDF2mirror" target="_blank"></a><br/>
+          </div>
+          <p>&nbsp;</p>
           <strong>Publicado por</strong>: <span class="hash-publisher"></span><br/>
           </div>
         </div>
@@ -130,29 +153,28 @@
           <div class="row">
             <div class="col-lg-12">
               <form>
+                <label>PDF</label>
                 <div class="form-group">
-                  <label for="hash1">PDF 1</label>
-                  <input type="text" class="form-control" id="hash1" placeholder="Hash do PDF">
+                  <input type="text" class="form-control" id="hash1" placeholder="Hash SHA256 do PDF">
                 </div>
                 <div class="form-group">
-                  <label for="hash2">RDF 1</label>
-                  <input type="text" class="form-control" id="hash2" placeholder="Hash do RDF">
+                  <input type="text" class="form-control" id="hash3" placeholder="Hash do PDF no IPFS">
+                </div>
+
+                <label>RDF</label>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="hash2" placeholder="Hash SHA256 do RDF">
                 </div>
                 <div class="form-group">
-                  <label for="hash3">PDF 2</label>
-                  <input type="text" class="form-control" id="hash3" placeholder="Hash do PDF (IPFS)">
-                </div>
-                <div class="form-group">
-                  <label for="hash4">RDF 2</label>
-                  <input type="text" class="form-control" id="hash4" placeholder="Hash do RDF (IPFS)">
+                  <input type="text" class="form-control" id="hash4" placeholder="Hash do RDF no IPFS">
                 </div>
               </form>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-success" data-dismiss="modal" onclick="App.storeHash(); return false;">Submit</button>
-          <button type="button" class="btn" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary btn-success" data-dismiss="modal" onclick="App.storeHash(); return false;">Enviar</button>
+          <button type="button" class="btn" data-dismiss="modal">Fechar</button>
         </div>
       </div>
 
@@ -162,7 +184,7 @@
   <div id="footer" class="container">
     <nav class="navbar navbar-default navbar-fixed-bottom">
       <div class="navbar-inner navbar-content-center text-center">
-        <p class="text-muted" credit><a href="http://portal1.iff.edu.br/pesquisa-e-inovacao/pos-graduacao-stricto-sensu/mestrado-profissional-em-sistemas-aplicados-a-engenharia-e-a-gestao/" target="_blank">SAEG</a> - &copy; 2019 - <a href="https://twitter.com/sarbogast">Luis Guilherme Carvalho</a> e <a href="https://twitter.com/eloudsa">Mark Douglas Jacyntho</a></p>
+        <p class="text-muted" credit><a href="http://portal1.iff.edu.br/pesquisa-e-inovacao/pos-graduacao-stricto-sensu/mestrado-profissional-em-sistemas-aplicados-a-engenharia-e-a-gestao/" target="_blank">SAEG</a> - &copy; 2019 - <a href="http://lattes.cnpq.br/9746105288236931" target="_blank">Luis Guilherme Carvalho</a> e <a href="http://lattes.cnpq.br/1000171750564368" target="_blank">Mark Douglas Jacyntho</a></p>
       </div>
     </nav>
   </div>

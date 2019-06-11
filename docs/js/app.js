@@ -71,7 +71,12 @@ App = {
       hashTemplate.find('.PDF1').text(hash[1]);
       hashTemplate.find('.RDF1').text(hash[2]);
       hashTemplate.find('.PDF2').text(hash[3]).attr('href','https://ipfs.io/ipfs/' + hash[3]);
+      hashTemplate.find('.mirrorPDF2').text("Mirror 1").attr('href','https://ipfs.infura.io/ipfs/' + hash[3]);
+      hashTemplate.find('.PDF2mirror').text("Mirror 2").attr('href','https://cloudflare-ipfs.com/ipfs/' + hash[3]);
+
       hashTemplate.find('.RDF2').text(hash[4]).attr('href','https://ipfs.io/ipfs/' + hash[4]);
+      hashTemplate.find('.mirrorRDF2').text("Mirror 1").attr('href','https://ipfs.infura.io/ipfs/' + hash[4]);
+      hashTemplate.find('.RDF2mirror').text("Mirror 2").attr('href','https://cloudflare-ipfs.com/ipfs/' + hash[4]);
 
 
       var publisher = hash[0];
@@ -139,7 +144,7 @@ App.contracts.Inbox.deployed().then(function(instance) {
 
 $(function() {
   $(window).load(function() {
-    $('#events').html(localStorage.content);
+    $('#events').html(localStorage.content).attr('href','https://rinkeby.etherscan.io/tx/' + localStorage.content);
     App.init();
   });
 });
