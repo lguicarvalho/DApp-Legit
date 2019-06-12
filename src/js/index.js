@@ -49,7 +49,6 @@ function clear(){
     $("#timeStart").val('');
     $("#timeEnd").val('');
     $("#timeDelta").val('');
-    $("#hash").val('');
     $("#fileSize").val('');
     $("#chunkTotal").val('');
     $("#chunkReorder").val('');

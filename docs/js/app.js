@@ -98,10 +98,10 @@ App = {
 
   storeHash: function() {
     // retrieve the detail of the hash
-    var _PDF1 = $('#hash1').val();
-    var _RDF1 = $('#hash2').val();
-    var _PDF2 = $('#hash3').val();
-    var _RDF2 = $('#hash4').val();
+    var _PDF1 = $('#hash').val();
+    var _RDF1 = $('#hashh').val();
+    var _PDF2 = $('#multihash').val();
+    var _RDF2 = $('#multihash1').val();
 
 
     App.contracts.Inbox.deployed().then(function(instance){
@@ -125,7 +125,7 @@ App.contracts.Inbox.deployed().then(function(instance) {
   instance.LogStoreHash({}, {}).watch(function(error, event) {
     if (!error) {
       console.log(event);
-      $('#events').html(event.transactionHash);
+      $('#events').html(event.transactionHash).attr('href','https://rinkeby.etherscan.io/tx/' + event.transactionHash);
 
       localStorage.content = $('#events').html();
 

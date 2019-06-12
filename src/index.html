@@ -34,11 +34,11 @@
       <div class="row">
 
             <div class="col-lg-12">
-            <span class="welcome pull-left">Conta:</span> <p id="account" class="welcome pull-left"></p>
+            <span id="account" class="welcome pull-left"></span>
             </div>
 
             <div class="col-lg-12">
-            <span class="welcome pull-left">Saldo atual:</span><p id="accountBalance" class="welcome pull-left"></p>
+            <span id="accountBalance" class="welcome pull-left"></span>
           </div>
       <div <div class="btn-group">
     <a type="button" class="btn button5" href="https://www.ethereum.org/" target="_blank"><i class="fa fa-ethereum"></i><span> Ethereum</span></a>
@@ -67,30 +67,45 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="custom-file-upload" for="file">
-                        <input type="file" id="file" accept='*' placeholder="Select file" class="btn button5 btn-lg"     border="1px solid #ccc"><i class="fa fa-cloud-upload"></i></input>
-                        Enviar arquivo</label>
-                    </div>
-                    <div class="form-group">
-                    <input type="hidden" id="chunkSize" class="form-control" value="1048576"/>
+                        <input type="file" id="file" accept='*' placeholder="Select file" class="btn button5 btn-lg"     border="1px solid #ccc"><i class="fa fa-file-pdf-o"></i></input>
+                        Enviar PDF</label></br>
+                        <input type="hidden" id="chunkSize" class="form-control" value="1048576"/>
+                            <label for="hash"></label>
+                            <output type="text" id="hash" class="form-control"></output>
+
+                          <label for="ipfshash"></label>
+                        <div>
+                      <input type="hidden" id="multihash" class="form-control"/>
+                      <p class="form-control" style="height:55px">
+                        <a id="ipfshash" target="_blank" ></a><br/>
+                        <a id="ipfsmirror" target="_blank"></a>&nbsp;&nbsp;
+                        <a id="mirroripfs" target="_blank"></a>
+                      </p>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="hash">Hash sha256</label>
-                        <output type="text" id="hash" class="form-control"></output>
+                        <label class="custom-file-upload" for="file1">
+                        <input type="file" id="file1" accept='*' placeholder="Select file" class="btn button5 btn-lg"     border="1px solid #ccc"><i class="fa fa-file-text-o"></i></input>
+                        Enviar RDF</label></br>
+                        <input type="hidden" id="chunkSize1" class="form-control" value="1048576"/>
+                            <label for="hashh"></label>
+                            <output type="text" id="hashh" class="form-control"></output>
+
+                          <label for="ipfshash1"></label>
+                        <div>
+                      <input type="hidden" id="multihash1" class="form-control"/>
+                      <p class="form-control" style="height:55px">
+                        <a id="ipfshash1" target="_blank"></a><br/>
+                        <a id="ipfsmirror1" target="_blank"></a>&nbsp;&nbsp;
+                        <a id="mirroripfs1" target="_blank"></a>
+                      </p>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                      <label for="ipfshash"> IPFS Hash</label>
-                      <div>
-                  <p class="form-control" style="height:55px">
-                    <a id="ipfshash" target="_blank"></a><br/>
-                    <a id="ipfsmirror" target="_blank"></a>&nbsp;&nbsp;
-                    <a id="mirroripfs" target="_blank"></a>
-                  </p>
-                     </div>
-                  </div>
+
+
                   <div>
-
                     <button class="btn button6 btn-lg pull-left" data-toggle="modal" data-target="#storeHash"><i class="fa fa-ethereum"></i> Publicar Hashs</button>
                   </div>
                   <p>&nbsp;</p><p>&nbsp;</p>
@@ -146,14 +161,15 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Publique suas Hashs</h4>
+          <h4 class="modal-title"><b>Publique suas Hashs</b></h4>
         </div>
         <div class="modal-body">
 
           <div class="row">
             <div class="col-lg-12">
               <form>
-                <label>PDF</label>
+                <p> <b>O custo em Ether desta operação será debitado da sua carteira conectada ao MetaMask. Deseja prosseguir?</b></p>
+                  <!--<label>PDF</label>
                 <div class="form-group">
                   <input type="text" class="form-control" id="hash1" placeholder="Hash SHA256 do PDF">
                 </div>
@@ -167,14 +183,14 @@
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="hash4" placeholder="Hash do RDF no IPFS">
-                </div>
+                </div>-->
               </form>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-success" data-dismiss="modal" onclick="App.storeHash(); return false;">Enviar</button>
-          <button type="button" class="btn" data-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary btn-success" data-dismiss="modal" onclick="App.storeHash(); return false;">Continuar</button>
+          <button type="button" class="btn" data-dismiss="modal">Cancelar</button>
         </div>
       </div>
 
@@ -196,7 +212,9 @@
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/crypto-js.js"></script>
   <script src="js/index.js"></script>
+  <script src="js/index1.js"></script>
   <script src="js/bundle.js"></script>
+  <script src="js/bundle1.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/web3.min.js"></script>
   <script src="js/truffle-contract.js"></script>

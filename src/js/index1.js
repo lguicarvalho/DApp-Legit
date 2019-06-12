@@ -2,9 +2,9 @@
 var chunkSize = 1024*1024; // bytes
 var timeout = 10; // millisec
 
-var inputElement = document.getElementById("file");
+var inputElement = document.getElementById("file1");
 inputElement.addEventListener("change", handleFiles, false);
-$("#file").click(function(event){
+$("#file1").click(function(event){
     clear();
 })
 
@@ -21,7 +21,7 @@ function handleFiles() {
     var timeEnd = 0;
     $("#timeStart").val(new Date(timeStart));
     $("#fileSize").val(humanFileSize(file.size,true));
-    chunkSize = parseInt($("#chunkSize").val());
+    chunkSize = parseInt($("#chunkSize1").val());
 
     loading(file,
         function (data) {
@@ -32,7 +32,7 @@ function handleFiles() {
         }, function (data) {
             //console.log('100%');
             var encrypted = SHA256.finalize().toString();
-            $("#hash").val(encrypted);
+            $("#hashh").val(encrypted);
             console.log(encrypted);
             timeEnd = new Date().getTime();
 
