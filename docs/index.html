@@ -71,13 +71,13 @@
                         Enviar PDF</label></br>
                         <input type="hidden" id="chunkSize" class="form-control" value="1048576"/>
                             <label for="hash"></label>
-                            <output type="text" id="hash" class="form-control"></output>
+                            <output type="text" id="hash" class="form-control"><font color="gray">SHA256 hash</font></output>
 
                           <label for="ipfshash"></label>
                         <div>
-                      <input type="hidden" id="multihash" class="form-control"/>
+                      <input type="hidden" id="multihash" class="form-control"></input>
                       <p class="form-control" style="height:55px">
-                        <a id="ipfshash" target="_blank" ></a><br/>
+                        <a id="ipfshash" target="_blank" ><font color="gray">IPFS hash</font></a><br/>
                         <a id="ipfsmirror" target="_blank"></a>&nbsp;&nbsp;
                         <a id="mirroripfs" target="_blank"></a>
                       </p>
@@ -90,13 +90,13 @@
                         Enviar RDF</label></br>
                         <input type="hidden" id="chunkSize1" class="form-control" value="1048576"/>
                             <label for="hashh"></label>
-                            <output type="text" id="hashh" class="form-control"></output>
+                            <output type="text" id="hashh" class="form-control"><font color="gray">SHA256 hash</font></output>
 
                           <label for="ipfshash1"></label>
                         <div>
                       <input type="hidden" id="multihash1" class="form-control"/>
                       <p class="form-control" style="height:55px">
-                        <a id="ipfshash1" target="_blank"></a><br/>
+                        <a id="ipfshash1" target="_blank"><font color="gray">IPFS hash</font></a><br/>
                         <a id="ipfsmirror1" target="_blank"></a>&nbsp;&nbsp;
                         <a id="mirroripfs1" target="_blank"></a>
                       </p>
@@ -130,7 +130,7 @@
           <div id="hashTemplate">
 
           <label>PDF</label>
-          <div>
+          <div class="form-control" style="height:70px">
           <strong>SHA256</strong>: <span class="PDF1"></span><br/>
           <strong>IPFS</strong>: <a  class="PDF2" target="_blank"></a><br/>
            <a  class="mirrorPDF2" target="_blank"></a>&nbsp;&nbsp;
@@ -138,7 +138,7 @@
           </div>
           <p>&nbsp;</p>
           <label>RDF</label>
-          <div>
+          <div class="form-control" style="height:70px">
           <strong>SHA256</strong>: <span class="RDF1"></span><br/>
           <strong>IPFS</strong>: <a  class="RDF2" target="_blank"></a><br/>
           <a  class="mirrorRDF2" target="_blank"></a>&nbsp;&nbsp;
@@ -168,7 +168,7 @@
           <div class="row">
             <div class="col-lg-12">
               <form>
-                <p> <b>O custo em Ether desta operação será debitado da sua carteira conectada ao MetaMask. Deseja prosseguir?</b></p>
+                <p> <b>O custo em Ether desta operação será debitado em sua carteira conectada ao MetaMask. Deseja prosseguir?</b></p>
                   <!--<label>PDF</label>
                 <div class="form-group">
                   <input type="text" class="form-control" id="hash1" placeholder="Hash SHA256 do PDF">
