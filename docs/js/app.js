@@ -26,6 +26,33 @@ App = {
   },
 
   displayAccountInfo: function() {
+    web3.version.getNetwork((err, netId) => {
+  switch (netId) {
+    case "1":
+      console.log('This is mainnet')
+      $('#network').html('<a type="button" class="btn button7 pull-right"><i class="fa fa-signal"> </i> <span>Rede Principal do Ethereum</span></a>')
+      break
+    case "42":
+      console.log('This is the Kovan test network.')
+      $('#network').html('<a type="button" class="btn button9 pull-right"><i class="fa fa-signal"> </i> <span>Kovan</span></a>')
+      break
+    case "3":
+      console.log('This is the ropsten test network.')
+      $('#network').html('<a type="button" class="btn button8 pull-right"><i class="fa fa-signal"> </i> <span>Ropsten</span></a>')
+      break
+      case "4":
+        console.log('This is the rinkeby test network.')
+        $('#network').html('<a type="button" class="btn button10 pull-right"><i class="fa fa-signal"> </i> <span>Rinkeby</span></a>')
+        break
+        case "5":
+          console.log('This is the Goerli test network.')
+          $('#network').html('<a type="button" class="btn button11 pull-right"><i class="fa fa-signal"> </i> <span>Goerli</span></a>')
+          break
+    default:
+      console.log('This is an unknown network.')
+      $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
+  }
+})
     web3.eth.getCoinbase(function(err, account) {
      if(err === null) {
        App.account = account;
@@ -59,6 +86,32 @@ App = {
     $('#hashsRow').empty();
 
     App.contracts.Inbox.deployed().then(function(instance) {
+
+      web3.version.getNetwork((err, netId) => {
+    switch (netId) {
+      case "1":
+
+        break
+      case "42":
+
+        break
+      case "3":
+
+        $('#contract').html(instance.contract.address).attr('href','https://ropsten.etherscan.io/address/' + instance.contract.address)
+        break
+        case "4":
+
+        $('#contract').html(instance.contract.address).attr('href','https://rinkeby.etherscan.io/address/' + instance.contract.address)
+
+          break
+          case "5":
+
+            break
+      default:
+
+    }
+  })
+      console.log(instance.contract.address);
       return instance.getMessage();
     }).then(function(hash) {
       if(hash[0] == 0x0) {
@@ -122,29 +175,68 @@ App = {
 //listen to events triggeres by the contract
 listenToEvents: function() {
 App.contracts.Inbox.deployed().then(function(instance) {
-  instance.LogStoreHash({}, {}).watch(function(error, event) {
-    if (!error) {
-      console.log(event);
-      $('#events').html(event.transactionHash).attr('href','https://rinkeby.etherscan.io/tx/' + event.transactionHash);
+     instance.LogStoreHash({}, {fromBlock: 0, toBlock: 'latest'}).watch(function(error, event) {
+     if (!error) {
+       console.log(event.transactionHash);
 
-      localStorage.content = $('#events').html();
+       web3.version.getNetwork((err, netId) => {
+     switch (netId) {
+       case "1":
 
-      console.log(localStorage);
+         break
+       case "42":
 
-      $('#success').append('<p class="list-group-item"> Um novo documento foi registrado!\n</p>' + new Date());
+         break
+       case "3":
 
-    } else {
-      console.error(error);
-    }
-    App.reloadHashs();
-  })
-});
+       $('#events').html(event.transactionHash).attr('href','https://ropsten.etherscan.io/tx/' + event.transactionHash);
+         break
+         case "4":
+
+         $('#events').html(event.transactionHash).attr('href','https://rinkeby.etherscan.io/tx/' + event.transactionHash);
+
+           break
+           case "5":
+
+             break
+       default:
+
+     }
+   })
+      // $('#events').html(event.transactionHash).attr('href','https://rinkeby.etherscan.io/tx/' + event.transactionHash);
+
+     //  localStorage.content = $('#events').html();
+
+     //  console.log(localStorage);
+
+       //$('#success').append('<p class="list-group-item"> Um novo documento foi registrado!\n</p>' + new Date());
+
+     } else {
+       console.error(error);
+     }
+   }).get(function(error, events) {
+     if (!error) {
+        console.log(events);
+
+      } else {
+        console.error(error);
+      }
+    })
+    //setTimeout (function() {
+    //instance.LogStoreHash({}, {fromBlock: 0, toBlock: 'latest'}).stopWatching();
+//  }, 60000)
+
+  });
+  //App.reloadHashs();
+
 },
+
 };
+
 
 $(function() {
   $(window).load(function() {
-    $('#events').html(localStorage.content).attr('href','https://rinkeby.etherscan.io/tx/' + localStorage.content);
+    //$('#events').html(localStorage.content).attr('href','https://rinkeby.etherscan.io/tx/' + localStorage.content);
     App.init();
   });
 });
