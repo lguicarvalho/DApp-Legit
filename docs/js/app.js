@@ -30,6 +30,31 @@ App = {
     web3.eth.getCoinbase(function(err, account) {
      if(err === null) {
        App.account = account;
+       web3.version.getNetwork((err, netId) => {
+     switch (netId) {
+       case "1":
+
+         break
+       case "42":
+
+         break
+       case "3":
+
+         $('#account').text(account).attr('href','https://ropsten.etherscan.io/address/' + account)
+
+         break
+         case "4":
+
+           $('#account').text(account).attr('href','https://rinkeby.etherscan.io/address/' + account)
+
+           break
+           case "5":
+
+             break
+       default:
+
+     }
+   })
 
        $('#account').text(account);
        web3.eth.getBalance(account, function(err, balance) {
@@ -48,61 +73,35 @@ App = {
       //set the provider for our contracts
       App.contracts.Inbox.setProvider(App.web3Provider);
 
-      web3.version.getNetwork((err, netId) => {
-    switch (netId) {
-      case "1":
-        console.log('This is mainnet')
-        $('#network').html('<a type="button" class="btn button7 pull-right"><i class="fa fa-signal"> </i> <span>Rede Principal do Ethereum</span></a>')
-        break
-      case "42":
-        console.log('This is the Kovan test network.')
-        $('#network').html('<a type="button" class="btn button9 pull-right"><i class="fa fa-signal"> </i> <span>Kovan</span></a>')
-        break
-      case "3":
-        console.log('This is the ropsten test network.')
-        $('#network').html('<a type="button" class="btn button8 pull-right"><i class="fa fa-signal"> </i> <span>Ropsten</span></a>')
-        $('#account').text(account).attr('href','https://ropsten.etherscan.io/address/' + account)
-
-        break
-        case "4":
-          console.log('This is the rinkeby test network.')
-          $('#network').html('<a type="button" class="btn button10 pull-right"><i class="fa fa-signal"> </i> <span>Rinkeby</span></a>')
-          $('#account').text(account).attr('href','https://rinkeby.etherscan.io/address/' + account)
-
-          break
-          case "5":
-            console.log('This is the Goerli test network.')
-            $('#network').html('<a type="button" class="btn button11 pull-right"><i class="fa fa-signal"> </i> <span>Goerli</span></a>')
-            break
-      default:
-        console.log('This is an unknown network.')
-        $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
-    }
-  })
 
   App.contracts.Inbox.deployed().then(function(instance) {
   web3.version.getNetwork((err, netId) => {
 switch (netId) {
   case "1":
-
-    break
+    console.log('This is mainnet')
+    $('#network').html('<a type="button" class="btn button7 pull-right"><i class="fa fa-signal"> </i> <span>Rede Principal do Ethereum</span></a>')
+     break
   case "42":
-
-    break
+    console.log('This is the Kovan test network.')
+    $('#network').html('<a type="button" class="btn button9 pull-right"><i class="fa fa-signal"> </i> <span>Kovan</span></a>')
+     break
   case "3":
-
+    console.log('This is the ropsten test network.')
+    $('#network').html('<a type="button" class="btn button8 pull-right"><i class="fa fa-signal"> </i> <span>Ropsten</span></a>')
     $('#contract').html(instance.contract.address).attr('href','https://ropsten.etherscan.io/address/' + instance.contract.address)
-    break
+     break
     case "4":
-
+    console.log('This is the rinkeby test network.')
+    $('#network').html('<a type="button" class="btn button10 pull-right"><i class="fa fa-signal"> </i> <span>Rinkeby</span></a>')
     $('#contract').html(instance.contract.address).attr('href','https://rinkeby.etherscan.io/address/' + instance.contract.address)
-
-      break
+     break
       case "5":
-
-        break
+    console.log('This is the Goerli test network.')
+    $('#network').html('<a type="button" class="btn button11 pull-right"><i class="fa fa-signal"> </i> <span>Goerli</span></a>')
+     break
   default:
-
+    console.log('This is an unknown network.')
+    $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
 }
 })
   console.log(instance.contract.address);
