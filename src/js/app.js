@@ -33,29 +33,35 @@ App = {
        web3.version.getNetwork((err, netId) => {
      switch (netId) {
        case "1":
-
+       console.log('This is mainnet')
+       $('#network').html('<a type="button" class="btn button7 pull-right"><i class="fa fa-signal"> </i> <span>Rede Principal do Ethereum</span></a>')
+       $('#account').text(account).attr('href','https://etherscan.io/address/' + account)
          break
        case "42":
-
+       console.log('This is the Kovan test network.')
+       $('#network').html('<a type="button" class="btn button9 pull-right"><i class="fa fa-signal"> </i> <span>Kovan</span></a>')
+       $('#account').text(account).attr('href','https://kovan.etherscan.io/address/' + account)
          break
        case "3":
-
+       console.log('This is the ropsten test network.')
+       $('#network').html('<a type="button" class="btn button8 pull-right"><i class="fa fa-signal"> </i> <span>Ropsten</span></a>')
          $('#account').text(account).attr('href','https://ropsten.etherscan.io/address/' + account)
-
          break
          case "4":
-
+         console.log('This is the rinkeby test network.')
+         $('#network').html('<a type="button" class="btn button10 pull-right"><i class="fa fa-signal"> </i> <span>Rinkeby</span></a>')
            $('#account').text(account).attr('href','https://rinkeby.etherscan.io/address/' + account)
-
            break
            case "5":
-
+           console.log('This is the Goerli test network.')
+           $('#network').html('<a type="button" class="btn button11 pull-right"><i class="fa fa-signal"> </i> <span>Goerli</span></a>')
+           $('#account').text(account).attr('href','https://goerli.etherscan.io/address/' + account)
              break
        default:
-
+       console.log('This is an unknown network.')
+       $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
      }
    })
-
        $('#account').text(account);
        web3.eth.getBalance(account, function(err, balance) {
          if(err === null) {
@@ -63,6 +69,7 @@ App = {
          }
        })
       }
+      $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
     });
   },
 
@@ -78,30 +85,24 @@ App = {
   web3.version.getNetwork((err, netId) => {
 switch (netId) {
   case "1":
-    console.log('This is mainnet')
-    $('#network').html('<a type="button" class="btn button7 pull-right"><i class="fa fa-signal"> </i> <span>Rede Principal do Ethereum</span></a>')
+
      break
   case "42":
-    console.log('This is the Kovan test network.')
-    $('#network').html('<a type="button" class="btn button9 pull-right"><i class="fa fa-signal"> </i> <span>Kovan</span></a>')
+
      break
   case "3":
-    console.log('This is the ropsten test network.')
-    $('#network').html('<a type="button" class="btn button8 pull-right"><i class="fa fa-signal"> </i> <span>Ropsten</span></a>')
+
     $('#contract').html(instance.contract.address).attr('href','https://ropsten.etherscan.io/address/' + instance.contract.address)
      break
     case "4":
-    console.log('This is the rinkeby test network.')
-    $('#network').html('<a type="button" class="btn button10 pull-right"><i class="fa fa-signal"> </i> <span>Rinkeby</span></a>')
+
     $('#contract').html(instance.contract.address).attr('href','https://rinkeby.etherscan.io/address/' + instance.contract.address)
      break
       case "5":
-    console.log('This is the Goerli test network.')
-    $('#network').html('<a type="button" class="btn button11 pull-right"><i class="fa fa-signal"> </i> <span>Goerli</span></a>')
+
      break
   default:
-    console.log('This is an unknown network.')
-    $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
+
 }
 })
   console.log(instance.contract.address);
@@ -185,9 +186,10 @@ switch (netId) {
 //listen to events triggeres by the contract
 listenToEvents: function() {
 App.contracts.Inbox.deployed().then(function(instance) {
-     instance.LogStoreHash({}, {fromBlock: 0, toBlock: 'latest'}).watch(function(error, event) {
+     var x = new Array();
+  instance.LogStoreHash({}, {fromBlock: 0, toBlock: 'latest'}).watch(function(error, event) {
      if (!error) {
-       console.log(event.transactionHash);
+       console.log(event);
 
        web3.version.getNetwork((err, netId) => {
      switch (netId) {
@@ -213,22 +215,78 @@ App.contracts.Inbox.deployed().then(function(instance) {
 
      }
    })
-      // $('#events').html(event.transactionHash).attr('href','https://rinkeby.etherscan.io/tx/' + event.transactionHash);
 
-     //  localStorage.content = $('#events').html();
-
-     //  console.log(localStorage);
-
-       //$('#success').append('<p class="list-group-item"> Um novo documento foi registrado!\n</p>' + new Date());
 
      } else {
        console.error(error);
      }
      App.reloadHashs();
 
-   }).get(function(error, events) {
+   }).get(function(error, event) {
      if (!error) {
-        console.log(events);
+        console.log(event);
+        var x = event;
+        x.forEach(myFunction);
+
+        function myFunction(item, index) {
+          web3.version.getNetwork((err, netId) => {
+        switch (netId) {
+          case "1":
+
+            break
+          case "42":
+
+            break
+          case "3":
+          document.getElementById("demo").innerHTML +=
+          "<p class=form-control style=height:340px;width:600px>" + "<b>Transação " + index + "</b>" + "<br>" + "<br>" +
+          "<b>Publicado por:</b> " + item.args._publisher + "<br>" + "<br>" +
+
+          "<b>PDF</b> " + "<br>" +
+          "<b>SHA256: </b> " + item.args.hash1 + "<br>" +
+          "<b>IPFS: </b> " + "<a target=_blank href=https://ipfs.io/ipfs/" + item.args.hash3 + ">" + item.args.hash3 + "</a>" + "<br>" +
+          "<a target=_blank href=https://ipfs.infura.io/ipfs/" + item.args.hash3 + ">" + "Mirror 1  " + "</a>" +
+          "<a target=_blank href=https://cloudflare-ipfs.com/ipfs/" + item.args.hash3 + ">" + "Mirror 2  " + "</a>" + "<br>" + "<br>" +
+
+          "<b>RDF</b> " + "<br>" +
+          "<b>SHA256: </b> " + item.args.hash2 + "<br>" +
+          "<b>IPFS: </b> " + "<a target=_blank href=https://ipfs.io/ipfs/" + item.args.hash4 + ">" + item.args.hash4 + "</a>" + "<br>" +
+          "<a target=_blank href=https://ipfs.infura.io/ipfs/" + item.args.hash4 + ">" + "Mirror 1  " + "</a>" +
+          "<a target=_blank href=https://cloudflare-ipfs.com/ipfs/" + item.args.hash4 + ">" + "Mirror 2  " + "</a>" + "<br>" + "<br>" +
+
+          "<b>Hash da Transação </b> " + "<a target=_blank href=https:ropsten.etherscan.io/tx/" + item.transactionHash + ">" + item.transactionHash + "</a>" + "</p>" + "<br>" + "<br>";
+            break
+            case "4":
+            document.getElementById("demo").innerHTML +=
+            "<p class=form-control style=height:340px;width:600px>" + "<b>Transação " + index + "</b>" + "<br>" + "<br>" +
+            "<b>Publicado por:</b> " + item.args._publisher + "<br>" + "<br>" +
+
+            "<b>PDF</b> " + "<br>" +
+            "<b>SHA256: </b> " + item.args.hash1 + "<br>" +
+            "<b>IPFS: </b> " + "<a target=_blank href=https://ipfs.io/ipfs/" + item.args.hash3 + ">" + item.args.hash3 + "</a>" + "<br>" +
+            "<a target=_blank href=https://ipfs.infura.io/ipfs/" + item.args.hash3 + ">" + "Mirror 1  " + "</a>" +
+            "<a target=_blank href=https://cloudflare-ipfs.com/ipfs/" + item.args.hash3 + ">" + "Mirror 2  " + "</a>" + "<br>" + "<br>" +
+
+            "<b>RDF</b> " + "<br>" +
+            "<b>SHA256: </b> " + item.args.hash2 + "<br>" +
+            "<b>IPFS: </b> " + "<a target=_blank href=https://ipfs.io/ipfs/" + item.args.hash4 + ">" + item.args.hash4 + "</a>" + "<br>" +
+            "<a target=_blank href=https://ipfs.infura.io/ipfs/" + item.args.hash4 + ">" + "Mirror 1  " + "</a>" +
+            "<a target=_blank href=https://cloudflare-ipfs.com/ipfs/" + item.args.hash4 + ">" + "Mirror 2  " + "</a>" + "<br>" + "<br>" +
+
+            "<b>Hash da Transação </b> " + "<a target=_blank href=https:rinkeby.etherscan.io/tx/" + item.transactionHash + ">" + item.transactionHash + "</a>" + "</p>" + "<br>" + "<br>";
+              break
+              case "5":
+
+                break
+          default:
+
+        }
+      })
+
+
+
+ }
+
 
       } else {
         console.error(error);
