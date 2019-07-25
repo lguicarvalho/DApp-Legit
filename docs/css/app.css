@@ -9,6 +9,20 @@ body {
   padding: 5px;
 }
 
+.stamp {
+        width: 366px;
+        height: 315px;
+        background: url("https://ipfs.infura.io/ipfs/QmdnPrB4WqPHi8i4QgrZwxmZuq4wXuoisigrUVJJDxtz8Y") no-repeat;
+        transition-duration: 0.6s;
+        display: inline-block;
+
+}
+
+.stamp:hover {
+        background: url("https://ipfs.infura.io/ipfs/QmZMzNajngxNkJHDvAzhmWgi6NeeMhNxcawPKkEaCcJkhs") no-repeat;
+        transition-duration: 0.6s;
+}
+
 .button7 {
   background-color: #555555;
   color: white;

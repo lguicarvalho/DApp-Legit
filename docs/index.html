@@ -55,7 +55,7 @@
    </div></br>
 
  </br><div class="form-control pull-right tooltip1" style="width:390px">
-           <a id="contract" class="welcome" target="_blank">Contrato ainda não disponível nesta rede</a>
+           <a id="contract" class="welcome" target="_blank"></a>
            <span class="tooltiptext1">Endereço do contrato</span>
          </div></br>
 
@@ -66,7 +66,9 @@
 
   <div class="container">
     <div id="success" style="background:transparent !important" class="jumbotron text-center">
-    <h1>Legit</h1>
+      <div class="stamp"></div>
+    <!--  <img src="https://ipfs.infura.io/ipfs/QmdnPrB4WqPHi8i4QgrZwxmZuq4wXuoisigrUVJJDxtz8Y" width="366" height="315">-->
+    <!-- <h1>Legit</h1> -->
     </div>
   </div>
 
@@ -80,7 +82,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="custom-file-upload" for="file">
-                        <input type="file" id="file" accept='*' placeholder="Select file" class="btn button5 btn-lg"     border="1px solid #ccc"><i class="fa fa-file-pdf-o"></i></input>
+                        <input type="file" id="file" accept='*' placeholder="Select file" class="btn button5 btn-lg"  border="1px solid #ccc"><i class="fa fa-file-pdf-o"></i></input>
                         Enviar PDF</label></br>
                         <input type="hidden" id="chunkSize" class="form-control" value="1048576"/>
                             <label for="hash"></label>
@@ -164,7 +166,38 @@
       </div>
     </div>
   </div>
+  <button class="btn button6 btn-lg pull-left" data-toggle="modal" data-target="#allTransactions"><i class="fa fa-ethereum"></i> Exibir todas as transações</button>
+
   </div>
+
+
+  <div class="modal fade" id="allTransactions" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content" style="width:640px">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"><b>Todas as transações</b></h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="row" class="form-control">
+            <div class="col-lg-12">
+              <form>
+
+                <div id="demo"></div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
 
   <!-- Modal form to sell an hash -->
   <div class="modal fade" id="storeHash" role="dialog">
@@ -181,22 +214,9 @@
           <div class="row">
             <div class="col-lg-12">
               <form>
-                <p> <b>O custo em Ether desta operação será debitado em sua carteira conectada ao MetaMask. Deseja prosseguir?</b></p>
-                  <!--<label>PDF</label>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="hash1" placeholder="Hash SHA256 do PDF">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="hash3" placeholder="Hash do PDF no IPFS">
-                </div>
 
-                <label>RDF</label>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="hash2" placeholder="Hash SHA256 do RDF">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="hash4" placeholder="Hash do RDF no IPFS">
-                </div>-->
+                <p> <b>O custo em Ether desta operação será debitado em sua carteira conectada ao MetaMask. Deseja prosseguir?</b></p>
+
               </form>
             </div>
           </div>
