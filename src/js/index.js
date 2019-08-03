@@ -32,7 +32,7 @@ function handleFiles() {
         }, function (data) {
             //console.log('100%');
             var encrypted = SHA256.finalize().toString();
-            $("#hash").val(encrypted);
+            $("#hash").html(encrypted);
             console.log(encrypted);
             timeEnd = new Date().getTime();
 

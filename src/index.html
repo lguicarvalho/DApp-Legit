@@ -32,13 +32,12 @@
     <div class="col-md-12">
       <div class="row">
 
-          <div class="form-control pull-left tooltip2" style="width:390px">
-          <a id="account" class="welcome" target="_blank"></a>
-          <span class="tooltiptext2">Chave pública da conta ativa</span>
-        </div></br>
+      <div id="account" class="tooltip2">
+      <span class="tooltiptext2">Chave pública da conta ativa</span>
+      </div>
 
-      </br><div class="form-control pull-left tooltip2" style="width:200px">
-          <span id="accountBalance" class="welcome"></span>
+      </br>
+      <div id="accountBalance" class="tooltip2">
           <span class="tooltiptext2">Saldo atual da conta ativa</span>
         </div></br>
 
@@ -54,8 +53,8 @@
      <span id="network"> </span>
    </div></br>
 
- </br><div class="form-control pull-right tooltip1" style="width:390px">
-           <a id="contract" class="welcome" target="_blank"></a>
+ </br>
+         <div id="contract" class="tooltip1 pull-right">
            <span class="tooltiptext1">Endereço do contrato</span>
          </div></br>
 
@@ -67,8 +66,6 @@
   <div class="container">
     <div id="success" style="background:transparent !important" class="jumbotron text-center">
       <div class="stamp"></div>
-    <!--  <img src="https://ipfs.infura.io/ipfs/QmdnPrB4WqPHi8i4QgrZwxmZuq4wXuoisigrUVJJDxtz8Y" width="366" height="315">-->
-    <!-- <h1>Legit</h1> -->
     </div>
   </div>
 
@@ -85,16 +82,23 @@
                         <input type="file" id="file" accept='*' placeholder="Select file" class="btn button5 btn-lg"  border="1px solid #ccc"><i class="fa fa-file-pdf-o"></i></input>
                         Enviar PDF</label></br>
                         <input type="hidden" id="chunkSize" class="form-control" value="1048576"/>
+
                             <label for="hash"></label>
-                            <output type="text" id="hash" class="form-control"><font color="gray">SHA256 hash</font></output>
+                            <div>
+                            <p class="form-control tooltip3">
+                            <span id="hash"></span>
+                            <span class="tooltiptext3">SHA256 Hash</span>
+                          </p>
+                           </div>
 
                           <label for="ipfshash"></label>
                         <div>
                       <input type="hidden" id="multihash" class="form-control"></input>
-                      <p class="form-control" style="height:55px">
-                        <a id="ipfshash" target="_blank" ><font color="gray">IPFS hash</font></a><br/>
+                      <p class="form-control tooltip3" style="height:55px">
+                        <a id="ipfshash" target="_blank" ></a><br/>
                         <a id="ipfsmirror" target="_blank"></a>&nbsp;&nbsp;
                         <a id="mirroripfs" target="_blank"></a>
+                        <span class="tooltiptext3">IPFS Hash</span>
                       </p>
                         </div>
                     </div>
@@ -104,16 +108,23 @@
                         <input type="file" id="file1" accept='*' placeholder="Select file" class="btn button5 btn-lg"     border="1px solid #ccc"><i class="fa fa-file-text-o"></i></input>
                         Enviar RDF</label></br>
                         <input type="hidden" id="chunkSize1" class="form-control" value="1048576"/>
-                            <label for="hashh"></label>
-                            <output type="text" id="hashh" class="form-control"><font color="gray">SHA256 hash</font></output>
+
+                        <label for="hashh"></label>
+                        <div>
+                        <p class="form-control tooltip3">
+                        <span id="hashh"></span>
+                        <span class="tooltiptext3">SHA256 Hash</span>
+                      </p>
+                       </div>
 
                           <label for="ipfshash1"></label>
                         <div>
                       <input type="hidden" id="multihash1" class="form-control"/>
-                      <p class="form-control" style="height:55px">
-                        <a id="ipfshash1" target="_blank"><font color="gray">IPFS hash</font></a><br/>
+                      <p class="form-control tooltip3" style="height:55px">
+                        <a id="ipfshash1" target="_blank"></a><br/>
                         <a id="ipfsmirror1" target="_blank"></a>&nbsp;&nbsp;
                         <a id="mirroripfs1" target="_blank"></a>
+                        <span class="tooltiptext3">IPFS Hash</span>
                       </p>
                         </div>
                     </div>
@@ -185,8 +196,28 @@
           <div class="row" class="form-control">
             <div class="col-lg-12">
               <form>
-
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Pesquisar..." title="Type in a name"></input>
+                <ul id="myUL">
                 <div id="demo"></div>
+
+<script>
+function myFunction() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName("li");
+    for (i = 0; i < li.length; i++) {
+        p = li[i].getElementsByTagName("p")[0];
+        txtValue = p.textContent || p.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+</script>
 
               </form>
             </div>

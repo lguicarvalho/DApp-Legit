@@ -4,7 +4,6 @@ App = {
   account: 0x0,
 
   init: function() {
-
     return App.initWeb3();
   },
 
@@ -42,16 +41,25 @@ App = {
        $('#network').html('<a type="button" class="btn button9 pull-right"><i class="fa fa-signal"> </i> <span>Kovan</span></a>')
        $('#account').text(account).attr('href','https://kovan.etherscan.io/address/' + account)
          break
+
        case "3":
        console.log('This is the ropsten test network.')
        $('#network').html('<a type="button" class="btn button8 pull-right"><i class="fa fa-signal"> </i> <span>Ropsten</span></a>')
-         $('#account').text(account).attr('href','https://ropsten.etherscan.io/address/' + account)
+       document.getElementById("account").innerHTML +=
+       "<p class=form-control pull-left tooltip2 style=width:390px>" +
+       "<a target=_blank class=welcome href=https://ropsten.etherscan.io/address/" + account + ">" + account + "</a>"
+       + "</p>"
          break
+
          case "4":
          console.log('This is the rinkeby test network.')
          $('#network').html('<a type="button" class="btn button10 pull-right"><i class="fa fa-signal"> </i> <span>Rinkeby</span></a>')
-           $('#account').text(account).attr('href','https://rinkeby.etherscan.io/address/' + account)
+         document.getElementById("account").innerHTML +=
+         "<p class=form-control pull-left tooltip2 style=width:390px>" +
+         "<a target=_blank class=welcome href=https://rinkeby.etherscan.io/address/" + account + ">" + account + "</a>"
+         + "</p>"
            break
+
            case "5":
            console.log('This is the Goerli test network.')
            $('#network').html('<a type="button" class="btn button11 pull-right"><i class="fa fa-signal"> </i> <span>Goerli</span></a>')
@@ -62,15 +70,19 @@ App = {
        $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
      }
    })
-       $('#account').text(account);
+
+       //$('#account').text(account);
        web3.eth.getBalance(account, function(err, balance) {
          if(err === null) {
-           $('#accountBalance').text(web3.fromWei(balance,"ether") + " ETH");
+           document.getElementById("accountBalance").innerHTML +=
+           "<p class=form-control pull-left tooltip2 style=width:200px>" + web3.fromWei(balance,"ether") + " ETH"
+           + "</p>"
+           //$('#accountBalance').text(web3.fromWei(balance,"ether") + " ETH");
          }
        })
       }
       $('#network').html('<a type="button" class="btn button6 pull-right"><i class="fa fa-ban"> </i> <span>Desconectado</span></a>')
-    });
+      });
   },
 
   initContract: function() {
@@ -91,12 +103,18 @@ switch (netId) {
 
      break
   case "3":
-
-    $('#contract').html(instance.contract.address).attr('href','https://ropsten.etherscan.io/address/' + instance.contract.address)
+  document.getElementById("contract").innerHTML +=
+  "<p class=form-control pull-right tooltip1 style=width:390px>" +
+  "<a target=_blank href=https://ropsten.etherscan.io/address/" + instance.contract.address + ">" + instance.contract.address + "</a>"
+  + "</p>"
+    //$('#contract').html(instance.contract.address).attr('href','https://ropsten.etherscan.io/address/' + instance.contract.address)
      break
     case "4":
-
-    $('#contract').html(instance.contract.address).attr('href','https://rinkeby.etherscan.io/address/' + instance.contract.address)
+    document.getElementById("contract").innerHTML +=
+    "<p class=form-control pull-right tooltip1 style=width:390px>" +
+    "<a target=_blank href=https://rinkeby.etherscan.io/address/" + instance.contract.address + ">" + instance.contract.address + "</a>"
+    + "</p>"
+    //$('#contract').html(instance.contract.address).attr('href','https://rinkeby.etherscan.io/address/' + instance.contract.address)
      break
       case "5":
 
@@ -113,12 +131,13 @@ switch (netId) {
       return App.reloadHashs();
     });
   },
+
+
   reloadHashs: function() {
     // refresh account information because the balance might have changed
-    App.displayAccountInfo();
+    //App.displayAccountInfo();
 
     // retrieve the article placeholder and clear it
-    $('#hashsRow').empty();
 
     App.contracts.Inbox.deployed().then(function(instance) {
 
@@ -239,7 +258,8 @@ App.contracts.Inbox.deployed().then(function(instance) {
             break
           case "3":
           document.getElementById("demo").innerHTML +=
-          "<p class=form-control style=height:340px;width:600px>" + "<b>Transação " + index + "</b>" + "<br>" + "<br>" +
+          "<li>" +
+          "<p>" + "<b>Transação " + index + "</b>" + "<br>" + "<br>" +
           "<b>Publicado por:</b> " + item.args._publisher + "<br>" + "<br>" +
 
           "<b>PDF</b> " + "<br>" +
@@ -254,11 +274,14 @@ App.contracts.Inbox.deployed().then(function(instance) {
           "<a target=_blank href=https://ipfs.infura.io/ipfs/" + item.args.hash4 + ">" + "Mirror 1  " + "</a>" +
           "<a target=_blank href=https://cloudflare-ipfs.com/ipfs/" + item.args.hash4 + ">" + "Mirror 2  " + "</a>" + "<br>" + "<br>" +
 
-          "<b>Hash da Transação </b> " + "<a target=_blank href=https:ropsten.etherscan.io/tx/" + item.transactionHash + ">" + item.transactionHash + "</a>" + "</p>" + "<br>" + "<br>";
+          "<b>Hash da Transação </b> " + "<a target=_blank href=https:ropsten.etherscan.io/tx/" + item.transactionHash + ">" + item.transactionHash + "</a>" + "</p>" + "<br>" + "<br>" +
+          "</li>" ;
+
+
             break
             case "4":
             document.getElementById("demo").innerHTML +=
-            "<p class=form-control style=height:340px;width:600px>" + "<b>Transação " + index + "</b>" + "<br>" + "<br>" +
+            "<p>" + "<b>Transação " + index + "</b>" + "<br>" + "<br>" +
             "<b>Publicado por:</b> " + item.args._publisher + "<br>" + "<br>" +
 
             "<b>PDF</b> " + "<br>" +
@@ -297,7 +320,6 @@ App.contracts.Inbox.deployed().then(function(instance) {
 //  }, 60000)
 
   });
-
 },
 
 };
@@ -305,7 +327,6 @@ App.contracts.Inbox.deployed().then(function(instance) {
 
 $(function() {
   $(window).load(function() {
-    //$('#events').html(localStorage.content).attr('href','https://rinkeby.etherscan.io/tx/' + localStorage.content);
-    App.init();
+  App.init();
   });
 });
