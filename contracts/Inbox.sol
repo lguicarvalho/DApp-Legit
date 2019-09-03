@@ -8,14 +8,13 @@ contract Inbox {
     string PDF2;
     string RDF2;
 
-    //events
+
     event LogStoreHash(
       address indexed _publisher,
       string hash1,
       string hash2,
       string hash3,
-      string hash4
-      );
+      string hash4);
 
     function storeHash
     (string memory hash1,
