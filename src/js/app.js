@@ -294,6 +294,7 @@ App.contracts.Inbox.deployed().then(function(instance) {
             break
             case "4":
             document.getElementById("demo").innerHTML +=
+            "<li>" +
             "<p>" + "<b>Transação " + index + "</b>" + "<br>" + "<br>" +
             "<b>Publicado por:</b> " + item.args._publisher + "<br>" + "<br>" +
 
@@ -309,7 +310,8 @@ App.contracts.Inbox.deployed().then(function(instance) {
             "<a target=_blank href=https://ipfs.infura.io/ipfs/" + item.args.hash4 + ">" + "Mirror 1  " + "</a>" +
             "<a target=_blank href=https://cloudflare-ipfs.com/ipfs/" + item.args.hash4 + ">" + "Mirror 2  " + "</a>" + "<br>" + "<br>" +
 
-            "<b>Hash da Transação </b> " + "<a target=_blank href=https://rinkeby.etherscan.io/tx/" + item.transactionHash + ">" + item.transactionHash + "</a>" + "</p>" + "<br>" + "<br>";
+            "<b>Hash da Transação </b> " + "<a target=_blank href=https://rinkeby.etherscan.io/tx/" + item.transactionHash + ">" + item.transactionHash + "</a>" + "</p>" + "<br>" + "<br>" +
+            "</li>" ;
               break
               case "5":
 
